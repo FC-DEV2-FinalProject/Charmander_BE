@@ -1,5 +1,6 @@
 package org.cm.domain.common;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Lob;
 import java.time.LocalDate;
@@ -10,6 +11,7 @@ public class Terms extends BaseEntity {
     private String termsType;
     private String version;
     @Lob
+    @Column(columnDefinition = "TEXT")
     private String content;
     private LocalDate effectiveDate;
     private boolean isMandatory;
