@@ -12,7 +12,7 @@ public class Member extends BaseEntity {
     private Principal principal;
 
     @Embedded
-    private PersonalInfo personalInfo;
+    private MemberDetail memberDetail;
 
     //TODO : Converter로 암호화 하기
     private String phoneNumber;
