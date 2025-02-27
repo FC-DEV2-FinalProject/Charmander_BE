@@ -6,7 +6,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 
 @Entity(name = "member_terms_agreement")
-public class MemberTermsAgreement extends BaseEntity {
+public class MemberTermAgreement extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
@@ -14,5 +14,5 @@ public class MemberTermsAgreement extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
-    private Terms terms;
+    private Term term;
 }
