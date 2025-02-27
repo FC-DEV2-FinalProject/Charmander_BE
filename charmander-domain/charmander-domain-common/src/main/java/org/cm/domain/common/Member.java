@@ -14,5 +14,6 @@ public class Member extends BaseEntity {
     @Embedded
     private PersonalInfo personalInfo;
 
+    //TODO : Converter로 암호화 하기
     private String phoneNumber;
 }
