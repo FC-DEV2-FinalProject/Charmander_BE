@@ -15,5 +15,4 @@ public class MemberTermsAgreement extends BaseEntity {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false)
     private Terms terms;
-    private boolean isAgreed;
 }
