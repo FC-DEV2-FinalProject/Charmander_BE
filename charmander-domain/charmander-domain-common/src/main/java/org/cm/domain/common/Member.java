@@ -8,14 +8,12 @@ import lombok.Getter;
 @Entity(name = "member")
 public class Member extends BaseEntity {
 
-    //jpa스럽게 domain스럽게
     @Embedded
     private Principal principal;
 
     @Embedded
-    private PersonalInfo personalInfo;
+    private MemberDetail memberDetail;
 
+    //TODO : Converter로 암호화 하기
     private String phoneNumber;
-
-    //약관동의를 한 유저라는것을 컬럼으로 나타내야하는가
 }

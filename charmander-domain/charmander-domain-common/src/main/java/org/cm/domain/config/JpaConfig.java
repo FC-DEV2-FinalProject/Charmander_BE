@@ -7,8 +7,8 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
 @EnableTransactionManagement
-@EntityScan(basePackages= "org.cm.domain")
-@EnableJpaRepositories(basePackages= "org.cm.domain")
+@EntityScan(basePackages = "org.cm.domain")
+@EnableJpaRepositories(basePackages = "org.cm.domain")
 public class JpaConfig {
 }
 
