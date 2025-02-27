@@ -27,9 +27,9 @@ public class BaseEntity {
     private LocalDateTime updatedAt;
 
     @Column(nullable = false)
-    private boolean isActive;
+    private boolean active;
 
     public void delete() {
-        this.isActive = false;
+        this.active = false;
     }
 }
