@@ -18,5 +18,4 @@ public class Member extends BaseEntity {
     private String phoneNumber;
 
     //약관동의를 한 유저라는것을 컬럼으로 나타내야하는가
-
 }

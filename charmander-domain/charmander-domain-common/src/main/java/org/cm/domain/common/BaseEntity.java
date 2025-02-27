@@ -29,7 +29,7 @@ public class BaseEntity {
     @Column(nullable = false)
     private boolean isActive;
 
-    public void delete(){
+    public void delete() {
         this.isActive = false;
     }
 }
