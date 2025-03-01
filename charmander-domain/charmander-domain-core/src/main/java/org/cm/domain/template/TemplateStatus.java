@@ -1,10 +1,13 @@
 package org.cm.domain.template;
 
-import jakarta.persistence.AttributeConverter;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.cm.domain.common.GenericEnumConverter;
+import org.cm.domain.common.PersistenceEnum;
 
+@Getter
 @AllArgsConstructor
-public enum TemplateStatus {
+public enum TemplateStatus implements PersistenceEnum<String> {
     // @formatter:off
     DRAFT    ("draft"),
     PUBLIC   ("public"),
@@ -12,27 +15,12 @@ public enum TemplateStatus {
     ;
     // @formatter:on
 
-    public final String value;
-
-    public static TemplateStatus of(String value) {
-        for (TemplateStatus status : values()) {
-            if (status.value.equals(value)) {
-                return status;
-            }
-        }
-        throw new IllegalArgumentException("Invalid TemplateStatus: " + value);
-    }
+    private final String value;
 
     @jakarta.persistence.Converter
-    public static class Converter implements AttributeConverter<TemplateStatus, String> {
-        @Override
-        public String convertToDatabaseColumn(TemplateStatus templateStatus) {
-            return templateStatus.value;
-        }
-
-        @Override
-        public TemplateStatus convertToEntityAttribute(String s) {
-            return TemplateStatus.of(s);
+    public static class Converter extends GenericEnumConverter<TemplateStatus, String> {
+        public Converter() {
+            super(TemplateStatus.class);
         }
     }
 }

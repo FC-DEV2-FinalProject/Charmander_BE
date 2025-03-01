@@ -1,37 +1,25 @@
 package org.cm.domain.template;
 
-import jakarta.persistence.AttributeConverter;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.cm.domain.common.GenericEnumConverter;
+import org.cm.domain.common.PersistenceEnum;
 
+@Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public enum TemplateBackgroundType {
+public enum TemplateBackgroundType implements PersistenceEnum<String> {
     // @formatter:off
     Image ("image"),
     ;
     // @formatter:on
 
-    public final String value;
-
-    public static TemplateBackgroundType of(String value) {
-        for (TemplateBackgroundType type : values()) {
-            if (type.value.equals(value)) {
-                return type;
-            }
-        }
-        throw new IllegalArgumentException("Invalid TemplateBackgroundType: " + value);
-    }
+    private final String value;
 
     @jakarta.persistence.Converter
-    public static class Converter implements AttributeConverter<TemplateBackgroundType, String> {
-        @Override
-        public String convertToDatabaseColumn(TemplateBackgroundType attr) {
-            return attr.value;
-        }
-
-        @Override
-        public TemplateBackgroundType convertToEntityAttribute(String s) {
-            return TemplateBackgroundType.of(s);
+    public static class Converter extends GenericEnumConverter<TemplateBackgroundType, String> {
+        public Converter() {
+            super(TemplateBackgroundType.class);
         }
     }
 }
