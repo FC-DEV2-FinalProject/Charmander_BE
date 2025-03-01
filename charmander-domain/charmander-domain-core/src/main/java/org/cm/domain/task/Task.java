@@ -29,6 +29,9 @@ public class Task extends BaseEntity {
     @Column(nullable = false)
     private TaskStatus status = TaskStatus.PENDING;
 
+    @Column
+    private String jobId;
+
     @Embedded
     private TaskOutput output;
 
@@ -38,6 +41,14 @@ public class Task extends BaseEntity {
     public Task(Project project, TaskType type) {
         this.project = project;
         this.type = type;
+    }
+
+    public void start(String jobId) {
+        if (status != TaskStatus.PENDING) {
+            throw new IllegalStateException("invalid task status");
+        }
+        this.status = TaskStatus.IN_PROGRESS;
+        this.jobId = jobId;
     }
 
     public void succeed(TaskOutput output) {
