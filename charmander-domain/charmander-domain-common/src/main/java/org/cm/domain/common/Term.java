@@ -2,7 +2,6 @@ package org.cm.domain.common;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
 import java.time.LocalDate;
 
