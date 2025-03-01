@@ -40,7 +40,7 @@ public class Task extends BaseEntity {
         this.type = type;
     }
 
-    public void setOutput(TaskOutput output) {
+    public void succeed(TaskOutput output) {
         if (status != TaskStatus.IN_PROGRESS) {
             throw new IllegalStateException("invalid task status");
         }
