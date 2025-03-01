@@ -12,7 +12,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cm.domain.common.BaseEntity;
-import org.cm.domain.common.Member;
+import org.cm.domain.member.Member;
 
 @Getter
 @Entity(name = "project")

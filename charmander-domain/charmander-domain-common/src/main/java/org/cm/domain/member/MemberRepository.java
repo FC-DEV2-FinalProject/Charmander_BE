@@ -1,4 +1,4 @@
-package org.cm.domain.common;
+package org.cm.domain.member;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
