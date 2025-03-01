@@ -1,11 +1,14 @@
 package org.cm.domain.task;
 
-import jakarta.persistence.AttributeConverter;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import org.cm.domain.common.GenericEnumConverter;
+import org.cm.domain.common.PersistenceEnum;
 
+@Getter
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public enum TaskStatus {
+public enum TaskStatus implements PersistenceEnum<String> {
     // @formatter:off
     PENDING     ("Pending"   , "대기중"),
     IN_PROGRESS ("InProgress", "처리중"),
@@ -15,29 +18,13 @@ public enum TaskStatus {
     ;
     // @formatter:on
 
-    public final String value;
-    public final String description;
-
-    public static TaskStatus of(String value) {
-        for (TaskStatus status : values()) {
-            if (status.value.equals(value)) {
-                return status;
-            }
-        }
-
-        throw new IllegalArgumentException("Invalid TaskStatus: " + value);
-    }
+    private final String value;
+    private final String description;
 
     @jakarta.persistence.Converter
-    public static class Converter implements AttributeConverter<TaskStatus, String> {
-        @Override
-        public String convertToDatabaseColumn(TaskStatus taskStatus) {
-            return taskStatus.value;
-        }
-
-        @Override
-        public TaskStatus convertToEntityAttribute(String s) {
-            return TaskStatus.of(s);
+    public static class Converter extends GenericEnumConverter<TaskStatus, String> {
+        public Converter() {
+            super(TaskStatus.class);
         }
     }
 }
