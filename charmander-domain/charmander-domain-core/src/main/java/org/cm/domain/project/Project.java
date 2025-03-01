@@ -1,9 +1,8 @@
 package org.cm.domain.project;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
@@ -26,7 +25,7 @@ public class Project extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @Enumerated(EnumType.STRING)
+    @Convert(converter = ProjectStatusConverter.class)
     @Column(nullable = false)
     private ProjectStatus status = ProjectStatus.DRAFT;
 
