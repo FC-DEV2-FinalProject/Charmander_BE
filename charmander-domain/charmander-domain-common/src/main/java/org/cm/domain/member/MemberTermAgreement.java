@@ -8,7 +8,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cm.domain.common.BaseEntity;
-import org.cm.domain.common.Term;
+import org.cm.domain.term.Term;
 
 @Getter
 @Entity(name = "memberTermsAgreement")
