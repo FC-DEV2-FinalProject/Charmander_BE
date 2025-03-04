@@ -5,6 +5,6 @@ import jakarta.persistence.Table;
 import org.cm.domain.common.BaseEntity;
 
 @Entity
-@Table(name ="e")
+@Table(name = "e")
 public class Example extends BaseEntity {
 }

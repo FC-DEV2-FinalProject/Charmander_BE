@@ -16,4 +16,3 @@ public class ProjectStatusConverter implements AttributeConverter<ProjectStatus,
         return ProjectStatus.valueOf(dbData);
     }
 }
-

@@ -10,21 +10,21 @@ import org.cm.domain.common.ScreenSize;
 
 @Embeddable
 public record TemplateData(
-        @Column(nullable = false)
-        TemplateCategory category,
+    @Column(nullable = false)
+    TemplateCategory category,
 
-        @Column(nullable = false)
-        String name,
+    @Column(nullable = false)
+    String name,
 
-        @Embedded
-        ScreenSize size,
+    @Embedded
+    ScreenSize size,
 
-        @ManyToOne(fetch = FetchType.EAGER)
-        @JoinColumn(nullable = false, updatable = false)
-        TemplateBackground background,
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, updatable = false)
+    TemplateBackground background,
 
-        @ManyToOne(fetch = FetchType.EAGER)
-        @JoinColumn(nullable = false, updatable = false)
-        TemplateAvatar avatar
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false, updatable = false)
+    TemplateAvatar avatar
 ) {
 }
