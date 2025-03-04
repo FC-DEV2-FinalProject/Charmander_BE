@@ -31,10 +31,8 @@ allprojects {
 }
 
 subprojects {
-    apply plugin: 'org.springframework.boot'
-    apply plugin: 'io.spring.dependency-management'
 
-    bootJar.enabled= true
+    bootJar.enabled = true
     jar.enabled = true
     dependencies {
 
