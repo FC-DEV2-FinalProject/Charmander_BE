@@ -4,7 +4,7 @@ import jakarta.persistence.AttributeConverter;
 
 @SuppressWarnings("ConverterNotAnnotatedInspection")
 public abstract class GenericEnumConverter<T extends Enum<T> & PersistenceEnum<E>, E> implements
-        AttributeConverter<T, E> {
+    AttributeConverter<T, E> {
     private final Class<T> enumClass;
 
     public GenericEnumConverter(Class<T> enumClass) {

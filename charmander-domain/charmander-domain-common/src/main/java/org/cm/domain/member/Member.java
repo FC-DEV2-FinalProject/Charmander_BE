@@ -21,9 +21,9 @@ public class Member extends BaseEntity {
     private String phoneNumber;
 
     public Member(
-            MemberPrincipal principal,
-            MemberDetail detail,
-            String phoneNumber
+        MemberPrincipal principal,
+        MemberDetail detail,
+        String phoneNumber
     ) {
         this.principal = principal;
         this.detail = detail;

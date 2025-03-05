@@ -40,11 +40,11 @@ public class Project extends BaseEntity {
     private LocalDateTime lastAccessedAt = LocalDateTime.now();
 
     public Project(
-            Member owner,
-            String name,
-            ProjectStatus status,
-            String data,
-            int version
+        Member owner,
+        String name,
+        ProjectStatus status,
+        String data,
+        int version
     ) {
         this.owner = owner;
         this.name = name;
