@@ -2,13 +2,16 @@ package org.cm.api.account;
 
 import lombok.RequiredArgsConstructor;
 import org.cm.api.account.dto.CheckEmailRequest;
+import org.cm.api.account.dto.RegisterRequest;
 import org.cm.api.account.dto.VerifyEmailRequest;
 import org.cm.domain.account.EmailVerification;
 import org.cm.domain.account.EmailVerificationRepository;
 import org.cm.domain.account.EmailVerificationType;
+import org.cm.domain.member.Member;
 import org.cm.domain.member.MemberPrincipalType;
 import org.cm.domain.member.MemberRepository;
 import org.cm.utils.StringUtils;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +23,22 @@ public class AccountService {
 
     private final MemberRepository memberRepository;
     private final EmailVerificationRepository verificationRepository;
+
+    private final PasswordEncoder passwordEncoder;
+
+    public Member register(RegisterRequest request) {
+        var verification = verificationRepository.get(new EmailVerification.IdType(request.email(), EmailVerificationType.REGISTER));
+
+        validateEmailNotInUse(request.email());
+        validateVerification(verification, request.code());
+
+        var member = request.toMember(passwordEncoder);
+
+        memberRepository.save(member);
+        verificationRepository.delete(verification);
+
+        return member;
+    }
 
     public void checkEmail(CheckEmailRequest request, EmailVerificationType type) {
         validateEmailNotInUse(request.email());
