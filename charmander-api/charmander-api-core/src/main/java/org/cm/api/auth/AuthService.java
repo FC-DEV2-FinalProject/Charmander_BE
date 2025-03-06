@@ -34,4 +34,13 @@ public class AuthService {
     public void logout() {
         // TODO: 로그아웃 이벤트
     }
+
+    public LoginResponse refresh(String refreshToken) {
+        var jwt = jwtService.verifyRefreshToken(refreshToken);
+        var accessToken = jwtService.createAccessToken(jwt.getSubject());
+        if (jwtService.shouldReissueRefreshToken(jwt)) {
+            refreshToken = jwtService.createRefreshToken(jwt.getSubject());
+        }
+        return new LoginResponse(accessToken, refreshToken);
+    }
 }
