@@ -1,0 +1,12 @@
+dependencies {
+    implementation project(":charmander-api::charmander-api-common")
+
+    implementation project(":charmander-domain::charmander-domain-common")
+    implementation project(":charmander-domain::charmander-domain-core")
+
+    implementation "org.springframework.boot:spring-boot-starter-web"
+
+    implementation "org.springframework.security:spring-security-core"
+
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+}

@@ -23,8 +23,8 @@ public class MemberTermAgreement extends BaseEntity {
     private Term term;
 
     public MemberTermAgreement(
-            Member member,
-            Term term
+        Member member,
+        Term term
     ) {
         this.member = member;
         this.term = term;

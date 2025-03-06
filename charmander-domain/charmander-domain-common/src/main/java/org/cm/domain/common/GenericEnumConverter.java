@@ -1,10 +1,14 @@
 package org.cm.domain.common;
 
 import jakarta.persistence.AttributeConverter;
+import lombok.extern.slf4j.Slf4j;
+import org.cm.domain.exception.CommonDomainException;
+import org.cm.domain.exception.CommonDomainExceptionCode;
 
+@Slf4j
 @SuppressWarnings("ConverterNotAnnotatedInspection")
 public abstract class GenericEnumConverter<T extends Enum<T> & PersistenceEnum<E>, E> implements
-        AttributeConverter<T, E> {
+    AttributeConverter<T, E> {
     private final Class<T> enumClass;
 
     public GenericEnumConverter(Class<T> enumClass) {
@@ -24,6 +28,7 @@ public abstract class GenericEnumConverter<T extends Enum<T> & PersistenceEnum<E
                 return e;
             }
         }
-        throw new IllegalArgumentException("Unknown value: " + dbData);
+        log.error("unknown value: {}", dbData);
+        throw new CommonDomainException(CommonDomainExceptionCode.ELEMENT_NOT_FOUND);
     }
 }

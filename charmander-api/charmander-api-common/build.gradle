@@ -1,0 +1,11 @@
+dependencies {
+    implementation project(":charmander-domain::charmander-domain-common")
+    implementation project(":charmander-domain::charmander-domain-core")
+
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+    api libs.jwt
+    implementation "org.springframework.security:spring-security-core"
+}

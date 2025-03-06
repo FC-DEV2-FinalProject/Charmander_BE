@@ -1,4 +1,13 @@
 rootProject.name = 'Charmander'
 
+include 'charmander-api:charmander-api-common'
+include 'charmander-api:charmander-api-core'
+
 include 'charmander-domain:charmander-domain-common'
 include 'charmander-domain:charmander-domain-core'
+
+include 'charmander-infra'
+include 'charmander-infra:charmander-docs'
+
+include 'charmander-common'
+

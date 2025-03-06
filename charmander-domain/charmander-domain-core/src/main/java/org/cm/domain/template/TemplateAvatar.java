@@ -23,8 +23,8 @@ public class TemplateAvatar extends BaseEntity {
     private String fileUrl;
 
     public TemplateAvatar(
-            String name,
-            String fileUrl
+        String name,
+        String fileUrl
     ) {
         this.name = name;
         this.fileUrl = fileUrl;
