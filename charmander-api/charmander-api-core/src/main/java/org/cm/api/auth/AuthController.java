@@ -1,7 +1,10 @@
 package org.cm.api.auth;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.Duration;
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.cm.api.auth.dto.LoginRequest;
 import org.cm.api.auth.dto.LoginResponse;
@@ -33,6 +36,18 @@ public class AuthController {
     public void logout(HttpServletResponse servletResponse) {
         authService.logout();
         revokeRefreshTokenCookie(servletResponse);
+    }
+
+    @PostMapping("/refresh")
+    public LoginResponse refresh(HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
+        var loginResponse = Arrays.stream(servletRequest.getCookies())
+            .filter((cookie) -> JwtConstants.REFRESH_TOKEN_COOKIE_NAME.equals(cookie.getName()))
+            .findFirst()
+            .map(Cookie::getValue)
+            .map(authService::refresh)
+            .orElseThrow(() -> new RuntimeException("Refresh token not found"));
+        addRefreshTokenCookie(servletResponse, loginResponse.refreshToken());
+        return loginResponse;
     }
 
     private void addRefreshTokenCookie(HttpServletResponse servletResponse, String token) {
