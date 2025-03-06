@@ -30,4 +30,8 @@ public class AuthService {
         var refreshToken = jwtService.createRefreshToken(member);
         return new LoginResponse(accessToken, refreshToken);
     }
+
+    public void logout() {
+        // TODO: 로그아웃 이벤트
+    }
 }
