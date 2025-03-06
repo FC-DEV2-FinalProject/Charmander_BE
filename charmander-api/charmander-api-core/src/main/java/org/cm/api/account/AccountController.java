@@ -19,6 +19,12 @@ import org.springframework.web.bind.annotation.RestController;
 public class AccountController {
     private final AccountService accountService;
 
+    @PostMapping("/register")
+    public RegisterResponse register(@RequestBody RegisterRequest request) {
+        var member = accountService.register(request);
+        return RegisterResponse.from(member);
+    }
+
     @PostMapping("/register/check-email")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void checkEmailForRegister(@RequestBody CheckEmailRequest request) {
