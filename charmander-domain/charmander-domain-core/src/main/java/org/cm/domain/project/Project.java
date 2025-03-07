@@ -6,11 +6,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.Version;
 import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.cm.domain.common.BaseEntity;
 import org.cm.domain.member.Member;
 
@@ -22,6 +24,7 @@ public class Project extends BaseEntity {
     @JoinColumn(nullable = false, updatable = false)
     private Member owner;
 
+    @Setter
     @Column(nullable = false)
     private String name;
 
@@ -29,6 +32,7 @@ public class Project extends BaseEntity {
     @Column(nullable = false)
     private ProjectStatus status = ProjectStatus.DRAFT;
 
+    @Setter
     @Column(nullable = false, columnDefinition = "MEDIUMTEXT")
     private String data;
 
@@ -51,5 +55,9 @@ public class Project extends BaseEntity {
         this.status = status;
         this.data = data;
         this.version = version;
+    }
+
+    public static Project newDraftProject(Member owner) {
+        return new Project(owner, "New Project", ProjectStatus.DRAFT, "{}", 0);
     }
 }
