@@ -22,7 +22,9 @@ allprojects {
 
     repositories { mavenCentral() }
 
-    tasks.named('test') {}
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
 }
 
 subprojects {
@@ -32,5 +34,13 @@ subprojects {
 
     bootJar.enabled = true
     jar.enabled = true
-    dependencies {}
+    dependencies {
+        implementation libs.mapstruct
+
+        annotationProcessor libs.mapstruct.processor
+        annotationProcessor libs.mapstruct.lombok
+
+        testAnnotationProcessor libs.mapstruct.processor
+        testAnnotationProcessor libs.mapstruct.lombok
+    }
 }
