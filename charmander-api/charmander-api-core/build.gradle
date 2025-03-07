@@ -5,6 +5,7 @@ dependencies {
     implementation project(":charmander-domain::charmander-domain-core")
 
     implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-data-redis"
 
     implementation "org.springframework.security:spring-security-core"
 
