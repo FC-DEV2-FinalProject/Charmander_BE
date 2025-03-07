@@ -22,7 +22,7 @@ public record ProjectResponse(
         ProjectResponse map(Project project);
     }
 
-    public static ProjectResponse of(Project project) {
+    public static ProjectResponse from(Project project) {
         return Mapper.INSTANCE.map(project);
     }
 }

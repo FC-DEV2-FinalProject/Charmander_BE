@@ -27,28 +27,28 @@ public class ProjectController {
     @GetMapping
     public ListResponse<ProjectResponse> getAllProjects(@AuthUser AuthInfo authInfo) {
         var items = projectService.getAllProjects(authInfo);
-        return ListResponse.of(items, ProjectResponse::of);
+        return ListResponse.of(items, ProjectResponse::from);
     }
 
     @MemberOnly
     @GetMapping("/{id}")
     public ProjectDetailResponse getProjectById(@PathVariable Long id, @AuthUser AuthInfo authInfo) {
         var item = projectService.getProjectById(authInfo, id);
-        return ProjectDetailResponse.of(item);
+        return ProjectDetailResponse.from(item);
     }
 
     @MemberOnly
     @PostMapping
     public ProjectDetailResponse createProject(@AuthUser AuthInfo authInfo) {
         var item = projectService.createProject(authInfo);
-        return ProjectDetailResponse.of(item);
+        return ProjectDetailResponse.from(item);
     }
 
     @MemberOnly
     @PutMapping("/{id}")
     public ProjectDetailResponse updateProject(@PathVariable Long id, @RequestBody ProjectUpdateRequest project, @AuthUser AuthInfo authInfo) {
         var item = projectService.updateProject(authInfo, id, project);
-        return ProjectDetailResponse.of(item);
+        return ProjectDetailResponse.from(item);
     }
 
     @MemberOnly
