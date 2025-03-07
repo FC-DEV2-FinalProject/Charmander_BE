@@ -31,13 +31,12 @@ public class AuthUserResolver implements HandlerMethodArgumentResolver {
         WebDataBinderFactory binderFactory
     ) {
         var servletRequest = (HttpServletRequest) webRequest.getNativeRequest();
-        var accessToken = Optional
+        return Optional
             .ofNullable(servletRequest.getHeader("Authorization"))
             .filter(header -> header.startsWith("Bearer "))
             .map(header -> header.substring(7))
             .map(jwtService::verifyAccessToken)
+            .map(AuthInfo::from)
             .orElse(null);
-
-        return AuthInfo.from(accessToken);
     }
 }
