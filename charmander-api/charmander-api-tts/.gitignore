@@ -1,0 +1,16 @@
+# Python
+__pycache__
+.venv
+venv
+
+# pytest
+.pytest_cache
+
+# dotenv
+.env
+
+# poetry
+poetry.toml
+
+# vscode
+.vscode/settings.json
