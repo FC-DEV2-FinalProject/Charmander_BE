@@ -24,14 +24,18 @@ WORKDIR $WORKDIR
 RUN chown -R $USER:$GROUP $WORKDIR
 USER $USER:$GROUP
 
-# copy files
+# install dependencies
 COPY --from=builder /builder/requirements.txt $WORKDIR
+RUN pip install --no-cache-dir -r requirements.txt
+
+# copy source code
 COPY src $WORKDIR/src
 COPY main.py $WORKDIR
-
-RUN pip install --no-cache-dir -r requirements.txt
 
 ENV PORT=8080
 EXPOSE 8080
 
-CMD [ "python", "-m", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "$PORT" ]
+COPY scripts/entrypoint.sh $WORKDIER
+
+ENTRYPOINT [ "sh" ]
+CMD [ "entrypoint.sh" ]
