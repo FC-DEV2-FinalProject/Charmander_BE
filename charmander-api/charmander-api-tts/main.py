@@ -1,8 +1,10 @@
 from fastapi import FastAPI
+from dotenv import load_dotenv
+
+from src.routes.api import router as api_router
+
+load_dotenv(override=True)
 
 app = FastAPI()
 
-
-@app.get("/")
-def hello_world():
-    return {"message": "Hello, World!"}
+app.include_router(api_router, prefix="/api")

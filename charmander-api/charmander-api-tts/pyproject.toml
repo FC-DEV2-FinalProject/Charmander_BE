@@ -13,6 +13,11 @@ build-backend = "poetry.core.masonry.api"
 [tool.poetry.dependencies]
 fastapi = "^0.115.11"
 uvicorn = "^0.34.0"
+pydantic = "^2.10.6"
+gtts = "^2.5.4"
+boto3 = "^1.37.9"
+python-dotenv = "^1.0.1"
+nanoid = "^2.0.0"
 
 [tool.poe.tasks.run]
 help = "Run the application"
