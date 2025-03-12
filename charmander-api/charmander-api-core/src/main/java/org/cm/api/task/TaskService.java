@@ -18,4 +18,8 @@ public class TaskService {
     public List<Task> getMemberTasks(AuthInfo authInfo) {
         return taskRepository.findByMemberId(authInfo.getMemberId());
     }
+
+    public Task getMemberTask(Long taskId, AuthInfo authInfo) {
+        return taskRepository.findByIdAndMemberId(taskId, authInfo.getMemberId());
+    }
 }

@@ -22,4 +22,11 @@ public class TaskController {
         var items = taskService.getMemberTasks(authInfo);
         return ListResponse.of(items, TaskResponse::from);
     }
+
+    @MemberOnly
+    @GetMapping("/{taskId}")
+    public TaskResponse getTask(@AuthUser AuthInfo authInfo, Long taskId) {
+        var item = taskService.getMemberTask(taskId, authInfo);
+        return TaskResponse.from(item);
+    }
 }
