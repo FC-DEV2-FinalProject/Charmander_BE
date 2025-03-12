@@ -1,0 +1,4 @@
+
+aws:
+  access_key: ${storage.s3.access_key}
+  secret_key: ${storage.s3.secret_key}
