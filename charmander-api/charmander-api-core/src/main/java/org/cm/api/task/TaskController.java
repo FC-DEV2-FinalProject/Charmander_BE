@@ -23,14 +23,14 @@ public class TaskController {
 
     @MemberOnly
     @GetMapping("/{taskId}")
-    public TaskResponse getTask(@AuthUser AuthInfo authInfo, @PathVariable Long taskId) {
+    public TaskResponse getTask(@PathVariable Long taskId, @AuthUser AuthInfo authInfo) {
         var item = taskService.getMemberTask(taskId, authInfo);
         return TaskResponse.from(item);
     }
 
     @MemberOnly
     @PostMapping("/{taskId}/retry")
-    public TaskResponse retryTask(@AuthUser AuthInfo authInfo, @PathVariable Long taskId) {
+    public TaskResponse retryTask(@PathVariable Long taskId, @AuthUser AuthInfo authInfo) {
         var item = taskService.retryTask(taskId, authInfo);
         return TaskResponse.from(item);
     }
