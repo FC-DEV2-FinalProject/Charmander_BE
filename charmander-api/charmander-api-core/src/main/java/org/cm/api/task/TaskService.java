@@ -15,10 +15,12 @@ import java.util.List;
 public class TaskService {
     private final TaskRepository taskRepository;
 
+    @Transactional(readOnly = true)
     public List<Task> getMemberTasks(AuthInfo authInfo) {
         return taskRepository.findByMemberId(authInfo.getMemberId());
     }
 
+    @Transactional(readOnly = true)
     public Task getMemberTask(Long taskId, AuthInfo authInfo) {
         return taskRepository.findByIdAndMemberId(taskId, authInfo.getMemberId());
     }
