@@ -2,6 +2,7 @@ package org.cm.api.template;
 
 import lombok.RequiredArgsConstructor;
 import org.cm.api.common.dto.ListResponse;
+import org.cm.api.template.dto.TemplateCategoryDto;
 import org.cm.api.template.dto.TemplateResponse;
 import org.cm.security.AuthInfo;
 import org.cm.security.annotations.support.AuthUser;
@@ -29,5 +30,11 @@ public class TemplateController {
     public TemplateResponse getTemplateById(@PathVariable Long id, @AuthUser AuthInfo authInfo) {
         var item = templateService.getTemplateById(id);
         return TemplateResponse.from(item);
+    }
+
+    @GetMapping("/categories")
+    public ListResponse<TemplateCategoryDto> getCategories(@AuthUser AuthInfo authInfo) {
+        var items = templateService.getCategories();
+        return ListResponse.of(items, TemplateCategoryDto::from);
     }
 }
