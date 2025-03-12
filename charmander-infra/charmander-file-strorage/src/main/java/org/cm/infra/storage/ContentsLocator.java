@@ -8,28 +8,16 @@ public interface ContentsLocator {
     String prefix();
 
     default String combineLocation(String identifier) {
-
         if(Strings.isBlank(identifier)){
             throw new IllegalArgumentException();
         }
 
         var prefix = prefix();
-
-        if(Strings.isBlank(prefix)){
-            if(identifier.startsWith("/")) {
-                return identifier.substring(1);
-            }
-            return identifier;
+        if (Strings.isBlank(prefix)) {
+            return identifier.startsWith("/") ? identifier.substring(1) : identifier;
         }
 
-        if(prefix.startsWith("/"))  {
-            prefix = prefix.substring(1);
-        }
-
-        if(identifier.startsWith("/")) {
-            return prefix + identifier;
-        }
-
-        return prefix + "/" + identifier;
+        prefix = prefix.startsWith("/") ? prefix.substring(1) : prefix;
+        return prefix + (identifier.startsWith("/") ? "" : "/") + identifier;
     }
 }
