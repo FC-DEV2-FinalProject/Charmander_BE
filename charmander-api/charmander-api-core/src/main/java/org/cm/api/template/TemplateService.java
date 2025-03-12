@@ -17,4 +17,8 @@ public class TemplateService {
     public List<Template> findAll() {
         return templateRepository.findAll();
     }
+
+    public Template getTemplateById(Long id) {
+        return templateRepository.findById(id).orElseThrow(() -> new RuntimeException("Template not found"));
+    }
 }
