@@ -1,5 +1,6 @@
 package org.cm.api.task;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.cm.domain.task.Task;
 import org.cm.domain.task.TaskRepository;
@@ -23,5 +24,14 @@ public class TaskService {
     @Transactional(readOnly = true)
     public Task getMemberTask(Long taskId, AuthInfo authInfo) {
         return taskRepository.findByIdAndMemberId(taskId, authInfo.getMemberId());
+    }
+
+    public Task retryTask(Long taskId, AuthInfo authInfo) {
+        var task = taskRepository.findByIdAndMemberIdForUpdate(taskId, authInfo.getMemberId());
+        if (task == null) {
+            throw new EntityNotFoundException("Task not found");
+        }
+        task.retry();
+        return taskRepository.save(task);
     }
 }
