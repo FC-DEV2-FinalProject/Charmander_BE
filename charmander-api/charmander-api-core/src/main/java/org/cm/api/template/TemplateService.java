@@ -19,6 +19,10 @@ public class TemplateService {
         return templateRepository.findAll();
     }
 
+    public List<Template> findByCategory(int categoryId) {
+        return templateRepository.findByCategory(TemplateCategory.of(categoryId));
+    }
+
     public Template getTemplateById(Long id) {
         return templateRepository.findById(id).orElseThrow(() -> new RuntimeException("Template not found"));
     }

@@ -4,13 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.cm.api.common.dto.ListResponse;
 import org.cm.api.template.dto.TemplateCategoryDto;
 import org.cm.api.template.dto.TemplateResponse;
+import org.cm.domain.template.Template;
 import org.cm.security.AuthInfo;
 import org.cm.security.annotations.support.AuthUser;
 import org.cm.security.annotations.support.MemberOnly;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.jspecify.annotations.Nullable;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/templates")
@@ -20,8 +21,17 @@ public class TemplateController {
 
     @MemberOnly
     @GetMapping
-    public ListResponse<TemplateResponse> getAllTemplates(@AuthUser AuthInfo authInfo) {
-        var items = templateService.findAll();
+    public ListResponse<TemplateResponse> getAllTemplates(
+        @Nullable @RequestParam(required = false) Integer categoryId,
+        @AuthUser AuthInfo authInfo
+    ) {
+        List<Template> items;
+        if (categoryId == null) {
+            items = templateService.findAll();
+        }
+        else {
+            items = templateService.findByCategory(categoryId);
+        }
         return ListResponse.of(items, TemplateResponse::from);
     }
 
