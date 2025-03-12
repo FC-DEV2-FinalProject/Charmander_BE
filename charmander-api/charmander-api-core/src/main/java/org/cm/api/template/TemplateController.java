@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.cm.api.common.dto.ListResponse;
 import org.cm.api.template.dto.TemplateCategoryDto;
 import org.cm.api.template.dto.TemplateResponse;
+import org.cm.api.template.dto.TemplateSuggestRequest;
+import org.cm.api.template.dto.TemplateSuggestResponse;
 import org.cm.domain.template.Template;
 import org.cm.security.AuthInfo;
 import org.cm.security.annotations.support.AuthUser;
@@ -18,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TemplateController {
     private final TemplateService templateService;
+    private final TemplateSuggestService templateSuggestService;
 
     @MemberOnly
     @GetMapping
@@ -46,5 +49,13 @@ public class TemplateController {
     public ListResponse<TemplateCategoryDto> getCategories(@AuthUser AuthInfo authInfo) {
         var items = templateService.getCategories();
         return ListResponse.of(items, TemplateCategoryDto::from);
+    }
+
+    @MemberOnly
+    @PostMapping("/suggest")
+    public TemplateSuggestResponse suggestTemplate(@RequestBody TemplateSuggestRequest request, @AuthUser AuthInfo authInfo) throws Exception {
+        var suggestion = templateSuggestService.suggestCategory(request);
+        var items = templateService.findByCategory(suggestion.result().id());
+        return TemplateSuggestResponse.from(suggestion, items);
     }
 }
