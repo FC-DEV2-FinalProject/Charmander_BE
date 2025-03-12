@@ -22,7 +22,9 @@ allprojects {
 
     repositories { mavenCentral() }
 
-    tasks.named('test') {}
+    tasks.named('test') {
+        useJUnitPlatform()
+    }
 }
 
 subprojects {
