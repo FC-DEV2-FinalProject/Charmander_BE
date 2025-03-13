@@ -9,15 +9,14 @@ dependencyManagement {
 }
 dependencies {
     implementation project(":charmander-common")
-    implementation project(":charmander-api::charmander-api-common")
-    implementation project(":charmander-domain::charmander-domain-common")
-    implementation project(":charmander-domain::charmander-domain-core")
+    implementation project(":charmander-api:charmander-api-common")
+    implementation project(":charmander-domain:charmander-domain-common")
+    implementation project(":charmander-domain:charmander-domain-core")
+    implementation project(":charmander-infra:charmander-docs")
 
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-data-redis"
-
     implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
-
     implementation "org.springframework.security:spring-security-core"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
