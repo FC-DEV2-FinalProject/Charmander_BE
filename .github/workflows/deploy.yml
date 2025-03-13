@@ -38,20 +38,18 @@ jobs:
       - name: Docker 이미지 생성 및 태그 붙이기
         run: docker build -t ${{ steps.login-ecr.outputs.registry }}/charmander-dev-server-ecr:latest ./charmander-api/charmander-api-core
 
-      - name: Docker 이미지 푸시하기
+      - name: ECR에 Docker 이미지 푸시하기
         run: docker push ${{ steps.login-ecr.outputs.registry }}/charmander-dev-server-ecr:latest
 
-      #TODO: SSH제거
-      - name: SSH로 EC2에 접속하기
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.EC2_HOST }}
-          username: ${{ secrets.EC2_USERNAME }}
-          key: ${{ secrets.EC2_PRIVATE_KEY }}
-          script_stop: true
-          #TODO: script파일 따로 분리
-          script: |
-            docker stop charmander-tts-server-ecr || true
-            docker rm charmander-tts-server-ecr || true
-            docker pull ${{ steps.login-ecr.outputs.registry }}/charmander-dev-server-ecr:latest
-            docker run -d --name charmander-tts-server-ecr -p 8080:8080 ${{ steps.login-ecr.outputs.registry }}/charmander-dev-server-ecr:latest
+      - name: 압축하기
+        run: tar -czvf $GITHUB_SHA.tar.gz appspec.yml scripts
+
+      - name: S3에 프로젝트 폴더 업로드하기
+        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.tar.gz s3://charmander-api-jar/$GITHUB_SHA.tar.gz
+
+      - name: Code Deploy를 활용해 EC2에 프로젝트 코드 배포
+        run: aws deploy create-deployment
+          --application-name charmander-api-codeploy
+          --deployment-config-name CodeDeployDefault.AllAtOnce
+          --deployment-group-namecharmadner-api-codedeploy-group
+          --s3-location bucket=charmander-api-jar,bundleType=tgz,key=$GITHUB_SHA.tar.gz
