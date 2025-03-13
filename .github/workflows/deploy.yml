@@ -41,6 +41,7 @@ jobs:
       - name: Docker 이미지 푸시하기
         run: docker push ${{ steps.login-ecr.outputs.registry }}/charmander-dev-server-ecr:latest
 
+      #TODO: SSH제거
       - name: SSH로 EC2에 접속하기
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -48,6 +49,7 @@ jobs:
           username: ${{ secrets.EC2_USERNAME }}
           key: ${{ secrets.EC2_PRIVATE_KEY }}
           script_stop: true
+          #TODO: script파일 따로 분리
           script: |
             docker stop charmander-tts-server-ecr || true
             docker rm charmander-tts-server-ecr || true
