@@ -67,7 +67,7 @@ public class AccountService {
 
     private void validateVerification(EmailVerification verification, String code) {
         if (verification != null && !verification.code().equals(code)) {
-            throw new IllegalArgumentException("Verification code already sent");
+            throw new CoreApiException(CoreApiExceptionCode.ACCOUNT_VERIFICATION_CODE_NOT_MATCH);
         }
     }
 }
