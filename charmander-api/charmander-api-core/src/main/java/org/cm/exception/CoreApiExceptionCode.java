@@ -9,7 +9,7 @@ import org.springframework.boot.logging.LogLevel;
 @RequiredArgsConstructor
 public enum CoreApiExceptionCode implements ExceptionCode {
     // @formatter:off
-
+    ACCOUNT_EMAIL_ALREADY_IN_USE("A001", "Email is already in use."),
     ;
     // @formatter:on
 

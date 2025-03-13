@@ -10,6 +10,8 @@ import org.cm.domain.account.EmailVerificationType;
 import org.cm.domain.member.Member;
 import org.cm.domain.member.MemberPrincipalType;
 import org.cm.domain.member.MemberRepository;
+import org.cm.exception.CoreApiException;
+import org.cm.exception.CoreApiExceptionCode;
 import org.cm.utils.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -59,7 +61,7 @@ public class AccountService {
 
     private void validateEmailNotInUse(String email) {
         if (memberRepository.existsByPrincipal_IdAndPrincipal_Type(email, MemberPrincipalType.LOCAL)) {
-            throw new IllegalArgumentException("Email already in use");
+            throw new CoreApiException(CoreApiExceptionCode.ACCOUNT_EMAIL_ALREADY_IN_USE);
         }
     }
 
