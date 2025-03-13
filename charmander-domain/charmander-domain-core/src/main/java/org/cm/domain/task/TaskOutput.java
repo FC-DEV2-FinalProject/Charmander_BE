@@ -8,18 +8,18 @@ import org.cm.converter.DurationToSecondConverter;
 
 @Embeddable
 public record TaskOutput(
-        @Column
-        String fileUrl,
+    @Column
+    String fileUrl,
 
-        @Column
-        String fileName,
+    @Column
+    String fileName,
 
-        @Convert(converter = DurationToSecondConverter.class)
-        @Column
-        Duration playtime,
+    @Convert(converter = DurationToSecondConverter.class)
+    @Column
+    Duration playtime,
 
-        @Column
-        Integer downloadCount
+    @Column
+    Integer downloadCount
 ) {
 
 }

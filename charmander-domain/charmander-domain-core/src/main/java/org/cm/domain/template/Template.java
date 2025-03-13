@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.cm.domain.common.BaseEntity;
+import org.cm.exception.CoreDomainException;
+import org.cm.exception.CoreDomainExceptionCode;
 
 @Getter
 @Entity(name = "template")
@@ -31,21 +33,21 @@ public class Template extends BaseEntity {
 
     public void update(TemplateData data) {
         if (status != TemplateStatus.DRAFT) {
-            throw new IllegalStateException("초안 상태에서만 수정할 수 있음.");
+            throw new CoreDomainException(CoreDomainExceptionCode.UPDATE_ALLOWED_ONLY_IN_DRAFT);
         }
         this.data = data;
     }
 
     public void publish() {
         if (status != TemplateStatus.DRAFT) {
-            throw new IllegalStateException("초안 상태에서만 공개할 수 있음.");
+            throw new CoreDomainException(CoreDomainExceptionCode.PUBLISH_ALLOWED_ONLY_IN_DRAFT);
         }
         this.status = TemplateStatus.PUBLIC;
     }
 
     public void disable() {
         if (status != TemplateStatus.PUBLIC) {
-            throw new IllegalStateException("공개 상태에서만 중단할 수 있음.");
+            throw new CoreDomainException(CoreDomainExceptionCode.DISABLE_ALLOWED_ONLY_IN_PUBLIC);
         }
         this.status = TemplateStatus.DISABLED;
     }

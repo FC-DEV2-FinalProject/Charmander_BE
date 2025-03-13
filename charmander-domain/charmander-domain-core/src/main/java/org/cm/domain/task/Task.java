@@ -12,6 +12,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cm.domain.common.BaseEntity;
 import org.cm.domain.project.Project;
+import org.cm.exception.CoreDomainException;
+import org.cm.exception.CoreDomainExceptionCode;
 
 @Getter
 @Entity(name = "task")
@@ -45,7 +47,7 @@ public class Task extends BaseEntity {
 
     public void start(String jobId) {
         if (status != TaskStatus.PENDING) {
-            throw new IllegalStateException("invalid task status");
+            throw new CoreDomainException(CoreDomainExceptionCode.START_ALLOWED_ONLY_IN_PENDING);
         }
         this.status = TaskStatus.IN_PROGRESS;
         this.jobId = jobId;
@@ -53,7 +55,7 @@ public class Task extends BaseEntity {
 
     public void succeed(TaskOutput output) {
         if (status != TaskStatus.IN_PROGRESS) {
-            throw new IllegalStateException("invalid task status");
+            throw new CoreDomainException(CoreDomainExceptionCode.SUCCEED_ALLOWED_ONLY_IN_PROGRESS);
         }
         this.output = output;
         this.status = TaskStatus.SUCCESS;
@@ -61,7 +63,7 @@ public class Task extends BaseEntity {
 
     public void retry() {
         if (status != TaskStatus.FAILED) {
-            throw new IllegalStateException("invalid task status");
+            throw new CoreDomainException(CoreDomainExceptionCode.RETRY_ALLOWED_ONLY_IN_FAILED);
         }
         status = TaskStatus.PENDING;
         retryCount++;
@@ -69,7 +71,7 @@ public class Task extends BaseEntity {
 
     public void cancel() {
         if (status != TaskStatus.PENDING) {
-            throw new IllegalStateException("invalid task status");
+            throw new CoreDomainException(CoreDomainExceptionCode.CANCEL_ALLOWED_ONLY_PENDING);
         }
         status = TaskStatus.CANCELED;
     }

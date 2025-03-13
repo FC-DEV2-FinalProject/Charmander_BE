@@ -33,10 +33,10 @@ public class TemplateBackground extends BaseEntity {
     private ScreenSize size;
 
     public TemplateBackground(
-            String name,
-            TemplateBackgroundType type,
-            String fileUrl,
-            ScreenSize size
+        String name,
+        TemplateBackgroundType type,
+        String fileUrl,
+        ScreenSize size
     ) {
         this.name = name;
         this.type = type;

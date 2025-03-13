@@ -22,6 +22,15 @@ public enum TemplateCategory implements PersistenceEnum<Integer> {
     private final Integer value;
     private final String description;
 
+    public static TemplateCategory of(Integer id) {
+        for (TemplateCategory category : values()) {
+            if (category.getValue().equals(id)) {
+                return category;
+            }
+        }
+        throw new IllegalArgumentException("Unknown TemplateCategory id: " + id);
+    }
+
     @jakarta.persistence.Converter
     public static class Converter extends GenericEnumConverter<TemplateCategory, Integer> {
         public Converter() {
