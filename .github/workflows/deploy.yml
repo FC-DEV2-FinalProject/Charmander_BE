@@ -51,5 +51,5 @@ jobs:
         run: aws deploy create-deployment
           --application-name charmander-api-codeploy
           --deployment-config-name CodeDeployDefault.AllAtOnce
-          --deployment-group-namecharmadner-api-codedeploy-group
+          --deployment-group-name charmadner-api-codedeploy-group
           --s3-location bucket=charmander-api-jar,bundleType=tgz,key=$GITHUB_SHA.tar.gz
