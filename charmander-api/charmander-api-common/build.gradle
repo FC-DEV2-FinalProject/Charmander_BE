@@ -1,4 +1,6 @@
 dependencies {
+    implementation project(":charmander-common")
+
     implementation project(":charmander-domain::charmander-domain-common")
     implementation project(":charmander-domain::charmander-domain-core")
 
