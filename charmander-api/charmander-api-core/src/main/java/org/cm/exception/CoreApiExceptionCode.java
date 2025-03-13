@@ -15,6 +15,8 @@ public enum CoreApiExceptionCode implements ExceptionCode {
     AUTH_INVALID_CREDENTIAL("AU001", "Invalid username or password."),
 
     MEMBER_NOT_FOUND("M001", "Member not found."),
+
+    PROJECT_NOT_FOUND("P001", "Project not found."),
     ;
     // @formatter:on
 
