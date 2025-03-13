@@ -1,6 +1,7 @@
 package org.cm.api.project.dto;
 
 import org.cm.domain.project.Project;
+import org.cm.domain.project.ProjectData;
 import org.jspecify.annotations.NonNull;
 
 public record ProjectUpdateRequest(
@@ -8,7 +9,7 @@ public record ProjectUpdateRequest(
     String name,
 
     @NonNull
-    String data
+    ProjectData data
 ) {
     public void update(Project project) {
         project.setName(name());
