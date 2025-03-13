@@ -16,13 +16,13 @@ public enum CoreApiExceptionCode implements WebExceptionCode {
 
     AUTH_INVALID_CREDENTIAL("AU001", "Invalid username or password."),
 
-    MEMBER_NOT_FOUND("M001", "Member not found."),
+    MEMBER_NOT_FOUND("M001", "Member not found.", HttpStatus.NOT_FOUND),
 
     PROJECT_NOT_FOUND("P001", "Project not found.", HttpStatus.NOT_FOUND),
 
-    TASK_NOT_FOUND("T001", "Task not found."),
+    TASK_NOT_FOUND("T001", "Task not found.", HttpStatus.NOT_FOUND),
 
-    TEMPLATE_NOT_FOUND("TP001", "Template not found.")
+    TEMPLATE_NOT_FOUND("TP001", "Template not found.", HttpStatus.NOT_FOUND)
     ;
     // @formatter:on
 
