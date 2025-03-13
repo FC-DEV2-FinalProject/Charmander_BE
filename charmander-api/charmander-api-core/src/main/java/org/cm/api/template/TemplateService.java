@@ -4,6 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.cm.domain.template.Template;
 import org.cm.domain.template.TemplateCategory;
 import org.cm.domain.template.TemplateRepository;
+import org.cm.exception.CoreApiException;
+import org.cm.exception.CoreApiExceptionCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,7 +26,7 @@ public class TemplateService {
     }
 
     public Template getTemplateById(Long id) {
-        return templateRepository.findById(id).orElseThrow(() -> new RuntimeException("Template not found"));
+        return templateRepository.findById(id).orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.TEMPLATE_NOT_FOUND));
     }
 
     public List<TemplateCategory> getCategories() {

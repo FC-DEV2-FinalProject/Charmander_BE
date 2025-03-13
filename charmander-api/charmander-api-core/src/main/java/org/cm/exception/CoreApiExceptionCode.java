@@ -18,7 +18,9 @@ public enum CoreApiExceptionCode implements ExceptionCode {
 
     PROJECT_NOT_FOUND("P001", "Project not found."),
 
-    TASK_NOT_FOUND("T001", "Task not found.")
+    TASK_NOT_FOUND("T001", "Task not found."),
+
+    TEMPLATE_NOT_FOUND("TP001", "Template not found.")
     ;
     // @formatter:on
 
