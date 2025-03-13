@@ -13,6 +13,8 @@ public enum CoreApiExceptionCode implements ExceptionCode {
     ACCOUNT_VERIFICATION_CODE_NOT_MATCH("A002", "Verification code does not match."),
 
     AUTH_INVALID_CREDENTIAL("AU001", "Invalid username or password."),
+
+    MEMBER_NOT_FOUND("M001", "Member not found."),
     ;
     // @formatter:on
 
