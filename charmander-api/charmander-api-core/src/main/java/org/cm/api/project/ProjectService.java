@@ -33,7 +33,7 @@ public class ProjectService {
 
     public Project createProject(AuthInfo authInfo) {
         var member = memberRepository.findById(authInfo.getMemberId())
-            .orElseThrow(() -> new IllegalArgumentException("Member not found"));
+            .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.MEMBER_NOT_FOUND));
 
         var project = Project.newDraftProject(member);
         return projectRepository.save(project);
