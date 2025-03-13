@@ -2,6 +2,8 @@ package org.cm.email;
 
 import java.nio.charset.StandardCharsets;
 import lombok.RequiredArgsConstructor;
+import org.cm.exception.CommonApiException;
+import org.cm.exception.CommonApiExceptionCode;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.thymeleaf.TemplateEngine;
@@ -30,7 +32,7 @@ public class ThymeleafEmailClient implements EmailClient {
 
             javaMailSender.send(message);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to send email", e);
+            throw new CommonApiException(CommonApiExceptionCode.EMAIL_SENT_FAIL);
         }
     }
 }

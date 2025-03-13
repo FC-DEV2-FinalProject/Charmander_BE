@@ -9,7 +9,7 @@ import org.springframework.boot.logging.LogLevel;
 @RequiredArgsConstructor
 public enum CommonApiExceptionCode implements ExceptionCode {
     // @formatter:off
-
+    EMAIL_SENT_FAIL ("E001", "이메일 발송에 실패하였습니다."),
     ;
     // @formatter:on
 
