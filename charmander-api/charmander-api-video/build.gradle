@@ -1,0 +1,9 @@
+
+dependencies {
+    implementation project(":charmander-infra:charmander-docs")
+    implementation project(":charmander-domain:charmander-domain-core")
+    implementation project(":charmander-domain:charmander-domain-common")
+    implementation project(":charmander-common")
+
+    implementation "org.springframework.boot:spring-boot-starter-web"
+}

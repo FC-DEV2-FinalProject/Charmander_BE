@@ -2,6 +2,7 @@ rootProject.name = 'Charmander'
 
 include 'charmander-api:charmander-api-common'
 include 'charmander-api:charmander-api-core'
+include 'charmander-api:charmander-api-video'
 
 include 'charmander-domain:charmander-domain-common'
 include 'charmander-domain:charmander-domain-core'
