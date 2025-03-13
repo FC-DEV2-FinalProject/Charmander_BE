@@ -17,6 +17,8 @@ public enum CoreApiExceptionCode implements ExceptionCode {
     MEMBER_NOT_FOUND("M001", "Member not found."),
 
     PROJECT_NOT_FOUND("P001", "Project not found."),
+
+    TASK_NOT_FOUND("T001", "Task not found.")
     ;
     // @formatter:on
 

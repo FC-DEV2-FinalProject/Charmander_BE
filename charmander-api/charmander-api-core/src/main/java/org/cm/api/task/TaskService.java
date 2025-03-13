@@ -4,6 +4,8 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.cm.domain.task.Task;
 import org.cm.domain.task.TaskRepository;
+import org.cm.exception.CoreApiException;
+import org.cm.exception.CoreApiExceptionCode;
 import org.cm.security.AuthInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +31,7 @@ public class TaskService {
     public Task retryTask(Long taskId, AuthInfo authInfo) {
         var task = taskRepository.findByIdAndMemberIdForUpdate(taskId, authInfo.getMemberId());
         if (task == null) {
-            throw new EntityNotFoundException("Task not found");
+            throw new CoreApiException(CoreApiExceptionCode.TASK_NOT_FOUND);
         }
         task.retry();
         return taskRepository.save(task);
