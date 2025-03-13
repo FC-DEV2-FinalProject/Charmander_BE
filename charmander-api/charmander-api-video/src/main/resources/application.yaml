@@ -1,0 +1,10 @@
+server:
+  port: 8081
+
+spring:
+  config:
+    import:
+      - api-docs.yml
+      - db-common.yml
+  profiles:
+    active: local
