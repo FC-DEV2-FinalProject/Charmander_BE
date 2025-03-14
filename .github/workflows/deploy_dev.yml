@@ -1,4 +1,4 @@
-name: Deploy To EC2
+name: dev branch Deploy To ECR
 
 on:
   push:
@@ -41,15 +41,15 @@ jobs:
       - name: ECR에 Docker 이미지 푸시하기
         run: docker push ${{ steps.login-ecr.outputs.registry }}/charmander-dev-server-ecr:latest
 
-      - name: 압축하기
-        run: tar -czvf $GITHUB_SHA.tar.gz appspec.yml scripts
-
-      - name: S3에 프로젝트 폴더 업로드하기
-        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.tar.gz s3://charmander-api-jar/$GITHUB_SHA.tar.gz
-
-      - name: Code Deploy를 활용해 EC2에 프로젝트 코드 배포
-        run: aws deploy create-deployment
-          --application-name charmander-api-codeploy
-          --deployment-config-name CodeDeployDefault.AllAtOnce
-          --deployment-group-name charmadner-api-codedeploy-group
-          --s3-location bucket=charmander-api-jar,bundleType=tgz,key=$GITHUB_SHA.tar.gz
+#      - name: 압축하기
+#        run: tar -czvf $GITHUB_SHA.tar.gz appspec.yml scripts
+#
+#      - name: S3에 프로젝트 폴더 업로드하기
+#        run: aws s3 cp --region ap-northeast-2 ./$GITHUB_SHA.tar.gz s3://charmander-api-jar/$GITHUB_SHA.tar.gz
+#
+#      - name: Code Deploy를 활용해 EC2에 프로젝트 코드 배포
+#        run: aws deploy create-deployment
+#          --application-name charmander-api-codeploy
+#          --deployment-config-name CodeDeployDefault.AllAtOnce
+#          --deployment-group-name charmadner-api-codedeploy-group
+#          --s3-location bucket=charmander-api-jar,bundleType=tgz,key=$GITHUB_SHA.tar.gz
