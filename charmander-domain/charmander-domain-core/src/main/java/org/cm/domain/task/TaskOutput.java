@@ -22,6 +22,16 @@ public final class TaskOutput {
     private Integer downloadCount;
 
     public TaskOutput(
+            String fileName,
+            Duration playtime
+    ){
+        this.fileName = fileName;
+        this.fileUrl = "";
+        this.playtime = playtime;
+        this.downloadCount = 0;
+    }
+
+    public TaskOutput(
             String fileUrl,
             String fileName,
             Duration playtime,
