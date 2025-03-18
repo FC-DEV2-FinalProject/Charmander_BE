@@ -34,7 +34,7 @@ public class ProjectService {
         var member = memberRepository.findById(authInfo.getMemberId())
             .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.MEMBER_NOT_FOUND));
 
-        var project = Project.newProject(member);
+        var project = Project.newCreateProject(member);
         return projectRepository.save(project);
     }
 

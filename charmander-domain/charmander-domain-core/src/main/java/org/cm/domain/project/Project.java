@@ -49,7 +49,7 @@ public class Project extends BaseEntity {
         this.version = version;
     }
 
-    public static Project newProject(Member owner) {
+    public static Project newCreateProject(Member owner) {
         return new Project(owner, "New Project", "{}", 0);
     }
 }
