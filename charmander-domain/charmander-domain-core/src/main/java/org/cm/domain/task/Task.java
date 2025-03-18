@@ -71,9 +71,9 @@ public class Task extends BaseEntity {
     }
 
     public void cancel() {
-        if (status != TaskStatus.PENDING) {
-            throw new CoreDomainException(CoreDomainExceptionCode.CANCEL_ALLOWED_ONLY_PENDING);
+        switch (status) {
+            case PENDING, IN_PROGRESS -> status = TaskStatus.CANCELED;
+            default -> throw new CoreDomainException(CoreDomainExceptionCode.CANCEL_ALLOWED_PENDING_OR_IN_PROGRESS);
         }
-        status = TaskStatus.CANCELED;
     }
 }
