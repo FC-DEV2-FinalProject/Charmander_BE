@@ -1,5 +1,6 @@
 package org.cm.api.project;
 
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.cm.api.project.dto.ProjectUpdateRequest;
 import org.cm.domain.member.MemberRepository;
@@ -10,8 +11,6 @@ import org.cm.exception.CoreApiExceptionCode;
 import org.cm.security.AuthInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Service
 @Transactional
@@ -35,7 +34,7 @@ public class ProjectService {
         var member = memberRepository.findById(authInfo.getMemberId())
             .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.MEMBER_NOT_FOUND));
 
-        var project = Project.newDraftProject(member);
+        var project = Project.newCreateProject(member);
         return projectRepository.save(project);
     }
 
