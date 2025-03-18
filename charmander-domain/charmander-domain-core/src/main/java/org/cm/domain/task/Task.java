@@ -31,6 +31,7 @@ public class Task extends BaseEntity {
     @Column(nullable = false)
     private TaskStatus status = TaskStatus.PENDING;
 
+    // TODO 삭제 예정
     @Column
     private String jobId;
 
@@ -45,12 +46,11 @@ public class Task extends BaseEntity {
         this.type = type;
     }
 
-    public void start(String jobId) {
+    public void start() {
         if (status != TaskStatus.PENDING) {
             throw new CoreDomainException(CoreDomainExceptionCode.START_ALLOWED_ONLY_IN_PENDING);
         }
         this.status = TaskStatus.IN_PROGRESS;
-        this.jobId = jobId;
     }
 
     public void succeed(TaskOutput output) {
