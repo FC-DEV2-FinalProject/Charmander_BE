@@ -8,3 +8,6 @@ spring:
       - db-common.yml
   profiles:
     active: local
+
+tts:
+  url: http://localhost:8081
