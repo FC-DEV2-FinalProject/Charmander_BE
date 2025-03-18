@@ -1,7 +1,10 @@
 package org.cm.domain.task;
 
 import jakarta.persistence.LockModeType;
+import org.cm.exception.CoreDomainException;
+import org.cm.exception.CoreDomainExceptionCode;
 import org.hibernate.LockMode;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
@@ -19,4 +22,10 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT t FROM task t WHERE t.id = :taskId AND t.project.owner.id = :memberId")
     Task findByIdAndMemberIdForUpdate(Long taskId, Long memberId);
+
+    @NonNull
+    default Task getById(@NonNull Long taskId){
+        return findById(taskId)
+                .orElseThrow(() -> new CoreDomainException(CoreDomainExceptionCode.NOT_FOUND_TASK));
+    }
 }
