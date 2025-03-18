@@ -41,6 +41,7 @@ public class Task extends BaseEntity {
     @Column(nullable = false)
     private int retryCount = 0;
 
+    // TODO 생성자에서 PENDING으로 바꾸기
     public Task(Project project, TaskType type) {
         this.project = project;
         this.type = type;
