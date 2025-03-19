@@ -6,6 +6,7 @@ import org.cm.common.exception.CoreException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 @Slf4j
 @RestControllerAdvice
@@ -39,6 +40,13 @@ public class CoreExceptionAdvice {
             case WARN -> log.warn("{} : {}", e.getClass().getSimpleName(), e.getMessage(), e);
             default -> log.info("{} : {}", e.getClass().getSimpleName(), e.getMessage(), e);
         }
+    }
+
+    @ExceptionHandler(NoResourceFoundException.class)
+    public ResponseEntity<ExceptionResponse> handleNoResourceFoundException(NoResourceFoundException e) {
+        log.error("NoResourceFoundException : {}", e.getMessage(), e);
+        var exceptionResponse = new ExceptionResponse("NO_RESOURCE_FOUND", "해당 리소스를 찾을 수 없습니다.");
+        return ResponseEntity.status(404).body(exceptionResponse);
     }
 
     @ExceptionHandler(Exception.class)
