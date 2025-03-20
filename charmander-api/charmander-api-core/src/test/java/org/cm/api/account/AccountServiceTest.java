@@ -7,23 +7,25 @@ import org.cm.domain.account.EmailVerificationType;
 import org.cm.domain.member.MemberRepository;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 @ExtendWith(MockitoExtension.class)
 class AccountServiceTest {
-    @MockitoBean
+    @Mock
     private AccountEmailClient emailClient;
 
-    @MockitoBean
+    @Mock
     private MemberRepository memberRepository;
 
-    @MockitoBean
+    @Mock
     private EmailVerificationRepository verificationRepository;
 
-    @MockitoBean
+    @Mock
     private PasswordEncoder passwordEncoder;
 
     private AccountService accountService;
@@ -49,9 +51,7 @@ class AccountServiceTest {
 
         // When
         Assertions.assertThrows(
-            BaseException.class, () -> {
-                accountService.verifyEmail(req, EmailVerificationType.REGISTER);
-            }
+            BaseException.class, () -> accountService.verifyEmail(req, EmailVerificationType.REGISTER)
         );
     }
 }
