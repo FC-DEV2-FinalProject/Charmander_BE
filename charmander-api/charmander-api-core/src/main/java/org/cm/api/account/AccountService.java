@@ -66,7 +66,7 @@ public class AccountService {
     }
 
     private void validateVerification(EmailVerification verification, String code) {
-        if (verification != null && !verification.code().equals(code)) {
+        if (verification == null || !verification.code().equals(code)) {
             throw new CoreApiException(CoreApiExceptionCode.ACCOUNT_VERIFICATION_CODE_NOT_MATCH);
         }
     }
