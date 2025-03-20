@@ -23,6 +23,13 @@ public enum CoreDomainExceptionCode implements ExceptionCode {
     // PROJECT
     NOT_FOUND_PROJECT("C01", "프로젝트를 찾을 수 없습니다"),
 
+    // TASK SCRIPT
+    TASK_SCRIPT_START_ALLOWED_ONLY_IN_PENDING("D01", "대기 상태만 작업을 시작할 수 있습니다."),
+    TASK_SCRIPT_SUCCESS_ALLOWED_ONLY_IN_PROGRESS("D02", "작업 진행중이 아니므로 완료할 수 없습니다."),
+    TASK_SCRIPT_CANCEL_ALLOWED_PENDING_OR_IN_PROGRESS("D03", "작업 취소는 대기, 진행 상태에서만 가능합니다."),
+    TASK_SCRIPT_FAIL_ALLOWED_ONLY_IN_PROGRESS("D04", "작업 실패 처리는 진행 상태에서만 가능합니다.")
+
+
     ;
 
     // Core domain
