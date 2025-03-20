@@ -51,9 +51,7 @@ class AccountServiceTest {
 
         // When
         Assertions.assertThrows(
-            BaseException.class, () -> {
-                accountService.verifyEmail(req, EmailVerificationType.REGISTER);
-            }
+            BaseException.class, () -> accountService.verifyEmail(req, EmailVerificationType.REGISTER)
         );
     }
 }
