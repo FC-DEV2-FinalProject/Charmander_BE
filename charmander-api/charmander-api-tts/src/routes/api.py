@@ -2,8 +2,8 @@ from logging import getLogger
 
 import requests
 from fastapi.routing import APIRouter
-from lib.tts import Audio
-from src import context as ctx
+from ..lib.tts import Audio
+from .. import context as ctx
 
 from .models import *
 
