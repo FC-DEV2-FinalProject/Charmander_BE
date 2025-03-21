@@ -4,7 +4,8 @@ RUN pip install --no-cache poetry==1.5.1
 
 WORKDIR /builder
 
-COPY . /builder
+COPY ./pyproject.toml /builder
+COPY ./poetry.lock /builder
 
 RUN poetry export --with infer,api -f requirements.txt --output /builder/requirements.txt
 
