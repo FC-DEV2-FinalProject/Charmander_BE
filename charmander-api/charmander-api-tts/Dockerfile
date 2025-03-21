@@ -1,41 +1,32 @@
-FROM python:3.12-alpine AS builder
+FROM python:3.7 AS builder
 
-ARG VERSION_POETRY=2.0.1
-ARG VERSION_POE=0.32.2
+RUN pip install --no-cache poetry==1.5.1
 
 WORKDIR /builder
 
-RUN pip install --no-cache-dir poetry==$VERSION_POETRY poethepoet==$VERSION_POE
-COPY poetry.lock pyproject.toml /builder/
-RUN poetry self add poetry-plugin-export
-RUN poetry export -f requirements.txt > requirements.txt
+COPY . /builder
 
-##############################################
+RUN poetry export --with infer,api -f requirements.txt --output /builder/requirements.txt
 
-FROM python:3.12-alpine
+# END: BUILD STAGE
 
-ARG USER=app
-ARG GROUP=app
-ARG WORKDIR=/home/app
+FROM python:3.7-slim
 
-# non root user
-RUN addgroup -S $GROUP && adduser -S $USER $GROUP
-WORKDIR $WORKDIR
-RUN chown -R $USER:$GROUP $WORKDIR
-USER $USER:$GROUP
+ENV DEBIAN_FRONTEND=noninteractive
 
-# install dependencies
-COPY --from=builder /builder/requirements.txt $WORKDIR
+WORKDIR /app
+
+RUN apt update &&  \
+    apt install -y --no-install-recommends \
+    espeak espeak-ng \
+    ffmpeg && \
+    apt clean && rm -rf /var/lib/apt/lists/*
+
+COPY --from=builder /builder/requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# copy source code
-COPY src $WORKDIR/src
-COPY main.py $WORKDIR
+COPY . /app
 
-ENV PORT=8080
-EXPOSE 8080
+EXPOSE 8000
 
-COPY scripts/entrypoint.sh $WORKDIER
-
-ENTRYPOINT [ "sh" ]
-CMD [ "entrypoint.sh" ]
+CMD ["python", "main.py"]
