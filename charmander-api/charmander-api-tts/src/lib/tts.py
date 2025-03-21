@@ -19,6 +19,7 @@ class TTS_Vits:
     def __init__(self, state_path: str, config_path : str):
         self._state_path = state_path
         self._config_path = config_path
+    
     def _split_text(self, text: str):
         text_list = text.split('\n')
         text_list = map(lambda x: x.strip(), text_list)
