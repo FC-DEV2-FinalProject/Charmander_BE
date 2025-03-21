@@ -117,7 +117,7 @@ class TTS_Vits:
             else:
                 inference_audio = inference_audio.cpu().float().numpy()
         
-        with SpooledTemporaryFile(max_size=20480, mode='w+b') as fp:
+        with SpooledTemporaryFile(max_size=5242880, mode='w+b') as fp:
             logger.debug(f"Writing synthesized audio to temporary file: {fp.name}")
 
             wavfile.write(fp, self._hps.data.sampling_rate, inference_audio)
