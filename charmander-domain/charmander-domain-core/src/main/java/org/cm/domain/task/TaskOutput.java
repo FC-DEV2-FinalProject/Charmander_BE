@@ -11,6 +11,7 @@ import org.cm.converter.DurationToSecondConverter;
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public final class TaskOutput {
+    // TODO fileId로 바꾸는게 좋을 듯
     @Column
     private String fileUrl;
     @Column
