@@ -55,7 +55,7 @@ def do_upload(req: SpeakRequest.v1, audio: Audio):
     complete_uplaod(req, part_number, eTag)
 
 def synthesize(req: SpeakRequest.v1):
-    audio = ctx.tts.synthesize(req.text, req.params.speed)
+    audio = ctx.tts.synthesize(req.text, length_scale=req.params.speed)
     return audio
 
 @router.post("/speak/v1")
