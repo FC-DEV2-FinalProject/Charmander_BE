@@ -31,7 +31,7 @@ public class TaskScript extends BaseEntity {
     private String fileId;
 
     @Column(nullable = false)
-    private Object option;
+    private String option;
 
     @Column(length = 500)
     private String failMessage;
@@ -44,32 +44,33 @@ public class TaskScript extends BaseEntity {
     public TaskScript(Task task, String sentence, Object option) {
         this.task = task;
         this.sentence = sentence;
-        this.option = option;
+        this.option = option.toString();
         this.status = TaskScriptStatus.PENDING;
     }
 
-    public void start(){
+    public void start() {
         if (status != TaskScriptStatus.PENDING) {
             throw new CoreDomainException(CoreDomainExceptionCode.TASK_SCRIPT_START_ALLOWED_ONLY_IN_PENDING);
         }
+        task.start();
         this.status = TaskScriptStatus.IN_PROGRESS;
     }
 
-    public void complete(@NonNull String fileId){
+    public void complete(@NonNull String fileId) {
         if (status != TaskScriptStatus.IN_PROGRESS) {
             throw new CoreDomainException(CoreDomainExceptionCode.TASK_SCRIPT_SUCCESS_ALLOWED_ONLY_IN_PROGRESS);
         }
         this.fileId = fileId;
     }
 
-    public void cancel(){
-        if(status != TaskScriptStatus.IN_PROGRESS) {
+    public void cancel() {
+        if (status != TaskScriptStatus.IN_PROGRESS) {
             throw new CoreDomainException(CoreDomainExceptionCode.TASK_SCRIPT_CANCEL_ALLOWED_PENDING_OR_IN_PROGRESS);
         }
     }
 
-    public void fail(@NonNull String failMessage){
-        if(status != TaskScriptStatus.IN_PROGRESS) {
+    public void fail(@NonNull String failMessage) {
+        if (status != TaskScriptStatus.IN_PROGRESS) {
             throw new CoreDomainException(CoreDomainExceptionCode.TASK_SCRIPT_FAIL_ALLOWED_ONLY_IN_PROGRESS);
         }
         this.failMessage = failMessage;

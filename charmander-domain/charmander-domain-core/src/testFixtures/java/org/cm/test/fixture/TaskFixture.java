@@ -14,7 +14,7 @@ public class TaskFixture {
         var task = create(project);
 
         task.start();
-        task.fail();
+//        task.fail();
 
         return task;
     }

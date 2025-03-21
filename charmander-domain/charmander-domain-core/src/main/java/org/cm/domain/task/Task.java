@@ -33,6 +33,7 @@ public class Task extends BaseEntity {
 
     // TODO 삭제 예정
     @Column
+    @Deprecated
     private String jobId;
 
     @Embedded
@@ -48,6 +49,9 @@ public class Task extends BaseEntity {
     }
 
     public void start() {
+        if (status == TaskStatus.IN_PROGRESS) {
+            return;
+        }
         if (status != TaskStatus.PENDING) {
             throw new CoreDomainException(CoreDomainExceptionCode.START_ALLOWED_ONLY_IN_PENDING);
         }
@@ -75,5 +79,9 @@ public class Task extends BaseEntity {
             case PENDING, IN_PROGRESS -> status = TaskStatus.CANCELED;
             default -> throw new CoreDomainException(CoreDomainExceptionCode.CANCEL_ALLOWED_PENDING_OR_IN_PROGRESS);
         }
+    }
+
+    public void tryConvert() {
+        status = TaskStatus.CONVERTING;
     }
 }

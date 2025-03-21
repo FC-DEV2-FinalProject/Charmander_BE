@@ -1,10 +1,15 @@
 package org.cm.vo;
 
-import org.cm.infra.storage.PreSignedURLIdentifier;
-
 public record TtsCreateCommand(
-        Long taskId,
-        PreSignedURLIdentifier identifier,
-        Object data
-){
+        String text,
+        String params,
+        String serverUrl,
+        String fullPath,
+        String fileName,
+        String uploadId
+) {
+
+    public record TtsOption(float speed) {
+
+    }
 }
