@@ -12,6 +12,7 @@ public enum TaskStatus implements PersistenceEnum<String> {
     // @formatter:off
     PENDING     ("Pending"   , "대기중"),
     IN_PROGRESS ("InProgress", "처리중"),
+    CONVERTING  ("Converting", "변환중"),
     SUCCESS     ("Success"   , "성공"  ),
     FAILED      ("Failed"    , "실패"  ),
     CANCELED    ("Canceled"  , "취소됨"),

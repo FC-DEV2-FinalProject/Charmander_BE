@@ -1,15 +1,16 @@
 package org.cm.domain.task;
 
 import jakarta.persistence.LockModeType;
+import java.util.List;
 import org.cm.exception.CoreDomainException;
 import org.cm.exception.CoreDomainExceptionCode;
-import org.hibernate.LockMode;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
-
-import java.util.List;
+import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 
 public interface TaskRepository extends JpaRepository<Task, Long> {
     @Query("SELECT t FROM task t WHERE t.project.owner.id = :memberId")
@@ -24,8 +25,13 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
     Task findByIdAndMemberIdForUpdate(Long taskId, Long memberId);
 
     @NonNull
-    default Task getById(@NonNull Long taskId){
+    default Task getById(@NonNull Long taskId) {
         return findById(taskId)
                 .orElseThrow(() -> new CoreDomainException(CoreDomainExceptionCode.NOT_FOUND_TASK));
     }
+
+    @Modifying
+    @Transactional
+    @Query("update task t set t.status = :status where t.id = :id")
+    void update(@Param("id") Long id, @Param("status") TaskStatus status);
 }

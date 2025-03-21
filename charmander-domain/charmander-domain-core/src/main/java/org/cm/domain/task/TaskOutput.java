@@ -10,7 +10,7 @@ import org.cm.converter.DurationToSecondConverter;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public final class TaskOutput {
+public class TaskOutput {
     // TODO fileId로 바꾸는게 좋을 듯
     @Column
     private String fileUrl;
@@ -25,7 +25,7 @@ public final class TaskOutput {
     public TaskOutput(
             String fileName,
             Duration playtime
-    ){
+    ) {
         this.fileName = fileName;
         this.fileUrl = "";
         this.playtime = playtime;
