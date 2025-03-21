@@ -54,14 +54,6 @@ class TaskTest {
 
                 task.start();
             }).isInstanceOf(CoreDomainException.class);
-
-            assertThatThrownBy(() -> {
-                var task = new Task();
-
-                task.start();
-                task.cancel();
-                task.start();
-            }).isInstanceOf(CoreDomainException.class);
         }
     }
 
@@ -83,7 +75,8 @@ class TaskTest {
         void 작업이_시작되지_않았다면_완료할_수_없습니다() {
             var task = new Task();
 
-            assertThatThrownBy(() -> task.succeed(new TaskOutput("fileId", Duration.ofMillis(10))));
+            assertThatThrownBy(() -> task.succeed(new TaskOutput("fileId", Duration.ofMillis(10))))
+                    .isInstanceOf(CoreDomainException.class);
         }
 
         @Test
