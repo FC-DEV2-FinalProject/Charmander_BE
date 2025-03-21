@@ -6,7 +6,6 @@ from src import context as ctx
 from logging import getLogger
 
 from .models import *
-
 logger = getLogger(__name__)
 
 router = APIRouter()
@@ -19,11 +18,11 @@ def startup():
 def speak(req: SpeakRequest.v1):
     logger.debug(f"Received speak request: {req}")
 
-    audio_bytes = ctx.tts.synthesize(
+    audio = ctx.tts.synthesize(
         req.text,
         length_scale= 1.0 / req.params.speed
     )
 
-    return StreamingResponse(io.BytesIO(audio_bytes), media_type="audio/wav")
+    return StreamingResponse(io.BytesIO(audio.raw_bytes), media_type="audio/wav")
 
 
