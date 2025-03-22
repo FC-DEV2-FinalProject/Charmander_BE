@@ -2,7 +2,6 @@ package org.cm.vo;
 
 public record TtsCreateCommand(
         String text,
-        String params,
         String serverUrl,
         String fullPath,
         String fileName,

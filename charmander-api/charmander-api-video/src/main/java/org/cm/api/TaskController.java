@@ -6,7 +6,6 @@ import org.cm.infra.storage.ContentsLocator;
 import org.cm.infra.storage.PreSignedFileUploadService;
 import org.cm.infra.storage.PreSignedURLCompleteCommand;
 import org.cm.infra.storage.PreSignedURLGenerateCommand;
-import org.cm.infra.storage.PreSignedURLIdentifier;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,11 +20,6 @@ public class TaskController {
 
     private final PreSignedFileUploadService preSignedFileUploadService;
     private final ContentsLocator contentsLocator;
-
-    @PostMapping("/multipart-upload")
-    public PreSignedURLIdentifier initiateMultipartUpload() {
-        return preSignedFileUploadService.sign(contentsLocator);
-    }
 
     @GetMapping("/pre-signed-url/{fileName}/{uploadId}/{partNumber}")
     public String generatePreSignedUrl(

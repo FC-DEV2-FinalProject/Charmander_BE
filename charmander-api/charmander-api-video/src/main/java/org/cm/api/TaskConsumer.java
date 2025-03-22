@@ -2,10 +2,11 @@ package org.cm.api;
 
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.cm.common.domain.FileType;
 import org.cm.infra.storage.ContentsLocator;
 import org.cm.infra.storage.PreSignedFileUploadService;
 import org.cm.infra.storage.PreSignedURLIdentifier;
-import org.cm.infra.storage.SingleFileUploadService;
 import org.cm.service.TtsService;
 import org.cm.vo.TaskCompletedCheckEvent;
 import org.cm.vo.TaskScriptGenerationCompletedEvent;
@@ -17,12 +18,12 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class TaskConsumer {
 
     private final ApplicationEventPublisher applicationEventPublisher;
-    private final SingleFileUploadService singleFileUploadService;
     private final ContentsLocator contentsLocator;
     private final TtsService ttsService;
     private final PreSignedFileUploadService preSignedFileUploadService;
@@ -32,12 +33,17 @@ public class TaskConsumer {
 
     @KafkaListener(topics = "tts-task", groupId = "tts-task-group")
     public void consume(TaskScriptRecord taskScriptRecord) {
-        prepareTaskScriptGeneration(taskScriptRecord);
+        try {
+            prepareTaskScriptGeneration(taskScriptRecord);
 
-        var preSignedURLIdentifier = preSignedFileUploadService.sign(contentsLocator);
-        var ttsInfo = createTts(taskScriptRecord, preSignedURLIdentifier);
+            var preSignedURLIdentifier = preSignedFileUploadService.sign(contentsLocator, FileType.AUDIO);
+            var ttsInfo = createTts(taskScriptRecord, preSignedURLIdentifier);
 
-        completeTaskScriptGeneration(taskScriptRecord, preSignedURLIdentifier, ttsInfo);
+            completeTaskScriptGeneration(taskScriptRecord, preSignedURLIdentifier, ttsInfo);
+        } catch (Exception e) {
+            log.error("{}", e.getMessage());
+        }
+
     }
 
     private void completeTaskScriptGeneration(
@@ -61,7 +67,6 @@ public class TaskConsumer {
     ) {
         var ttsCreateCommand = new TtsCreateCommand(
                 taskScriptRecord.sentence(),
-                taskScriptRecord.option(),
                 serverURL,
                 preSignedURLIdentifier.fullPath(),
                 preSignedURLIdentifier.fileName(),
