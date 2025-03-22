@@ -25,7 +25,7 @@ def get_presigned_url(req: SpeakRequest.v1, part_number: int):
 def complete_uplaod(req: SpeakRequest.v1, part_number: int, eTag: str):
     requests.post(
         f"{req.serverUrl}/api/v1/tasks/pre-signed-url/complete-upload",
-        data={
+        json={
             "fileName": req.fileName,
             "uploadId": req.uploadId,
             "parts": [
