@@ -2,6 +2,7 @@ package org.cm.infra.storage;
 
 import java.time.Duration;
 import lombok.RequiredArgsConstructor;
+import org.cm.common.domain.FileType;
 import org.cm.common.utils.RandomKeyGenerator;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.services.s3.S3Client;
@@ -19,13 +20,14 @@ public class PreSignedFileUploadService {
     private final S3Presigner s3Presigner;
     private final AwsProperty awsProperty;
 
-    public PreSignedURLIdentifier sign(ContentsLocator contentsLocator){
+    public PreSignedURLIdentifier sign(ContentsLocator contentsLocator, FileType fileType) {
         var randomFileName = RandomKeyGenerator.generateRandomKey();
         var fullPath = contentsLocator.combineLocation(randomFileName);
 
         var createMultipartUploadRequest = CreateMultipartUploadRequest.builder()
                 .bucket(awsProperty.bucket())
                 .key(fullPath)
+                .contentType(fileType.getValue())
                 .build();
 
         var multipartUpload = s3Client.createMultipartUpload(createMultipartUploadRequest);
@@ -41,7 +43,7 @@ public class PreSignedFileUploadService {
             ContentsLocator contentsLocator,
             PreSignedURLGenerateCommand command,
             Duration duration
-    ){
+    ) {
         String path = contentsLocator.combineLocation(command.fileName());
 
         var uploadRequest = UploadPartPresignRequest.builder()
@@ -73,7 +75,7 @@ public class PreSignedFileUploadService {
         s3Client.completeMultipartUpload(completeMultipartUploadRequest);
     }
 
-    public void abort(ContentsLocator contentsLocator, PreSignedURLAbortCommand command){
+    public void abort(ContentsLocator contentsLocator, PreSignedURLAbortCommand command) {
         String path = contentsLocator.combineLocation(command.fileName());
 
         var abortMultipartUploadRequest = AbortMultipartUploadRequest.builder()
