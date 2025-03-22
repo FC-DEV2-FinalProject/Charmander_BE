@@ -17,14 +17,13 @@ def startup():
 
 def get_presigned_url(req: SpeakRequest.v1, part_number: int):
     res = requests.get(
-        f"{req.serverUrl}/api/v1/pre-signed-url/{req.fileName}/{req.uploadId}/{part_number}",
+        f"{req.serverUrl}/api/v1/tasks/pre-signed-url/{req.fileName}/{req.uploadId}/{part_number}",
     )
     return res.text
 
-
 def complete_uplaod(req: SpeakRequest.v1, part_number: int, eTag: str):
     requests.post(
-        f"{req.serverUrl}/api/v1/tasks/pre-signed-url/complete-upload",
+        f"{req.serverUrl}/api/v1/tasks/complete-upload",
         json={
             "fileName": req.fileName,
             "uploadId": req.uploadId,
