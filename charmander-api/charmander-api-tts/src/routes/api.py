@@ -37,7 +37,7 @@ def complete_uplaod(req: SpeakRequest.v1, part_number: int, eTag: str):
         }
     )
 
-def do_upload(req: SpeakRequest.v1, audio: Audio):
+def do_multipart_upload(req: SpeakRequest.v1, audio: Audio):
     logger.info(f"uploading to S3. uploadId: {req.uploadId}, fileName: {req.fileName}")
 
     part_number = 1
@@ -63,7 +63,7 @@ def speak(req: SpeakRequest.v1):
     logger.debug(f"Received speak request: {req}")
     
     audio = synthesize(req)
-    do_upload(req, audio)
+    do_multipart_upload(req, audio)
 
     return {
         "size": len(audio.raw_bytes),
