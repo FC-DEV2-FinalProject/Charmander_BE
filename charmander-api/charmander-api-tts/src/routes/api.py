@@ -40,7 +40,7 @@ def complete_uplaod(req: SpeakRequest.v1, part_number: int, eTag: str):
 def do_upload(req: SpeakRequest.v1, audio: Audio):
     logger.info(f"uploading to S3. uploadId: {req.uploadId}, fileName: {req.fileName}")
 
-    part_number = 0
+    part_number = 1
     presinged_url = get_presigned_url(req, part_number)
 
     res = requests.put(
