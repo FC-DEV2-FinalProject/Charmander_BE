@@ -2,7 +2,6 @@ package org.cm.api.project;
 
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.cm.api.project.dto.ProjectUpdateRequest;
 import org.cm.domain.member.MemberRepository;
 import org.cm.domain.project.Project;
 import org.cm.domain.project.ProjectRepository;
@@ -36,13 +35,6 @@ public class ProjectService {
 
         var project = Project.newCreateProject(member);
         return projectRepository.save(project);
-    }
-
-    public Project updateProject(AuthInfo authInfo, Long id, ProjectUpdateRequest updateRequest) {
-        var existingProject = projectRepository.findByIdAndOwnerIdForUpdate(id, authInfo.getMemberId())
-            .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.PROJECT_NOT_FOUND));
-        updateRequest.update(existingProject);
-        return projectRepository.save(existingProject);
     }
 
     public void deleteProject(AuthInfo authInfo, Long id) {
