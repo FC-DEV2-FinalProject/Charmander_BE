@@ -1,18 +1,16 @@
 package org.cm.domain.project;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Version;
-import java.time.LocalDateTime;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.cm.domain.common.BaseEntity;
 import org.cm.domain.member.Member;
+import org.cm.domain.scene.Scene;
+
+import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Entity(name = "project")
@@ -22,13 +20,12 @@ public class Project extends BaseEntity {
     @JoinColumn(nullable = false, updatable = false)
     private Member owner;
 
+    @OneToMany(fetch = FetchType.LAZY)
+    private List<Scene> scenes;
+
     @Setter
     @Column(nullable = false)
     private String name;
-
-    @Setter
-    @Column(nullable = false, columnDefinition = "MEDIUMTEXT")
-    private String data;
 
     @Version
     @Column(nullable = false)
@@ -40,16 +37,22 @@ public class Project extends BaseEntity {
     public Project(
         Member owner,
         String name,
-        String data,
         int version
     ) {
         this.owner = owner;
         this.name = name;
-        this.data = data;
         this.version = version;
     }
 
+    public void addScene(Scene scene) {
+        scenes.add(scene);
+    }
+
+    public void removeScene(Scene scene) {
+        scenes.remove(scene);
+    }
+
     public static Project newCreateProject(Member owner) {
-        return new Project(owner, "New Project", "{}", 0);
+        return new Project(owner, "New Project", 0);
     }
 }
