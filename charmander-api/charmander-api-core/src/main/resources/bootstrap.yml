@@ -1,0 +1,7 @@
+aws:
+  secretsmanager:
+    name: prod/charmander-rds/credentials
+cloud:
+  aws:
+    region:
+      static: ap-northeast-2
