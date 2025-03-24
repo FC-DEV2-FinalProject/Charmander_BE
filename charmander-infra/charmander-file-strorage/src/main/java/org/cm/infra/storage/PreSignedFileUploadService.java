@@ -23,11 +23,11 @@ public class PreSignedFileUploadService {
     public PreSignedURLIdentifier sign(ContentsLocator contentsLocator, FileType fileType) {
         var randomFileName = RandomKeyGenerator.generateRandomKey();
         var fullPath = contentsLocator.combineLocation(randomFileName);
-
+        
         var createMultipartUploadRequest = CreateMultipartUploadRequest.builder()
                 .bucket(awsProperty.bucket())
                 .key(fullPath)
-                .contentType(fileType.getValue())
+                .contentType(fileType.mimeType)
                 .build();
 
         var multipartUpload = s3Client.createMultipartUpload(createMultipartUploadRequest);
