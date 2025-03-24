@@ -36,7 +36,7 @@ public class TaskConsumer {
         try {
             prepareTaskScriptGeneration(taskScriptRecord);
 
-            var preSignedURLIdentifier = preSignedFileUploadService.sign(contentsLocator, FileType.AUDIO);
+            var preSignedURLIdentifier = preSignedFileUploadService.sign(contentsLocator, FileType.WAV);
             var ttsInfo = createTts(taskScriptRecord, preSignedURLIdentifier);
 
             completeTaskScriptGeneration(taskScriptRecord, preSignedURLIdentifier, ttsInfo);
