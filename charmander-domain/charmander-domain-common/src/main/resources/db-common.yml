@@ -2,7 +2,7 @@ spring:
   jpa:
     open-in-view: false
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create
     properties:
       hibernate:
         default_batch_fetch_size: 100
@@ -50,7 +50,7 @@ spring:
     password: ${RDS_PASSWORD}
   jpa:
       hibernate:
-        ddl-auto: create
+        ddl-auto: none
       properties:
         hibernate:
           format_sql: false
