@@ -10,4 +10,5 @@ include 'charmander-infra'
 include 'charmander-infra:charmander-docs'
 
 include 'charmander-common'
+include 'study'
 
