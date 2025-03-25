@@ -28,7 +28,10 @@ public class Task extends BaseEntity {
 
     @Convert(converter = TaskStatus.Converter.class)
     @Column(nullable = false)
-    private TaskStatus status = TaskStatus.PENDING;
+    private TaskStatus status = TaskStatus.CREATING;
+
+    @OneToMany(mappedBy = "task", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<TaskScript> taskScripts;
 
     // TODO 삭제 예정
     @Column
@@ -51,9 +54,20 @@ public class Task extends BaseEntity {
         this.type = type;
     }
 
+    @PrePersist
+    public void prePersist() {
+        if (status == TaskStatus.CREATING) {
+            status = TaskStatus.PENDING;
+        }
+    }
+
     public void setTaskScripts(List<TaskScript> taskScripts) {
+        if (status != TaskStatus.CREATING) {
+            throw new CoreDomainException(CoreDomainExceptionCode.TASK_SCRIPTS_ALLOWED_ONLY_CREATING);
+        }
         this.taskScripts = taskScripts;
     }
+
     public void start() {
         if (status == TaskStatus.IN_PROGRESS) {
             return;
