@@ -1,12 +1,6 @@
 package org.cm.domain.taskscript;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,6 +19,10 @@ public class TaskScript extends BaseEntity {
     @JoinColumn(nullable = false)
     @ManyToOne(fetch = FetchType.LAZY)
     private Task task;
+
+    @Column(nullable = false, updatable = false)
+    private Long sceneId;
+
     // 300자 제한이지만 넉넉하게 400자로 잡음
     @Column(nullable = false, length = 400)
     private String sentence;
