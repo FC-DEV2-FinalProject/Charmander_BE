@@ -12,6 +12,7 @@ import org.cm.domain.member.MemberPrincipalType;
 import org.cm.domain.member.MemberRepository;
 import org.cm.exception.CoreApiException;
 import org.cm.exception.CoreApiExceptionCode;
+import org.cm.security.auth.oauth.OAuthUserInfo;
 import org.cm.utils.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,15 @@ public class AccountService {
         verificationRepository.delete(verification);
 
         return member;
+    }
+
+    public void register(OAuthUserInfo userInfo) {
+        var principal = userInfo.toMemberprincipal();
+        if (memberRepository.existsByPrincipal_IdAndPrincipal_Type(principal.id(), MemberPrincipalType.OAUTH)) {
+            return;
+        }
+        var member = userInfo.toMember();
+        memberRepository.save(member);
     }
 
     public void checkEmail(CheckEmailRequest request, EmailVerificationType type) {

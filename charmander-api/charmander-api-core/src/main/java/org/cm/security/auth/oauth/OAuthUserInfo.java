@@ -1,5 +1,9 @@
 package org.cm.security.auth.oauth;
 
+import org.cm.domain.member.Member;
+import org.cm.domain.member.MemberDetail;
+import org.cm.domain.member.MemberPrincipal;
+import org.cm.domain.member.MemberPrincipalType;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -14,6 +18,17 @@ public record OAuthUserInfo(
     @Nullable
     String email
 ) {
+    public Member toMember() {
+        var principal = toMemberprincipal();
+        var details = new MemberDetail(email, email, email);
+        return new Member(principal, details, null);
+    }
+
+    public MemberPrincipal toMemberprincipal() {
+        var principalId = MemberPrincipal.createScopedPrincipalId(provider, id);
+        return new MemberPrincipal(principalId, null, MemberPrincipalType.OAUTH);
+    }
+
     public static OAuthUserInfo of(String providerName, Map<String, ?> userInfo) {
         return switch (providerName) {
             case "google" -> ofGoogle(userInfo);
