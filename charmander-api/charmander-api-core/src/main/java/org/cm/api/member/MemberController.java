@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.cm.api.member.dto.MyProfileResponse;
 import org.cm.security.AuthInfo;
 import org.cm.security.annotations.support.AuthUser;
+import org.cm.security.annotations.support.MemberOnly;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class MemberController {
     private final MemberService memberService;
 
+    @MemberOnly
     @GetMapping("/my")
     public MyProfileResponse getMyInfo(@AuthUser AuthInfo authInfo) {
         var member = memberService.getMember(authInfo);
