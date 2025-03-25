@@ -27,14 +27,16 @@ public record TaskInputSchema(
         Long id,
         List<Transcript> transcript,
         Subtitle subtitle,
-        List<Media> media
+        Media background,
+        Media avatar
     ) {
         public static Scene from(org.cm.domain.scene.Scene scene) {
             return new Scene(
                 scene.getId(),
                 scene.getTranscripts().stream().map(Transcript::from).toList(),
                 Subtitle.from(scene.getSubtitle()),
-                scene.getMedia().stream().map(Media::from).toList()
+                Media.from(scene.getBackground()),
+                Media.from(scene.getAvatar())
             );
         }
     }
