@@ -16,4 +16,10 @@ public record MemberPrincipal(
     @Column(name = "login_type", nullable = false, updatable = false)
     MemberPrincipalType type
 ) {
+    public static String createScopedPrincipalId(String scope, String id) {
+        if (scope.contains(":")) {
+            throw new IllegalArgumentException("Scope cannot contain ':'");
+        }
+        return String.format("{%s}:{%s}", scope, id);
+    }
 }

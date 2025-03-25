@@ -7,5 +7,5 @@ public interface OAuthClient {
 
     Map<String, ?> getToken(String providerName, String token, String state);
 
-    Object getUserInfo(String providerName, Map<String, ?> token, String state);
+    OAuthUserInfo getUserInfo(String providerName, Map<String, ?> token, String state);
 }
