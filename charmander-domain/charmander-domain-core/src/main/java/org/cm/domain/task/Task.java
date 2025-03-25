@@ -51,6 +51,9 @@ public class Task extends BaseEntity {
         this.type = type;
     }
 
+    public void setTaskScripts(List<TaskScript> taskScripts) {
+        this.taskScripts = taskScripts;
+    }
     public void start() {
         if (status == TaskStatus.IN_PROGRESS) {
             return;
