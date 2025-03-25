@@ -10,6 +10,9 @@ import org.cm.domain.account.EmailVerificationType;
 import org.cm.domain.member.Member;
 import org.cm.domain.member.MemberPrincipalType;
 import org.cm.domain.member.MemberRepository;
+import org.cm.exception.CoreApiException;
+import org.cm.exception.CoreApiExceptionCode;
+import org.cm.security.auth.oauth.OAuthUserInfo;
 import org.cm.utils.StringUtils;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -40,6 +43,15 @@ public class AccountService {
         return member;
     }
 
+    public void register(OAuthUserInfo userInfo) {
+        var principal = userInfo.toMemberprincipal();
+        if (memberRepository.existsByPrincipal_IdAndPrincipal_Type(principal.id(), MemberPrincipalType.OAUTH)) {
+            return;
+        }
+        var member = userInfo.toMember();
+        memberRepository.save(member);
+    }
+
     public void checkEmail(CheckEmailRequest request, EmailVerificationType type) {
         validateEmailNotInUse(request.email());
 
@@ -59,13 +71,13 @@ public class AccountService {
 
     private void validateEmailNotInUse(String email) {
         if (memberRepository.existsByPrincipal_IdAndPrincipal_Type(email, MemberPrincipalType.LOCAL)) {
-            throw new IllegalArgumentException("Email already in use");
+            throw new CoreApiException(CoreApiExceptionCode.ACCOUNT_EMAIL_ALREADY_IN_USE);
         }
     }
 
     private void validateVerification(EmailVerification verification, String code) {
-        if (verification != null && !verification.code().equals(code)) {
-            throw new IllegalArgumentException("Verification code already sent");
+        if (verification == null || !verification.code().equals(code)) {
+            throw new CoreApiException(CoreApiExceptionCode.ACCOUNT_VERIFICATION_CODE_NOT_MATCH);
         }
     }
 }

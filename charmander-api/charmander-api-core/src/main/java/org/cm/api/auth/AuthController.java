@@ -27,7 +27,7 @@ public class AuthController {
     @PostMapping("/login")
     public LoginResponse login(@RequestBody LoginRequest loginRequest, HttpServletResponse servletResponse) {
         var loginResponse = authService.login(loginRequest);
-        addRefreshTokenCookie(servletResponse, loginResponse.refreshToken());
+        AuthHttpUtils.addRefreshTokenCookie(servletResponse, loginResponse.refreshToken());
         return loginResponse;
     }
 
@@ -35,7 +35,7 @@ public class AuthController {
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void logout(HttpServletResponse servletResponse) {
         authService.logout();
-        revokeRefreshTokenCookie(servletResponse);
+        AuthHttpUtils.revokeRefreshTokenCookie(servletResponse);
     }
 
     @PostMapping("/refresh")
@@ -46,32 +46,7 @@ public class AuthController {
             .map(Cookie::getValue)
             .map(authService::refresh)
             .orElseThrow(() -> new RuntimeException("Refresh token not found"));
-        addRefreshTokenCookie(servletResponse, loginResponse.refreshToken());
+        AuthHttpUtils.addRefreshTokenCookie(servletResponse, loginResponse.refreshToken());
         return loginResponse;
-    }
-
-    private void addRefreshTokenCookie(HttpServletResponse servletResponse, String token) {
-        var cookie = ResponseCookie
-            .from(JwtConstants.REFRESH_TOKEN_COOKIE_NAME)
-            .value(token)
-            .secure(true)
-            .httpOnly(true)
-            .path(JwtConstants.REFRESH_TOKEN_COOKIE_PATH)
-            .maxAge(JwtConstants.REFRESH_TOKEN_DURATION)
-            .sameSite(JwtConstants.REFRESH_TOKEN_COOKIE_SAME_SITE)
-            .build();
-        servletResponse.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
-    }
-
-    private void revokeRefreshTokenCookie(HttpServletResponse servletResponse) {
-        var cookie = ResponseCookie
-            .from(JwtConstants.REFRESH_TOKEN_COOKIE_NAME)
-            .secure(true)
-            .httpOnly(true)
-            .path("/")
-            .maxAge(Duration.ZERO)
-            .sameSite(JwtConstants.REFRESH_TOKEN_COOKIE_SAME_SITE)
-            .build();
-        servletResponse.addHeader(HttpHeaders.SET_COOKIE, cookie.toString());
     }
 }

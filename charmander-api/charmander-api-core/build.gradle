@@ -1,12 +1,27 @@
-dependencies {
-    implementation project(":charmander-api::charmander-api-common")
+ext {
+    springAiVersion = "1.0.0-M6"
+    springCloudVersion = "2024.0.1"
+}
 
-    implementation project(":charmander-domain::charmander-domain-common")
-    implementation project(":charmander-domain::charmander-domain-core")
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.ai:spring-ai-bom:$springAiVersion"
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:$springCloudVersion"
+    }
+}
+dependencies {
+    implementation project(":charmander-common")
+    implementation project(":charmander-api:charmander-api-common")
+    implementation project(":charmander-domain:charmander-domain-common")
+    implementation project(":charmander-domain:charmander-domain-core")
+    implementation project(":charmander-infra:charmander-docs")
 
     implementation "org.springframework.boot:spring-boot-starter-web"
-
+    implementation "org.springframework.boot:spring-boot-starter-data-redis"
+    implementation 'org.springframework.ai:spring-ai-openai-spring-boot-starter'
     implementation "org.springframework.security:spring-security-core"
+
+    implementation "io.awspring.cloud:spring-cloud-aws-starter-secrets-manager:3.3.0"
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
 }

@@ -1,0 +1,13 @@
+# python venv
+.venv
+
+# python cache
+__pycache__
+
+# pytorch pth
+*.pth
+
+# vscode
+.vscode
+
+.env

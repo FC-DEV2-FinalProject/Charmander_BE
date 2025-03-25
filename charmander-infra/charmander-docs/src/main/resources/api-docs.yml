@@ -1,6 +1,6 @@
 springdoc:
   swagger-ui:
-    enabled: false
+    enabled: true
     operationsSorter: method  # API 정렬 기준 (alpha, method 등)
     tagsSorter: alpha     # 태그 정렬 기준 (기본값: alpha)
     display-request-duration: true  # 요청 소요 시간 표시 여부

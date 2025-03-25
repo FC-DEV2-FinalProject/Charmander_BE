@@ -3,6 +3,8 @@ package org.cm.common.exception;
 import org.springframework.boot.logging.LogLevel;
 
 public interface ExceptionCode {
+
+    // TODO getCode 명칭 리팩토링하는게 좋을듯?
     String getCode();
     String getMessage();
     LogLevel getLevel();
