@@ -1,20 +1,33 @@
 package org.cm.api.project;
 
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.Setter;
+import org.cm.api.task.TaskService;
 import org.cm.domain.member.MemberRepository;
 import org.cm.domain.project.Project;
 import org.cm.domain.project.ProjectRepository;
+import org.cm.domain.task.Task;
+import org.cm.domain.task.TaskType;
 import org.cm.exception.CoreApiException;
 import org.cm.exception.CoreApiExceptionCode;
 import org.cm.security.AuthInfo;
+import org.jspecify.annotations.NonNull;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @Transactional
 @RequiredArgsConstructor
-public class ProjectService {
+public class ProjectService implements ApplicationEventPublisherAware {
+    @Setter
+    private ApplicationEventPublisher applicationEventPublisher;
+
+    private final TaskService taskService;
+
     private final MemberRepository memberRepository;
     private final ProjectRepository projectRepository;
 
@@ -41,5 +54,11 @@ public class ProjectService {
         var project = projectRepository.findByIdAndOwnerId(id, authInfo.getMemberId())
             .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.PROJECT_NOT_FOUND));
         projectRepository.delete(project);
+    }
+
+    public Task generateProject(@NonNull AuthInfo authInfo, Long id) {
+        var project = projectRepository.findByIdAndOwnerIdWithFetch(id, authInfo.getMemberId())
+            .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.PROJECT_NOT_FOUND));
+        return taskService.createTask(project, TaskType.VIDEO);
     }
 }
