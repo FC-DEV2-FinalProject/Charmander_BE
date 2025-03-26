@@ -78,12 +78,11 @@ public class ProjectService implements ApplicationEventPublisherAware {
                     .orElseThrow(() -> new CoreDomainException(CoreDomainExceptionCode.NOT_FOUND_PROJECT));
 
                 // db에 저장된 updateAt보다 timestamp가 최신 정보를 가지고 있다면 충돌 발생
-                if (foundProject.getUpdatedAt().isAfter(timestamp)) {
+                if (!foundProject.getUpdatedAt().isEqual(timestamp) && foundProject.getUpdatedAt().isAfter(timestamp)) {
                     throw new OptimisticLockingFailureException("동시성 충돌: 다른 사용자가 이미 수정했습니다.");
                 }
 
                 foundProject.updateProjectNewsArticle(newArticle);
-                // DB에서의 최신 timestamp 자동 갱신
                 projectRepository.save(foundProject);
 
                 break; // 성공적으로 업데이트 완료
@@ -94,7 +93,7 @@ public class ProjectService implements ApplicationEventPublisherAware {
 
                 // 잠시 대기 후 재시도
                 try {
-                    Thread.sleep(150);
+                    Thread.sleep(300);
                 } catch (InterruptedException ex) {
                     Thread.currentThread().interrupt();
                 }
@@ -104,12 +103,14 @@ public class ProjectService implements ApplicationEventPublisherAware {
                     logger.info("네임드 락 시작");
 
                     projectRepository.getLock(id.toString());
-                    projectRepository.updateProjectNewsArticleFindById(id, newArticle, timestamp);
-                    logger.info("네임드 락 종료");
+                    try {
+                        projectRepository.updateProjectNewsArticleFindById(id, newArticle, timestamp);
+                    }finally {
+                        projectRepository.releaseLock(id.toString());
+                        logger.info("네임드 락 종료");
+                    }
                     return;
                 }
-            }finally {
-                projectRepository.releaseLock(id.toString());
             }
         }// end while
     }// end method
