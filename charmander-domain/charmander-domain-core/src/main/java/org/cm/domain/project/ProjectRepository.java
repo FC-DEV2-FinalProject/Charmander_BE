@@ -31,16 +31,6 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
             .orElseThrow(() -> new CoreDomainException(CoreDomainExceptionCode.NOT_FOUND_PROJECT));
     }
 
-    // 네임드 get락
-    @Transactional
-    @Query(value = "SELECT GET_LOCK(:lockName, 2)", nativeQuery = true)
-    boolean getLock(@Param("lockName") String lockName);
-
-    // 네임드 release락
-    @Transactional
-    @Query(value = "SELECT RELEASE_LOCK(:lockName)", nativeQuery = true)
-    Integer releaseLock(@Param("lockName") String lockName);
-
     // Project newsArticle 수정
     @Modifying
     @Query("UPDATE project p SET p.newsArticle = :newsArticle WHERE p.id = :id AND p.updatedAt < :updatedAt")
