@@ -34,7 +34,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     // 네임드 get락
     @Transactional
     @Query(value = "SELECT GET_LOCK(:lockName, 2)", nativeQuery = true)
-    Integer getLock(@Param("lockName") String lockName);
+    boolean getLock(@Param("lockName") String lockName);
 
     // 네임드 release락
     @Transactional

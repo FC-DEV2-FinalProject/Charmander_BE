@@ -102,15 +102,28 @@ public class ProjectService implements ApplicationEventPublisherAware {
                     logger.info("동시성 5회 이상 충돌 ");
                     logger.info("네임드 락 시작");
 
-                    projectRepository.getLock(id.toString());
+                    boolean lockAcquired  = projectRepository.getLock(id.toString());
+
+                    if (!lockAcquired) {
+                        logger.error("네임드 락 획득 실패: id={}", id);
+                        throw new OptimisticLockingFailureException("네임드 락을 획득할 수 없습니다. 잠시 후 다시 시도해주세요.");
+                    }
+
                     try {
                         projectRepository.updateProjectNewsArticleFindById(id, newArticle, timestamp);
-                    }finally {
+                    } catch (Exception ex) {
+                        logger.error("네임드 락 기반 업데이트 실패: {}", ex.getMessage(), ex);
+                        throw new RuntimeException("네임드 락을 활용한 업데이트 중 오류가 발생했습니다.", e);
+                    } finally {
                         projectRepository.releaseLock(id.toString());
                         logger.info("네임드 락 종료");
                     }
-                    return;
-                }
+
+                    break;
+                } // end if
+            } catch (Exception e) {
+                logger.error("예기치 못한 오류 발생: {}", e.getMessage(), e);
+                throw new RuntimeException("예기치 못한 오류로 인해 업데이트에 실패했습니다.", e);
             }
         }// end while
     }// end method
