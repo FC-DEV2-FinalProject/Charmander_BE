@@ -8,10 +8,7 @@ import org.cm.api.auth.dto.LoginResponse;
 import org.cm.api.auth.dto.OAuthSignupRequest;
 import org.cm.security.auth.oauth.OAuthClient;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequestMapping("/api/v1/auth/oauth")
@@ -29,7 +26,7 @@ public class OAuthController {
     }
 
     @PostMapping("/signup")
-    public LoginResponse signup(OAuthSignupRequest request, HttpServletResponse httpResponse) {
+    public LoginResponse signup(@RequestBody OAuthSignupRequest request, HttpServletResponse httpResponse) {
         var token = oAuthClient.getToken(request.provider(), request.code(), request.state());
         var oAuthUserInfo = oAuthClient.getUserInfo(request.provider(), token, request.state());
 

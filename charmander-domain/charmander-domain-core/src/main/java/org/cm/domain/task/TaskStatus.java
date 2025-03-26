@@ -10,6 +10,7 @@ import org.cm.domain.common.PersistenceEnum;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public enum TaskStatus implements PersistenceEnum<String> {
     // @formatter:off
+    CREATING    ("Creating"  , "생성중"),
     PENDING     ("Pending"   , "대기중"),
     IN_PROGRESS ("InProgress", "처리중"),
     CONVERTING  ("Converting", "변환중"),

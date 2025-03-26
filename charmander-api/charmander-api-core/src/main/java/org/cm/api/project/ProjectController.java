@@ -3,16 +3,12 @@ package org.cm.api.project;
 import lombok.RequiredArgsConstructor;
 import org.cm.api.common.dto.ListResponse;
 import org.cm.api.project.dto.ProjectDetailResponse;
+import org.cm.api.project.dto.ProjectGenerationResponse;
 import org.cm.api.project.dto.ProjectResponse;
 import org.cm.security.AuthInfo;
 import org.cm.security.annotations.support.AuthUser;
 import org.cm.security.annotations.support.MemberOnly;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/projects")
@@ -45,5 +41,13 @@ public class ProjectController {
     @DeleteMapping("/{id}")
     public void deleteProject(@PathVariable Long id, @AuthUser AuthInfo authInfo) {
         projectService.deleteProject(authInfo, id);
+    }
+
+    // TODO: 중복 요청 방지
+    @MemberOnly
+    @PostMapping("/{id}/generate-video")
+    public ProjectGenerationResponse generateProject(@PathVariable Long id, @AuthUser AuthInfo authInfo) {
+        var task = projectService.generateProject(authInfo, id);
+        return new ProjectGenerationResponse(id, task.getId());
     }
 }
