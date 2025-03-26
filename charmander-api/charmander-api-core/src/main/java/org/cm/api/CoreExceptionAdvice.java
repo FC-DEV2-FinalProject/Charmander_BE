@@ -44,7 +44,7 @@ public class CoreExceptionAdvice {
 
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<ExceptionResponse> handleNoResourceFoundException(NoResourceFoundException e) {
-        log.error("NoResourceFoundException : {}", e.getMessage(), e);
+        log.error("NoResourceFoundException : {}", e.getMessage());
         var exceptionResponse = new ExceptionResponse("NO_RESOURCE_FOUND", "해당 리소스를 찾을 수 없습니다.");
         return ResponseEntity.status(404).body(exceptionResponse);
     }
