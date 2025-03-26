@@ -67,7 +67,7 @@ done
 if [ "$HEALTHY" != "true" ]; then
   echo "[Error] 새 컨테이너가 정상 구동되지 않음. 롤백 진행"
   docker stop ${APP_NAME}-$IDLE_PORT
-  docker rm ${APP_NAME}-$IDLE_PORT
+  #docker rm ${APP_NAME}-$IDLE_PORT
   exit 1
 fi
 
