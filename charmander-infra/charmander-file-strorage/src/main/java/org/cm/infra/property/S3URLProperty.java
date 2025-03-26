@@ -12,13 +12,13 @@ public record S3URLProperty(
         String resourceSource,
 
         ContentsLocator ttsContentsLocator,
-        ContentsLocator avatarContentsLocator
-
+        ContentsLocator avatarContentsLocator,
+        ContentsLocator videoContentsLocator
 ) {
 
     public S3URLProperty {
         ttsContentsLocator = new AwsContentsLocator(resourceOriginal, "/tts");
         avatarContentsLocator = new AwsContentsLocator(resourceOriginal, "/avatar");
-
+        videoContentsLocator = new AwsContentsLocator(resourceOriginal, "/video");
     }
 }

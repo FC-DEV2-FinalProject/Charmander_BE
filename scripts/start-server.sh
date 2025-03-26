@@ -46,6 +46,7 @@ docker rm   ${APP_NAME}-$IDLE_PORT 2>/dev/null || true
 docker run -d \
   --name "${APP_NAME}-$IDLE_PORT" \
   -p $IDLE_PORT:8080 \
+  -e SPRING_PROFILES_ACTIVE=aws-secretsmanager,prod \
   $IMAGE_NAME
 
 ########################################
