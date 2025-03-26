@@ -46,6 +46,7 @@ docker rm   ${APP_NAME}-$IDLE_PORT 2>/dev/null || true
 docker run -d \
   --name "${APP_NAME}-$IDLE_PORT" \
   -p $IDLE_PORT:8080 \
+  -e SPRING_PROFILES_ACTIVE=aws-secretsmanager,prod \
   $IMAGE_NAME
 
 ########################################
@@ -67,7 +68,7 @@ done
 if [ "$HEALTHY" != "true" ]; then
   echo "[Error] 새 컨테이너가 정상 구동되지 않음. 롤백 진행"
   docker stop ${APP_NAME}-$IDLE_PORT
-  #docker rm ${APP_NAME}-$IDLE_PORT
+  docker rm ${APP_NAME}-$IDLE_PORT
   exit 1
 fi
 
