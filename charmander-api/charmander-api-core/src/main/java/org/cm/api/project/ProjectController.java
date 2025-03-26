@@ -8,7 +8,10 @@ import org.cm.api.project.dto.ProjectResponse;
 import org.cm.security.AuthInfo;
 import org.cm.security.annotations.support.AuthUser;
 import org.cm.security.annotations.support.MemberOnly;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/v1/projects")
@@ -35,6 +38,14 @@ public class ProjectController {
     public ProjectDetailResponse createProject(@AuthUser AuthInfo authInfo) {
         var item = projectService.createProject(authInfo);
         return ProjectDetailResponse.from(item);
+    }
+
+    // project newsArticle update
+    @MemberOnly
+    @ResponseStatus(HttpStatus.OK)
+    @PatchMapping("/{id}/newsArticle")
+    public void updateProjectNewsArticle(@PathVariable Long id, @AuthUser AuthInfo authInfo, String newsArticle, LocalDateTime timestamp) {
+        projectService.modifyProjectNewsArticle(id, authInfo.getMemberId(), newsArticle, timestamp);
     }
 
     @MemberOnly
