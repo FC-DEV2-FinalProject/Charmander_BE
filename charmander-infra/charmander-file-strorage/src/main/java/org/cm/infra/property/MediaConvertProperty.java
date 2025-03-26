@@ -11,7 +11,8 @@ public record MediaConvertProperty(
 ) {
 
     public record Queue(
-            String voiceCombine
+            String voiceCombine,
+            String sceneCombine
     ) {
     }
 }
