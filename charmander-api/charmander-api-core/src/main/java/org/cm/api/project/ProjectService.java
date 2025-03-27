@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.cm.api.project.dto.ProjectUpdateRequest;
 import org.cm.api.task.TaskService;
-import org.cm.domain.common.NamedLockRepository;
 import org.cm.domain.member.MemberRepository;
 import org.cm.domain.project.Project;
 import org.cm.domain.project.ProjectRepository;
@@ -14,10 +13,13 @@ import org.cm.exception.CoreApiException;
 import org.cm.exception.CoreApiExceptionCode;
 import org.cm.exception.CoreDomainException;
 import org.cm.exception.CoreDomainExceptionCode;
+import org.cm.repository.NamedLockProvider;
+import org.cm.repository.NamedLockTemplate;
 import org.cm.security.AuthInfo;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -38,9 +40,8 @@ public class ProjectService implements ApplicationEventPublisherAware {
 
     private final MemberRepository memberRepository;
     private final ProjectRepository projectRepository;
-    private final NamedLockRepository namedLockRepository;
 
-    private static final Logger logger = LoggerFactory.getLogger(ProjectService.class);
+    private final NamedLockTemplate namedLockTemplate;
 
     @Transactional(readOnly = true)
     public List<Project> getAllProjects(AuthInfo authInfo) {
@@ -77,19 +78,25 @@ public class ProjectService implements ApplicationEventPublisherAware {
     // project newsArticle
     // modify
     @Transactional
-    public void modifyProjectNewsArticle(Long id, Long memberId, String newArticle, LocalDateTime timestamp) {
-        Project foundProject = projectRepository
-            .findByIdAndOwnerIdForUpdate(id, memberId)
-            .orElseThrow(() -> new CoreDomainException(CoreDomainExceptionCode.NOT_FOUND_PROJECT));
+    public void modifyProjectNewsArticle(Long id, Long memberId, String newArticle) {
+        var lockName = "Project-" + id;
+        namedLockTemplate
+            .executeWithLock(lockName, () -> {
+                Project foundProject = projectRepository
+                    .findByIdAndOwnerIdForUpdate(id, memberId)
+                    .orElseThrow(() -> new CoreDomainException(CoreDomainExceptionCode.NOT_FOUND_PROJECT));
 
-        // db에 저장된 updateAt보다 timestamp가 최신 정보를 가지고 있다면 충돌 발생
-        if (!foundProject.getUpdatedAt().isEqual(timestamp) && foundProject.getUpdatedAt().isAfter(timestamp)) {
-            throw new OptimisticLockingFailureException("동시성 충돌: 다른 사용자가 이미 수정했습니다.");
-        }
+                LocalDateTime timestamp = LocalDateTime.now();
 
-        foundProject.updateProjectNewsArticle(newArticle);
-        projectRepository.save(foundProject);
-    }// end method
+                // 만약 db에 저장된 updateAt이 timestamp보다 더 최근 시간이라면 충돌 발생
+                if (!foundProject.getUpdatedAt().isEqual(timestamp) && foundProject.getUpdatedAt().isAfter(timestamp)) {
+                    throw new OptimisticLockingFailureException("동시성 충돌: 다른 사용자가 이미 수정했습니다.");
+                }
+
+                foundProject.updateProjectNewsArticle(newArticle);
+                projectRepository.save(foundProject);
+        });
+    }
 
     public Task generateProject(@NonNull AuthInfo authInfo, Long id) {
         var project = projectRepository.findByIdAndOwnerIdWithFetch(id, authInfo.getMemberId())

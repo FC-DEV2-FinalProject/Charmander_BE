@@ -46,7 +46,7 @@ public class ProjectController {
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping("/{id}/newsArticle")
     public void updateProjectNewsArticle(@PathVariable Long id, @AuthUser AuthInfo authInfo, String newsArticle) {
-        projectService.modifyProjectNewsArticle(id, authInfo.getMemberId(), newsArticle, LocalDateTime.now());
+        projectService.modifyProjectNewsArticle(id, authInfo.getMemberId(), newsArticle);
     }
 
     @MemberOnly
