@@ -1,6 +1,8 @@
 package org.cm.api.scene;
 
 import lombok.RequiredArgsConstructor;
+import org.cm.api.scene.dto.SceneTranscriptCreateCommand;
+import org.cm.api.scene.dto.SceneTranscriptResponse;
 import org.cm.api.scene.dto.SceneTranscriptUpdateRequest;
 import org.cm.security.AuthInfo;
 import org.cm.security.annotations.support.AuthUser;
@@ -12,6 +14,18 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class SceneTranscriptController {
     private final SceneTranscriptService sceneTranscriptService;
+
+    @MemberOnly
+    @PostMapping("/scenes/{sceneId}/ts")
+    public SceneTranscriptResponse createSceneTs(
+        @PathVariable Long projectId,
+        @PathVariable Long sceneId,
+        @AuthUser AuthInfo authInfo
+    ) {
+        var command = new SceneTranscriptCreateCommand(projectId, sceneId);
+        var transcript = sceneTranscriptService.createSceneTranscript(authInfo, command);
+        return SceneTranscriptResponse.from(transcript);
+    }
 
     @MemberOnly
     @PatchMapping("/scenes/{sceneId}/ts/{tsId}")

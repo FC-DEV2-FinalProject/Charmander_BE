@@ -43,5 +43,9 @@ public class SceneTranscript extends BaseEntity {
                 postDelay = 0;
             }
         }
+
+        public static Property createDefault() {
+            return new Property(1.0, 0);
+        }
     }
 }
