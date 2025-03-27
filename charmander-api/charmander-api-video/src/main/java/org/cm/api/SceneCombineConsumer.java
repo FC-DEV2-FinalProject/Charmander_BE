@@ -16,7 +16,7 @@ public class SceneCombineConsumer {
     private final SceneOutputRepository sceneOutputRepository;
     private final VideoOverlayCombineQueue videoOverlayCombineQueue;
 
-    @KafkaListener(topics = "scene-task", groupId = "tts-task-group")
+    @KafkaListener(topics = "video-overlay-task", groupId = "tts-task-group")
     public void consume(SceneCombineRecord sceneCombineRecord) {
         var sceneOutput = sceneOutputRepository.getById(sceneCombineRecord.sceneId());
         var scene = sceneOutput.getScene();
