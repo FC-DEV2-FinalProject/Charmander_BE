@@ -9,10 +9,7 @@ import org.cm.api.project.dto.ProjectUpdateRequest;
 import org.cm.security.AuthInfo;
 import org.cm.security.annotations.support.AuthUser;
 import org.cm.security.annotations.support.MemberOnly;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/api/v1/projects")
@@ -43,7 +40,7 @@ public class ProjectController {
 
     // project newsArticle update
     @MemberOnly
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus
     @PatchMapping("/{id}/newsArticle")
     public void updateProjectNewsArticle(@PathVariable Long id, @AuthUser AuthInfo authInfo, String newsArticle) {
         projectService.modifyProjectNewsArticle(id, authInfo.getMemberId(), newsArticle);

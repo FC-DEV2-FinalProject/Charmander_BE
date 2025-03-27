@@ -13,13 +13,9 @@ import org.cm.exception.CoreApiException;
 import org.cm.exception.CoreApiExceptionCode;
 import org.cm.exception.CoreDomainException;
 import org.cm.exception.CoreDomainExceptionCode;
-import org.cm.repository.NamedLockProvider;
 import org.cm.repository.NamedLockTemplate;
 import org.cm.security.AuthInfo;
 import org.jspecify.annotations.NonNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.dao.OptimisticLockingFailureException;
@@ -88,7 +84,6 @@ public class ProjectService implements ApplicationEventPublisherAware {
 
                 LocalDateTime timestamp = LocalDateTime.now();
 
-                // 만약 db에 저장된 updateAt이 timestamp보다 더 최근 시간이라면 충돌 발생
                 if (!foundProject.getUpdatedAt().isEqual(timestamp) && foundProject.getUpdatedAt().isAfter(timestamp)) {
                     throw new OptimisticLockingFailureException("동시성 충돌: 다른 사용자가 이미 수정했습니다.");
                 }
