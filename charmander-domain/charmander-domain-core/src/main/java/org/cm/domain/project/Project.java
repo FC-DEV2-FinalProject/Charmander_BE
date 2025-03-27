@@ -10,6 +10,7 @@ import org.cm.domain.member.Member;
 import org.cm.domain.scene.Scene;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -20,8 +21,8 @@ public class Project extends BaseEntity {
     @JoinColumn(nullable = false, updatable = false)
     private Member owner;
 
-    @OneToMany(fetch = FetchType.LAZY)
-    private List<Scene> scenes;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Scene> scenes = new ArrayList<>();
 
     @Setter
     @Column(nullable = false)
