@@ -21,4 +21,6 @@ public interface TaskScriptRepository extends JpaRepository<TaskScript, Long> {
 
     List<TaskScript> findAllByTaskId(Long taskId);
 
+    @Query("select t from TaskScript t where t.sceneId = :sceneId and t.status != 'Success'")
+    List<TaskScript> findAllNotSuccessTaskScriptsBySceneId(Long sceneId);
 }
