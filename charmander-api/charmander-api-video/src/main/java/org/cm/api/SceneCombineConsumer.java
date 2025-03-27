@@ -5,6 +5,7 @@ import org.cm.common.utils.RandomKeyGenerator;
 import org.cm.domain.task.SceneOutputRepository;
 import org.cm.infra.mediaconvert.queue.VideoOverlayCombineQueue;
 import org.cm.infra.mediaconvert.queue.WavVideoCombineQueue.VideoSource;
+import org.cm.kafka.SceneCombineRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
