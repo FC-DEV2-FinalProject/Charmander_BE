@@ -2,8 +2,9 @@ name: deploy dev to oci
 
 on:
   push:
-    branches: 
+    branches:
       - dev
+      - cicd/dev-oci
 jobs:
   build:
     runs-on: ubuntu-latest
