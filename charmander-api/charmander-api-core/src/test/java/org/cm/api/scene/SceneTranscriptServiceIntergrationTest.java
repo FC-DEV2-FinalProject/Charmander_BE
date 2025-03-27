@@ -14,12 +14,13 @@ import static org.junit.jupiter.api.Assertions.*;
 @Import({
     SceneTranscriptService.class,
 })
+@DisplayName("[통합 테스트] SceneTranscriptService")
 class SceneTranscriptServiceIntergrationTest extends BaseServiceIntergrationTest {
     @Autowired
     SceneTranscriptService sceneTranscriptService;
 
     @Nested
-    @DisplayName("[삽입 테스트]")
+    @DisplayName("[삽입]")
     class InsertionTest {
         @Test
         @DisplayName("001. 대본을 생성할 수 있어야 함.")

@@ -16,12 +16,13 @@ import static org.junit.jupiter.api.Assertions.*;
   SceneService.class,
   SceneUpdateRequest.Mapper.class
 })
+@DisplayName("[통합 테스트] SceneService")
 class SceneServiceIntergrationTest extends BaseServiceIntergrationTest {
     @Autowired
     SceneService sceneService;
 
     @Nested
-    @DisplayName("[조회 테스트]")
+    @DisplayName("[조회]")
     class GetTest {
         @Test
         @DisplayName("001. 사용자가 소유한 Project를 조회할 수 있어야 함.")
@@ -57,7 +58,7 @@ class SceneServiceIntergrationTest extends BaseServiceIntergrationTest {
     }
 
     @Nested
-    @DisplayName("[삽입 테스트]")
+    @DisplayName("[삽입]")
     class InsertionTest {
         @Test
         @DisplayName("001. 새로운 Scene을 생성할 수 있어야 함.")
@@ -78,7 +79,7 @@ class SceneServiceIntergrationTest extends BaseServiceIntergrationTest {
     }
 
     @Nested
-    @DisplayName("[수정 테스트]")
+    @DisplayName("[수정]")
     class UpdateTest {
         @Test
         @DisplayName("001. 자막을 수정할 수 있어야 함.")
@@ -107,7 +108,7 @@ class SceneServiceIntergrationTest extends BaseServiceIntergrationTest {
     }
 
     @Nested
-    @DisplayName("[삭제 테스트]")
+    @DisplayName("[삭제]")
     class DeletionTest {
         @Test
         @DisplayName("001. 사용자가 소유한 Scene을 삭제할 수 있어야 함.")

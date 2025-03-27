@@ -18,6 +18,7 @@ import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+@DisplayName("[단위 테스트] SceneTranscriptService")
 class SceneTranscriptServiceUnitTest extends BaseServiceUnitTest {
     @InjectMocks
     SceneTranscriptService SceneTranscriptService;
