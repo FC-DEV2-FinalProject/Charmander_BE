@@ -38,12 +38,18 @@ public class ProjectController {
         return ProjectDetailResponse.from(item);
     }
 
-    // project newsArticle update
     @MemberOnly
-    @ResponseStatus
     @PatchMapping("/{id}/newsArticle")
-    public void updateProjectNewsArticle(@PathVariable Long id, @AuthUser AuthInfo authInfo, String newsArticle) {
-        projectService.modifyProjectNewsArticle(id, authInfo.getMemberId(), newsArticle);
+    public void updateProjectNewsArticle(
+        @PathVariable Long id,
+        @AuthUser AuthInfo authInfo,
+        String newsArticle
+    ) {
+        projectService.modifyProjectNewsArticle(
+            id,
+            authInfo.getMemberId(),
+            newsArticle
+        );
     }
 
     @MemberOnly
