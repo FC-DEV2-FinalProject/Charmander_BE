@@ -1,6 +1,6 @@
 venv
 .venv
-__pycache__
+**/__pycache__
 
 *.pyc
 *.pyo
@@ -8,5 +8,23 @@ __pycache__
 
 .DS_Store
 
+# git
 .git
 .gitignore
+
+# dotenv
+.env
+
+# vscode
+.vscode
+
+# docker
+docker-compose*.yaml
+Dockerfile
+
+
+# markdown
+README.MD
+
+# etc
+assets
