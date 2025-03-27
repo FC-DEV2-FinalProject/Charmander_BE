@@ -2,7 +2,7 @@ package org.cm.api.scene;
 
 import org.cm.api.scene.dto.SceneTranscriptCreateCommand;
 import org.cm.security.AuthInfo;
-import org.cm.test.config.BaseServiceTest;
+import org.cm.test.config.BaseServiceIntergrationTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Import({
     SceneTranscriptService.class,
 })
-class SceneTranscriptServiceTest extends BaseServiceTest {
+class SceneTranscriptServiceIntergrationTest extends BaseServiceIntergrationTest {
     @Autowired
     SceneTranscriptService sceneTranscriptService;
 

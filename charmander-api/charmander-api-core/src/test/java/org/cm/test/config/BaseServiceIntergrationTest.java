@@ -15,7 +15,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import java.util.stream.IntStream;
 
 @DataJpaTest
-public abstract class BaseServiceTest {
+public abstract class BaseServiceIntergrationTest {
     @Autowired
     private EntityManager em;
 
