@@ -7,10 +7,12 @@ import org.cm.common.domain.FileType;
 import org.cm.infra.storage.ContentsLocator;
 import org.cm.infra.storage.PreSignedFileUploadService;
 import org.cm.infra.storage.PreSignedURLIdentifier;
+import org.cm.kafka.TaskScriptRecord;
 import org.cm.service.TtsService;
 import org.cm.vo.TaskCompletedCheckEvent;
 import org.cm.vo.TaskScriptGenerationCompletedEvent;
 import org.cm.vo.TaskScriptGenerationStartedEvent;
+import org.cm.vo.TtsCombineEvent;
 import org.cm.vo.TtsCreateCommand;
 import org.cm.vo.TtsInfo;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,7 +43,8 @@ public class TaskConsumer {
 
             completeTaskScriptGeneration(taskScriptRecord, preSignedURLIdentifier, ttsInfo);
         } catch (Exception e) {
-            log.error("{}", e.getMessage());
+
+            log.error("{}", e.getMessage(), e);
         }
 
     }
@@ -57,7 +60,10 @@ public class TaskConsumer {
                 preSignedURLIdentifier.fileName(),
                 ttsInfo.playTime()
         );
+        var ttsCombineEvent = new TtsCombineEvent(taskScriptRecord.taskId(), taskScriptRecord.taskScriptId());
+
         applicationEventPublisher.publishEvent(taskScriptGenerationCompletedEvent);
+        applicationEventPublisher.publishEvent(ttsCombineEvent);
         applicationEventPublisher.publishEvent(new TaskCompletedCheckEvent(taskScriptRecord.taskId()));
     }
 

@@ -5,6 +5,7 @@ import org.cm.common.utils.RandomKeyGenerator;
 import org.cm.domain.task.SceneOutputRepository;
 import org.cm.infra.mediaconvert.queue.VideoOverlayCombineQueue;
 import org.cm.infra.mediaconvert.queue.WavVideoCombineQueue.VideoSource;
+import org.cm.kafka.SceneCombineRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,7 @@ public class SceneCombineConsumer {
     private final SceneOutputRepository sceneOutputRepository;
     private final VideoOverlayCombineQueue videoOverlayCombineQueue;
 
-    @KafkaListener(topics = "scene-task", groupId = "tts-task-group")
+    @KafkaListener(topics = "video-overlay-task", groupId = "tts-task-group")
     public void consume(SceneCombineRecord sceneCombineRecord) {
         var sceneOutput = sceneOutputRepository.getById(sceneCombineRecord.sceneId());
         var scene = sceneOutput.getScene();

@@ -2,6 +2,7 @@ package org.cm.api;
 
 import lombok.RequiredArgsConstructor;
 import org.cm.domain.task.TaskRepository;
+import org.cm.kafka.VideoConcatRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 

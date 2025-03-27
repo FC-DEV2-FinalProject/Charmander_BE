@@ -8,6 +8,7 @@ import org.cm.infra.mediaconvert.queue.WavImageCombineQueue;
 import org.cm.infra.mediaconvert.queue.WavImageCombineQueue.ImageSource;
 import org.cm.infra.mediaconvert.queue.WavVideoCombineQueue;
 import org.cm.infra.mediaconvert.queue.WavVideoCombineQueue.VideoSource;
+import org.cm.kafka.TtsCombineRecord;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 

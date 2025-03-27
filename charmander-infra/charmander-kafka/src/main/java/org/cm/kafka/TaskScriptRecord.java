@@ -1,4 +1,4 @@
-package org.cm.api;
+package org.cm.kafka;
 
 public record TaskScriptRecord(
         Long taskId,
