@@ -50,8 +50,7 @@ class TaskTest {
                 var task = new Task();
 
                 task.start();
-                task.succeed(new TaskOutput("fileId", Duration.ofMillis(10)));
-
+                task.succeed();
                 task.start();
             }).isInstanceOf(CoreDomainException.class);
         }
@@ -66,7 +65,7 @@ class TaskTest {
             var task = new Task();
 
             task.start();
-            task.succeed(new TaskOutput("fileId", Duration.ofSeconds(10)));
+            task.succeed();
 
             assertThat(task.getStatus()).isEqualTo(TaskStatus.SUCCESS);
         }
@@ -75,7 +74,7 @@ class TaskTest {
         void 작업이_시작되지_않았다면_완료할_수_없습니다() {
             var task = new Task();
 
-            assertThatThrownBy(() -> task.succeed(new TaskOutput("fileId", Duration.ofMillis(10))))
+            assertThatThrownBy(task::succeed)
                     .isInstanceOf(CoreDomainException.class);
         }
 
@@ -85,7 +84,7 @@ class TaskTest {
             assertThatThrownBy(() -> {
                 var task = new Task();
 
-                task.succeed(taskOutput);
+                task.succeed();
             }).isInstanceOf(CoreDomainException.class);
 
             assertThatThrownBy(() -> {
@@ -93,15 +92,15 @@ class TaskTest {
 
                 task.start();
                 task.cancel();
-                task.succeed(taskOutput);
+                task.succeed();
             }).isInstanceOf(CoreDomainException.class);
 
             assertThatThrownBy(() -> {
                 var task = new Task();
 
                 task.start();
-                task.succeed(taskOutput);
-                task.succeed(taskOutput);
+                task.succeed();
+                task.succeed();
             }).isInstanceOf(CoreDomainException.class);
         }
     }
