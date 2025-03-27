@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - dev
-      - cicd/dev-coi
+      - cicd/dev-oci
 jobs:
   build:
     runs-on: ubuntu-latest
