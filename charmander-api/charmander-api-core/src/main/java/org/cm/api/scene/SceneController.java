@@ -6,10 +6,7 @@ import org.cm.api.scene.dto.SceneResponse;
 import org.cm.security.AuthInfo;
 import org.cm.security.annotations.support.AuthUser;
 import org.cm.security.annotations.support.MemberOnly;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/projects/{projectId}")
@@ -22,5 +19,12 @@ public class SceneController {
     public ListResponse<SceneResponse> getProjectScenes(@PathVariable Long projectId, @AuthUser AuthInfo authInfo) {
         var items = sceneService.getProjectScenes(authInfo, projectId);
         return ListResponse.of(items, SceneResponse::from);
+    }
+
+    @MemberOnly
+    @PostMapping("/scenes")
+    public SceneResponse createScene(@PathVariable Long projectId, @AuthUser AuthInfo authInfo) {
+        var scene = sceneService.createScene(authInfo, projectId);
+        return SceneResponse.from(scene);
     }
 }

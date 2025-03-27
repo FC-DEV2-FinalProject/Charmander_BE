@@ -50,4 +50,8 @@ public class Scene extends BaseEntity {
         this.avatar = avatar;
         this.property = property;
     }
+
+    public static Scene createEmpty(Project project) {
+        return new Scene(project, SceneSubtitle.createDefault(), SceneMedia.createDefault(), SceneMedia.createDefault(), SceneProperty.createDefault());
+    }
 }

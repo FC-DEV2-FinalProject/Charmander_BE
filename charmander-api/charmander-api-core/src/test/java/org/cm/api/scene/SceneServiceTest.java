@@ -63,6 +63,27 @@ class SceneServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("[삽입 테스트]")
+    class InsertionTest {
+        @Test
+        @DisplayName("001. 새로운 Scene을 생성할 수 있어야 함.")
+        void test00001() {
+            // given
+            var member = createMember();
+            var project = populatProjectData(member, 0);
+            var authInfo = new AuthInfo(member.getId());
+
+            // when
+            var scene = sceneService.createScene(authInfo, project.getId());
+            var scenes = sceneService.getProjectScenes(authInfo, project.getId());
+
+            // then
+            assertNotNull(scene.getId());
+            assertEquals(1, scenes.size());
+        }
+    }
+
     private Member createMember() {
         var member = MemberFixture.create();
         return em.merge(member);
