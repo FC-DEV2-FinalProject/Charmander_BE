@@ -23,6 +23,17 @@ public class SceneSubtitle {
         String fontSize,
         String fontColor
     ) {
+        public static SceneSubtitle.Property createDefault() {
+            return new SceneSubtitle.Property("Arial", "12", "#FFFFFF");
+        }
+    }
 
+    public SceneSubtitle(String text, SceneSubtitle.Property property) {
+        this.text = text;
+        this.property = property;
+    }
+
+    public static SceneSubtitle createDefault() {
+        return new SceneSubtitle("", SceneSubtitle.Property.createDefault());
     }
 }
