@@ -54,12 +54,8 @@ public class TaskScriptEventListener {
         var audioSources = getAudioSources(taskScripts, transcripts);
         var combineAudioId = RandomKeyGenerator.generateRandomKey();
 
-        var jobId = wavCombineQueue.offer(
-                combineAudioId,
-                audioSources
-        );
-
-        sceneOutput.update(combineAudioId, jobId);
+        wavCombineQueue.offer(combineAudioId, audioSources);
+        sceneOutput.update(combineAudioId);
 
     }
 
