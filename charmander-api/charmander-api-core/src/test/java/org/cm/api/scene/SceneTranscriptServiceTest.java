@@ -2,6 +2,7 @@ package org.cm.api.scene;
 
 import org.cm.api.scene.dto.SceneTranscriptUpdateCommand;
 import org.cm.domain.scene.SceneTranscriptRepository;
+import org.cm.exception.CoreApiException;
 import org.cm.security.AuthInfo;
 import org.cm.test.fixture.MemberFixture;
 import org.cm.test.fixture.SceneTranscriptFixture;
@@ -109,6 +110,33 @@ class SceneTranscriptServiceTest {
             assertEquals(text, updatedTs.getText());
             assertEquals(speed, updatedTs.getProperty().speed());
             assertEquals(postDelay, updatedTs.getProperty().postDelay());
+        }
+
+        @Test
+        @DisplayName("004. 다른 사용자의 대본은 수정할 수 없어야 한다.")
+        void test00004() {
+            // stub
+            var member = MemberFixture.create();
+            var ts = SceneTranscriptFixture.create();
+            var authInfo = new AuthInfo((long) 999);
+            Mockito
+                .when(sceneTranscriptRepository.findForUpdate(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any()))
+                .thenAnswer((invoke) -> {
+                    var memberId = invoke.getArgument(3);
+                    if (memberId.equals(member.getId())) {
+                        return Optional.of(ts);
+                    }
+                    return Optional.empty();
+                });
+
+            // when
+            var text = "이것은 변경된 텍스트 입니다.";
+            var speed = 2.0;
+            var postDelay = 300;
+            var command = new SceneTranscriptUpdateCommand(1L, 1L, 1L, text, speed, postDelay);
+
+            // when
+            assertThrows(CoreApiException.class, () -> SceneTranscriptService.updateSceneTranscript(authInfo, command));
         }
     }
 }
