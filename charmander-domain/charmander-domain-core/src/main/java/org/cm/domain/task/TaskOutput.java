@@ -22,6 +22,11 @@ public class TaskOutput {
     @Column
     private Integer downloadCount;
 
+    public TaskOutput(String fileId) {
+        // TODO file 스키마 맞추기
+        this.fileName = fileId;
+    }
+
     public TaskOutput(
             String fileName,
             Duration playtime

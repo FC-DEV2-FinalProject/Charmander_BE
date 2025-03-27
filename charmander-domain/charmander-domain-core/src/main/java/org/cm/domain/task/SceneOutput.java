@@ -42,4 +42,8 @@ public class SceneOutput extends BaseEntity {
     public void update(String combineAudioId) {
         this.voiceFileId = voiceFileId;
     }
+
+    public void updateSceneId(String sceneFileId) {
+        this.sceneFileId = sceneFileId;
+    }
 }

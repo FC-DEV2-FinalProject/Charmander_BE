@@ -84,11 +84,21 @@ public class Task extends BaseEntity {
         this.status = TaskStatus.IN_PROGRESS;
     }
 
+    // TODO 제거 예정
+    @Deprecated
     public void succeed() {
         if (status != TaskStatus.IN_PROGRESS) {
             throw new CoreDomainException(CoreDomainExceptionCode.SUCCEED_ALLOWED_ONLY_IN_PROGRESS);
         }
         this.status = TaskStatus.SUCCESS;
+    }
+
+    public void succeed(String fileId) {
+        if (status != TaskStatus.IN_PROGRESS) {
+            throw new CoreDomainException(CoreDomainExceptionCode.SUCCEED_ALLOWED_ONLY_IN_PROGRESS);
+        }
+        this.status = TaskStatus.SUCCESS;
+        this.output = new TaskOutput(fileId);
     }
 
     public void retry() {
