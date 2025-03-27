@@ -18,13 +18,13 @@ public class NamedLockRepository {
     public boolean getLock(String lockName) {
         Query query = entityManager.createNativeQuery("SELECT GET_LOCK(?lockName, 2)");
         query.setParameter("lockName", lockName);
-        return ((Number) query.getSingleResult()).intValue() == 1;
+        return query.getSingleResult().equals(1);
     }
 
     @Transactional
     public boolean releaseLock(String lockName) {
         Query query = entityManager.createNativeQuery("SELECT RELEASE_LOCK(?lockName)");
         query.setParameter("lockName", lockName);
-        return ((Number) query.getSingleResult()).intValue() == 1;
+        return query.getSingleResult().equals(1);
     }
 }
