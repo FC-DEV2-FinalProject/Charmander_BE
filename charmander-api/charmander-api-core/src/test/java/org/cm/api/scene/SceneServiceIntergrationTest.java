@@ -1,21 +1,14 @@
 package org.cm.api.scene;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.EntityManager;
 import org.cm.api.scene.dto.SceneUpdateRequest;
-import org.cm.domain.member.Member;
-import org.cm.domain.project.Project;
 import org.cm.domain.scene.Scene;
 import org.cm.security.AuthInfo;
-import org.cm.test.fixture.MemberFixture;
-import org.cm.test.fixture.ProjectFixture;
-import org.cm.test.fixture.SceneFixture;
-import org.junit.jupiter.api.*;
+import org.cm.test.config.BaseServiceIntergrationTest;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-
-import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,33 +16,17 @@ import static org.junit.jupiter.api.Assertions.*;
   SceneService.class,
   SceneUpdateRequest.Mapper.class
 })
-@DataJpaTest
-class SceneServiceTest {
+@DisplayName("[통합 테스트] SceneService")
+class SceneServiceIntergrationTest extends BaseServiceIntergrationTest {
     @Autowired
     SceneService sceneService;
 
-    @Autowired
-    EntityManager em;
-
-    ObjectMapper objectMapper;
-
-    @BeforeEach
-    void setUp() {
-        objectMapper = new ObjectMapper();
-        objectMapper.findAndRegisterModules();
-    }
-
-    @AfterEach
-    void tearDown() {
-        objectMapper = null;
-    }
-
     @Nested
-    @DisplayName("[조회 테스트]")
+    @DisplayName("[조회]")
     class GetTest {
         @Test
-        @DisplayName("001. 사용자가 소유한 프로젝트를 조회할 수 있어야 함.")
-        void test00001() {
+        @DisplayName("001. 사용자가 소유한 Project를 조회할 수 있어야 함.")
+        void 사용자가_소유한_Project를_조회할_수_있어야_함() {
             // given
             var member1 = createMember();
             var member2 = createMember();
@@ -64,8 +41,8 @@ class SceneServiceTest {
         }
 
         @Test
-        @DisplayName("002. 다른 사용자가 소유한 프로젝트를 조회할 수 없어야 함.")
-        void test00002() {
+        @DisplayName("002. 소유하지 않은 Project를 조회할 수 없어야 함.")
+        void 소유하지_않은_Project를_조회할_수_없어야_함() {
             // given
             var member1 = createMember();
             var member2 = createMember();
@@ -81,11 +58,11 @@ class SceneServiceTest {
     }
 
     @Nested
-    @DisplayName("[삽입 테스트]")
+    @DisplayName("[삽입]")
     class InsertionTest {
         @Test
         @DisplayName("001. 새로운 Scene을 생성할 수 있어야 함.")
-        void test00001() {
+        void 새로운_Scene을_생성할_수_있어야_함() {
             // given
             var member = createMember();
             var project = populatProjectData(member, 0);
@@ -102,11 +79,11 @@ class SceneServiceTest {
     }
 
     @Nested
-    @DisplayName("[수정 테스트]")
+    @DisplayName("[수정]")
     class UpdateTest {
         @Test
-        @DisplayName("001. 자막 테스트를 수정할 수 있어야 함.")
-        void test00001() throws Exception {
+        @DisplayName("001. 자막을 수정할 수 있어야 함.")
+        void 자막을_수정할_수_있어야_함() throws Exception {
             // given
             var member = createMember();
             var project = createProject(member);
@@ -131,11 +108,11 @@ class SceneServiceTest {
     }
 
     @Nested
-    @DisplayName("[삭제 테스트]")
+    @DisplayName("[삭제]")
     class DeletionTest {
         @Test
         @DisplayName("001. 사용자가 소유한 Scene을 삭제할 수 있어야 함.")
-        void test00001() {
+        void 사용자가_소유한_Scene을_삭제할_수_있어야_함() {
             // given
             var member = createMember();
             var project = populatProjectData(member, 1);
@@ -151,8 +128,8 @@ class SceneServiceTest {
         }
 
         @Test
-        @DisplayName("002. 다른 사용자가 소유한 Scene을 삭제할 수 없어야 함.")
-        void test00002() {
+        @DisplayName("002. 소유하지 않은 Scene을 삭제할 수 없어야 함.")
+        void 소유하지_않은_Scene을_삭제할_수_없어야_함() {
             // given
             var member1 = createMember();
             var member2 = createMember();
@@ -163,30 +140,5 @@ class SceneServiceTest {
             // when
             assertThrows(Exception.class, () -> sceneService.deleteScene(authInfo, project.getId(), scene.getId()));
         }
-    }
-
-    private Member createMember() {
-        var member = MemberFixture.create();
-        return em.merge(member);
-    }
-
-    private Project createProject(Member member) {
-        var project = ProjectFixture.create(member);
-        return em.merge(project);
-    }
-
-    private Scene createScene(Project project) {
-        var scene = SceneFixture.create(project);
-        return em.merge(scene);
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    private Project populatProjectData(Member member, int nScenes) {
-        var project = ProjectFixture.create(member);
-        var scenes = IntStream.range(0, nScenes)
-            .mapToObj(i -> SceneFixture.create(project))
-            .toList();
-        scenes.forEach(project::addScene);
-        return em.merge(project);
     }
 }

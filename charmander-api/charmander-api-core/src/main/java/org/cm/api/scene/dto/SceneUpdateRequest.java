@@ -11,14 +11,10 @@ public record SceneUpdateRequest(
     SceneSubtitleDto subtitle,
     ScenePropertyDto property
 ) {
-    public static void update(Scene scene, SceneUpdateRequest request) {
-        Mapper.update(scene, request);
-    }
-
     @Component
     @RequiredArgsConstructor
     public static class Mapper {
-        public static void update(Scene scene, SceneUpdateRequest request) {
+        public void update(Scene scene, SceneUpdateRequest request) {
             if (request == null) {
                 return;
             }
@@ -27,7 +23,7 @@ public record SceneUpdateRequest(
             updateProperty(scene, request.property);
         }
 
-        private static void updateSubtitle(Scene scene, SceneSubtitleDto subtitle) {
+        private void updateSubtitle(Scene scene, SceneSubtitleDto subtitle) {
             if (subtitle == null) {
                 return;
             }
@@ -51,7 +47,7 @@ public record SceneUpdateRequest(
             }
         }
 
-        private static void updateProperty(Scene scene, ScenePropertyDto property) {
+        private void updateProperty(Scene scene, ScenePropertyDto property) {
             if (property == null) {
                 return;
             }
