@@ -1,21 +1,14 @@
 package org.cm.api.scene;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.persistence.EntityManager;
 import org.cm.api.scene.dto.SceneUpdateRequest;
-import org.cm.domain.member.Member;
-import org.cm.domain.project.Project;
 import org.cm.domain.scene.Scene;
 import org.cm.security.AuthInfo;
-import org.cm.test.fixture.MemberFixture;
-import org.cm.test.fixture.ProjectFixture;
-import org.cm.test.fixture.SceneFixture;
-import org.junit.jupiter.api.*;
+import org.cm.test.config.BaseServiceTest;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
-
-import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,26 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
   SceneService.class,
   SceneUpdateRequest.Mapper.class
 })
-@DataJpaTest
-class SceneServiceTest {
+class SceneServiceTest extends BaseServiceTest {
     @Autowired
     SceneService sceneService;
-
-    @Autowired
-    EntityManager em;
-
-    ObjectMapper objectMapper;
-
-    @BeforeEach
-    void setUp() {
-        objectMapper = new ObjectMapper();
-        objectMapper.findAndRegisterModules();
-    }
-
-    @AfterEach
-    void tearDown() {
-        objectMapper = null;
-    }
 
     @Nested
     @DisplayName("[조회 테스트]")
@@ -163,30 +139,5 @@ class SceneServiceTest {
             // when
             assertThrows(Exception.class, () -> sceneService.deleteScene(authInfo, project.getId(), scene.getId()));
         }
-    }
-
-    private Member createMember() {
-        var member = MemberFixture.create();
-        return em.merge(member);
-    }
-
-    private Project createProject(Member member) {
-        var project = ProjectFixture.create(member);
-        return em.merge(project);
-    }
-
-    private Scene createScene(Project project) {
-        var scene = SceneFixture.create(project);
-        return em.merge(scene);
-    }
-
-    @SuppressWarnings("SameParameterValue")
-    private Project populatProjectData(Member member, int nScenes) {
-        var project = ProjectFixture.create(member);
-        var scenes = IntStream.range(0, nScenes)
-            .mapToObj(i -> SceneFixture.create(project))
-            .toList();
-        scenes.forEach(project::addScene);
-        return em.merge(project);
     }
 }
