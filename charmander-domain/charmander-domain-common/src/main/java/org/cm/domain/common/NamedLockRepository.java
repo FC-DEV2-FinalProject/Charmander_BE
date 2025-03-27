@@ -1,19 +1,30 @@
 package org.cm.domain.common;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.Query;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-public interface NamedLockRepository extends JpaRepository {
+@Repository
+public class NamedLockRepository {
 
-    // 네임드 get락
-    @Transactional
-    @Query(value = "SELECT GET_LOCK(:lockName, 2)", nativeQuery = true)
-    boolean getLock(@Param("lockName") String lockName);
+    private final EntityManager entityManager;
 
-    // 네임드 release락
+    public NamedLockRepository(EntityManager entityManager) {
+        this.entityManager = entityManager;
+    }
+
     @Transactional
-    @Query(value = "SELECT RELEASE_LOCK(:lockName)", nativeQuery = true)
-    Integer releaseLock(@Param("lockName") String lockName);
+    public boolean getLock(String lockName) {
+        Query query = entityManager.createNativeQuery("SELECT GET_LOCK(?lockName, 2)");
+        query.setParameter("lockName", lockName);
+        return ((Number) query.getSingleResult()).intValue() == 1;
+    }
+
+    @Transactional
+    public boolean releaseLock(String lockName) {
+        Query query = entityManager.createNativeQuery("SELECT RELEASE_LOCK(?lockName)");
+        query.setParameter("lockName", lockName);
+        return ((Number) query.getSingleResult()).intValue() == 1;
+    }
 }
