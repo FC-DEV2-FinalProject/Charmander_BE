@@ -10,6 +10,7 @@ import org.cm.domain.project.Project;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -20,8 +21,8 @@ public class Scene extends BaseEntity {
     @JoinColumn(nullable = false, updatable = false)
     private Project project;
 
-    @OneToMany
-    private List<SceneTranscript> transcripts;
+    @OneToMany(mappedBy = "scene", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SceneTranscript> transcripts = new ArrayList<>();
 
     @Embedded
     private SceneSubtitle subtitle;
@@ -38,6 +39,10 @@ public class Scene extends BaseEntity {
     @Embedded
     @AttributeOverride(name = "background", column = @Column(name = "property_background"))
     private SceneProperty property;
+
+    public void addTranscript(SceneTranscript transcript) {
+        this.transcripts.add(transcript);
+    }
 
     public Scene(
         Project project,
