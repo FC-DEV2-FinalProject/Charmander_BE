@@ -1,13 +1,6 @@
 package org.cm.domain.scene;
 
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import java.util.List;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,6 +8,8 @@ import org.cm.domain.common.BaseEntity;
 import org.cm.domain.project.Project;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+
+import java.util.List;
 
 @Entity
 @Getter
@@ -42,7 +37,17 @@ public class Scene extends BaseEntity {
     @AttributeOverride(name = "background", column = @Column(name = "property_background"))
     private SceneProperty property;
 
-    public Scene(Project project) {
+    public Scene(
+        Project project,
+        SceneSubtitle subtitle,
+        SceneMedia background,
+        SceneMedia avatar,
+        SceneProperty property
+    ) {
         this.project = project;
+        this.subtitle = subtitle;
+        this.background = background;
+        this.avatar = avatar;
+        this.property = property;
     }
 }

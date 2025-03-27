@@ -21,5 +21,19 @@ public record SceneMedia(
         public Property {
             scale = 1.0;
         }
+
+        public static Property createDefault() {
+            return new Property(0, new ScreenSize(0, 0), new Position2D(0, 0), 1.0);
+        }
+    }
+
+    public static SceneMedia createDefault() {
+        return new SceneMedia(
+            SceneMediaType.Image,
+            "",
+            "0",
+            Duration.ZERO,
+            Property.createDefault()
+        );
     }
 }
