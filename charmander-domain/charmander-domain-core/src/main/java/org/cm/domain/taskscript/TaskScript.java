@@ -1,6 +1,12 @@
 package org.cm.domain.taskscript;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,7 +34,7 @@ public class TaskScript extends BaseEntity {
     private String sentence;
     private String fileId;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "task_script_options")
     private String option;
 
     @Column(length = 500)
