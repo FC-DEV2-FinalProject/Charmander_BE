@@ -15,7 +15,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Scene extends BaseEntity {
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.DETACH})
     @JoinColumn(nullable = false, updatable = false)
     private Project project;
 
