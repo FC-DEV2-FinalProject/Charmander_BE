@@ -2,6 +2,7 @@ package org.cm.api.project;
 
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.cm.api.project.dto.ProjectUpdateRequest;
 import org.cm.api.task.TaskService;
 import org.cm.domain.common.NamedLockRepository;
 import org.cm.domain.member.MemberRepository;
@@ -58,6 +59,13 @@ public class ProjectService implements ApplicationEventPublisherAware {
 
         var project = Project.newCreateProject(member);
         return projectRepository.save(project);
+    }
+
+    public void updateProject(AuthInfo authInfo, Long id, ProjectUpdateRequest request) {
+        var project = projectRepository.findByIdAndOwnerId(id, authInfo.getMemberId())
+            .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.PROJECT_NOT_FOUND));
+
+        ProjectUpdateRequest.update(project, request);
     }
 
     public void deleteProject(AuthInfo authInfo, Long id) {

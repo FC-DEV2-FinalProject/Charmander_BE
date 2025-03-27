@@ -1,3 +1,4 @@
+import io
 from logging import getLogger
 from tempfile import SpooledTemporaryFile
 
@@ -19,6 +20,7 @@ class TTS_Vits:
     def __init__(self, state_path: str, config_path : str):
         self._state_path = state_path
         self._config_path = config_path
+    
     def _split_text(self, text: str):
         text_list = text.split('\n')
         text_list = map(lambda x: x.strip(), text_list)
@@ -115,12 +117,22 @@ class TTS_Vits:
             else:
                 inference_audio = inference_audio.cpu().float().numpy()
         
-        with SpooledTemporaryFile(max_size=20480, mode='w+b') as fp:
+        with SpooledTemporaryFile(max_size=5242880, mode='w+b') as fp:
             logger.debug(f"Writing synthesized audio to temporary file: {fp.name}")
 
             wavfile.write(fp, self._hps.data.sampling_rate, inference_audio)
             fp.seek(0)
-            audio_bytes = fp.read() 
+            return Audio.from_raw_bytes(fp.read())        
+    
+class Audio:
+    def __init__(self, raw_bytes, wav_bytes, sample_rate, duration):
+        self.raw_bytes = raw_bytes
+        self.wav_bytes = wav_bytes
+        self.sample_rate = sample_rate
+        self.duration = duration
 
-        logger.info(f"Synthesized audio for text: {text}")
-        return audio_bytes
+    @staticmethod
+    def from_raw_bytes(raw_bytes):
+        sample_rate, wav_bytes = wavfile.read(io.BytesIO(raw_bytes))
+        duration = len(wav_bytes) / sample_rate
+        return Audio(raw_bytes, wav_bytes, sample_rate, duration)
