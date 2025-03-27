@@ -5,6 +5,7 @@ import org.cm.api.common.dto.ListResponse;
 import org.cm.api.project.dto.ProjectDetailResponse;
 import org.cm.api.project.dto.ProjectGenerationResponse;
 import org.cm.api.project.dto.ProjectResponse;
+import org.cm.api.project.dto.ProjectUpdateRequest;
 import org.cm.security.AuthInfo;
 import org.cm.security.annotations.support.AuthUser;
 import org.cm.security.annotations.support.MemberOnly;
@@ -35,6 +36,12 @@ public class ProjectController {
     public ProjectDetailResponse createProject(@AuthUser AuthInfo authInfo) {
         var item = projectService.createProject(authInfo);
         return ProjectDetailResponse.from(item);
+    }
+
+    @MemberOnly
+    @PatchMapping("/{id}")
+    public void updateProject(@PathVariable Long id, @RequestBody ProjectUpdateRequest request, @AuthUser AuthInfo authInfo) {
+        projectService.updateProject(authInfo, id, request);
     }
 
     @MemberOnly
