@@ -54,7 +54,7 @@ public class WavVideoCombineQueue {
     private final MediaConvertProperty property;
     private final S3URLProperty s3URLProperty;
 
-    public String offer(AudioSource audioSource, String fileId, VideoSource videoSource) {
+    public String offer(AudioSource audioSource, VideoSource videoSource, String fileId) {
         CreateJobRequest jobRequest = CreateJobRequest.builder()
                 .queue(property.queue().sceneCombine())
                 .role(property.userArn())
