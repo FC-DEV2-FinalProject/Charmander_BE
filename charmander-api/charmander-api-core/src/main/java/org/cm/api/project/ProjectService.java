@@ -71,13 +71,10 @@ public class ProjectService implements ApplicationEventPublisherAware {
         projectRepository.delete(project);
     }
 
-    // project newsArticle
-    // modify
-    @Transactional
     public void modifyProjectNewsArticle(Long id, Long memberId, String newArticle) {
         var lockName = "Project-" + id;
         namedLockTemplate
-            .executeWithLock(lockName, () -> {
+            .runWithNamedLockFallback(lockName, () -> {
                 Project foundProject = projectRepository
                     .findByIdAndOwnerIdForUpdate(id, memberId)
                     .orElseThrow(() -> new CoreDomainException(CoreDomainExceptionCode.NOT_FOUND_PROJECT));
