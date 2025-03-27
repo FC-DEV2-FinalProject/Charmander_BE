@@ -45,6 +45,6 @@ public class SceneService {
         var scene = sceneRepository.findProjectSceneForUpdate(projectId, sceneId, authInfo.getMemberId())
             .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.SCENE_NOT_FOUND));
 
-        SceneUpdateRequest.update(scene, request);
+        updateMapper.update(scene, request);
     }
 }
