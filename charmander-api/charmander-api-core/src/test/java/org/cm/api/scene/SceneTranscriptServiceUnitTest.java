@@ -7,7 +7,9 @@ import org.cm.security.AuthInfo;
 import org.cm.test.config.BaseServiceUnitTest;
 import org.cm.test.fixture.MemberFixture;
 import org.cm.test.fixture.SceneTranscriptFixture;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -22,18 +24,6 @@ class SceneTranscriptServiceUnitTest extends BaseServiceUnitTest {
 
     @Mock
     SceneTranscriptRepository sceneTranscriptRepository;
-
-    @BeforeEach
-    void setUp() {
-        Mockito
-            .when(sceneTranscriptRepository.save(Mockito.any()))
-            .thenAnswer((invoke) -> invoke.getArgument(0));
-    }
-
-    @AfterEach
-    void tearDown() {
-        Mockito.reset(sceneTranscriptRepository);
-    }
 
     @Nested
     @DisplayName("[수정]")
