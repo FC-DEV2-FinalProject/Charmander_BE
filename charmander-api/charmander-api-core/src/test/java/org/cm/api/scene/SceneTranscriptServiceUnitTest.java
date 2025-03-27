@@ -29,8 +29,8 @@ class SceneTranscriptServiceUnitTest extends BaseServiceUnitTest {
     @DisplayName("[수정]")
     class UpdateTest {
         @Test
-        @DisplayName("001. 대본 `text`가 수정 가능해야 한다.")
-        void test00001() {
+        @DisplayName("001. 대본 문장을 수정할 수 있다.")
+        void 대본_문장을_수정할_수_있다() {
             // stub
             var member = MemberFixture.create();
             var ts = SceneTranscriptFixture.create();
@@ -51,8 +51,8 @@ class SceneTranscriptServiceUnitTest extends BaseServiceUnitTest {
         }
 
         @Test
-        @DisplayName("002. 대본 `speed`가 수정 가능해야 한다.")
-        void test00002() {
+        @DisplayName("002. 대본 속도를 수정할 수 있다")
+        void 대본_속도를_수정할_수_있다() {
             // stub
             var member = MemberFixture.create();
             var ts = SceneTranscriptFixture.create();
@@ -75,8 +75,8 @@ class SceneTranscriptServiceUnitTest extends BaseServiceUnitTest {
         }
 
         @Test
-        @DisplayName("002. 대본 `postDelay`가 수정 가능해야 한다.")
-        void test00003() {
+        @DisplayName("003. 대본 지연을 수정할 수 있다.")
+        void 대본_지연을_수정할_수_있다() {
             // stub
             var member = MemberFixture.create();
             var ts = SceneTranscriptFixture.create();
@@ -101,8 +101,8 @@ class SceneTranscriptServiceUnitTest extends BaseServiceUnitTest {
         }
 
         @Test
-        @DisplayName("004. 다른 사용자의 대본은 수정할 수 없어야 한다.")
-        void test00004() {
+        @DisplayName("004. 소유하지 않은 대본은 수정할 수 없다.")
+        void 소유하지_않은_대본은_수정할_수_없다() {
             // stub
             var member = MemberFixture.create();
             var ts = SceneTranscriptFixture.create();
