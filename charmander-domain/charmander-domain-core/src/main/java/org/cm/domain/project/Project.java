@@ -28,6 +28,8 @@ public class Project extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
+    private String newsArticle;
+
     @Version
     @Column(nullable = false)
     private int version;
@@ -55,5 +57,9 @@ public class Project extends BaseEntity {
 
     public static Project newCreateProject(Member owner) {
         return new Project(owner, "New Project", 0);
+    }
+
+    public void updateProjectNewsArticle(String newsArticle) {
+        this.newsArticle = newsArticle;
     }
 }
