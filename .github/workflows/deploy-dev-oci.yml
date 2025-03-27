@@ -19,6 +19,9 @@ jobs:
       uses: gradle/actions/setup-gradle@v3
     - name: Build with Gradle
       run: ./gradlew :charmander-api:charmander-api-core:clean :charmander-api:charmander-api-core:bootJar
+    - name: Clear Hostfile
+      run: |
+        rm -rf ~/.ssh/known_hosts
     - name: Deploy to Server
       env:
         HOST: ${{ secrets.DEV_OCI_SERVER_HOST }}
