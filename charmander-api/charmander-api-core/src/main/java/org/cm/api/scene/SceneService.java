@@ -20,6 +20,8 @@ public class SceneService {
     private final ProjectRepository projectRepository;
     private final SceneRepository sceneRepository;
 
+    private final SceneUpdateRequest.Mapper updateMapper;
+
     public List<Scene> getProjectScenes(AuthInfo authInfo, Long projectId) {
         return sceneRepository.findProjectScenes(projectId, authInfo.getMemberId());
     }

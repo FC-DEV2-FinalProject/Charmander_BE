@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.cm.domain.common.BaseEntity;
 import org.cm.domain.project.Project;
 import org.hibernate.annotations.JdbcTypeCode;
@@ -33,6 +34,7 @@ public class Scene extends BaseEntity {
     @Column(nullable = false, columnDefinition = "json")
     private SceneMedia avatar;
 
+    @Setter
     @Embedded
     @AttributeOverride(name = "background", column = @Column(name = "property_background"))
     private SceneProperty property;
