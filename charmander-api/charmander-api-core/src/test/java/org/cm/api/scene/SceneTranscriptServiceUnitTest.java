@@ -4,21 +4,19 @@ import org.cm.api.scene.dto.SceneTranscriptUpdateCommand;
 import org.cm.domain.scene.SceneTranscriptRepository;
 import org.cm.exception.CoreApiException;
 import org.cm.security.AuthInfo;
+import org.cm.test.config.BaseServiceUnitTest;
 import org.cm.test.fixture.MemberFixture;
 import org.cm.test.fixture.SceneTranscriptFixture;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@ExtendWith(MockitoExtension.class)
-class SceneTranscriptServiceUnitTest {
+class SceneTranscriptServiceUnitTest extends BaseServiceUnitTest {
     @InjectMocks
     SceneTranscriptService SceneTranscriptService;
 
