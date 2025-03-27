@@ -8,9 +8,9 @@ import org.springframework.dao.OptimisticLockingFailureException;
 
 @Slf4j
 public class NamedLockTemplate {
-    NamedLockProvider lockProvider;
-    int retires;
-    int backoffMs;
+    private NamedLockProvider lockProvider;
+    private int retires;
+    private int backoffMs;
 
     NamedLockTemplate(NamedLockProvider lockProvider, int retires, int backoffMs) {
         this.lockProvider = lockProvider;
@@ -20,36 +20,16 @@ public class NamedLockTemplate {
 
     // TODO: 코드가 드럽다. 개선할 수 잇을 듯?
     // TODO: 메소드 이름 마음에 안듦. run --> executeWithLock로 변경
-    public void executeWithLock(String lockName, Runnable func) {
+    public void runWithNamedLockFallback(String lockName, Runnable func) {
         for (int i = 0; i < retires; i++) {
             try {
                 func.run();
                 return;
             } catch (OptimisticLockingFailureException e) {
-                // TODO: Thread.sleep??
-                if (backoffMs <= 0) {
-                    continue;
-                }
-
-                try {
-                    Thread.sleep(backoffMs);
-                } catch (InterruptedException e2) {
-                    break;
-                } catch (Exception e3) {
-                    throw new RuntimeException(e3);
-                }
+                waitForBackoff(backoffMs);
             }
         }
-
-        try {
-            acquireLock(lockName);
-            func.run();
-        } catch (Exception e) {
-            // TODO
-            throw new RuntimeException(e);
-        } finally {
-            releaseLock(lockName);
-        }
+        runWithNamedLock(lockName, func);
     }
 
     private void acquireLock(@NonNull String lockName) {
@@ -64,13 +44,40 @@ public class NamedLockTemplate {
         return new Builder();
     }
 
+    private void waitForBackoff(int backoffMs) {
+        // TODO: Thread.sleep??
+        if (backoffMs <= 0) {
+            return;
+        }
+
+        try {
+            Thread.sleep(backoffMs);
+        } catch (InterruptedException e2) {
+            Thread.currentThread().interrupt();
+            return;
+        } catch (Exception e3) {
+            throw new RuntimeException(e3);
+        }
+    }
+
+    private void runWithNamedLock(String lockName, Runnable func) {
+        try {
+            acquireLock(lockName);
+            func.run();
+        } catch (Exception e) {
+            // TODO
+            throw new RuntimeException(e);
+        } finally {
+            releaseLock(lockName);
+        }
+    }
     @Setter
     @Accessors(chain = true)
     public static class Builder {
-        NamedLockProvider lockProvider;
+        private NamedLockProvider lockProvider;
 
-        int retry = 5;
-        int backoffMs = 200;
+        private int retry = 5;
+        private int backoffMs = 200;
 
         public NamedLockTemplate build() {
             validate();
