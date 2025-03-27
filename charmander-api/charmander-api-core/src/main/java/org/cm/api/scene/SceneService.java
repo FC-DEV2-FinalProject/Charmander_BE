@@ -2,6 +2,7 @@ package org.cm.api.scene;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.cm.api.scene.dto.SceneUpdateRequest;
 import org.cm.domain.project.ProjectRepository;
 import org.cm.domain.scene.Scene;
 import org.cm.domain.scene.SceneRepository;
@@ -36,5 +37,12 @@ public class SceneService {
             .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.SCENE_NOT_FOUND));
 
         sceneRepository.delete(scene);
+    }
+
+    public void updateScene(AuthInfo authInfo, Long projectId, Long sceneId, SceneUpdateRequest request) {
+        var scene = sceneRepository.findProjectSceneForUpdate(projectId, sceneId, authInfo.getMemberId())
+            .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.SCENE_NOT_FOUND));
+
+        SceneUpdateRequest.update(scene, request);
     }
 }
