@@ -21,6 +21,7 @@ public enum CoreApiExceptionCode implements WebExceptionCode {
     PROJECT_NOT_FOUND("P001", "Project not found.", HttpStatus.NOT_FOUND),
 
     SCENE_NOT_FOUND("SC001", "Scene not found.", HttpStatus.NOT_FOUND),
+    SCENE_TRANSCRIPT_NOT_FOUND("SCT001", "Scene transcript not found.", HttpStatus.NOT_FOUND),
 
     TASK_NOT_FOUND("T001", "Task not found.", HttpStatus.NOT_FOUND),
 

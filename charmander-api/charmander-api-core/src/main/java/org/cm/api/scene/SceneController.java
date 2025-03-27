@@ -3,6 +3,7 @@ package org.cm.api.scene;
 import lombok.RequiredArgsConstructor;
 import org.cm.api.common.dto.ListResponse;
 import org.cm.api.scene.dto.SceneResponse;
+import org.cm.api.scene.dto.SceneTranscriptUpdateRequest;
 import org.cm.api.scene.dto.SceneUpdateRequest;
 import org.cm.security.AuthInfo;
 import org.cm.security.annotations.support.AuthUser;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class SceneController {
     private final SceneService sceneService;
+    private final SceneTranscriptService sceneTranscriptService;
 
     @MemberOnly
     @GetMapping("/scenes")
@@ -33,6 +35,19 @@ public class SceneController {
     @PatchMapping("/scenes/{sceneId}")
     public void updateScene(@PathVariable Long projectId, @PathVariable Long sceneId, @RequestBody SceneUpdateRequest request, @AuthUser AuthInfo authInfo) {
         sceneService.updateScene(authInfo, projectId, sceneId, request);
+    }
+
+    @MemberOnly
+    @PatchMapping("/scenes/{sceneId}/ts/{tsId}")
+    public void updateSceneTs(
+        @PathVariable Long projectId,
+        @PathVariable Long sceneId,
+        @PathVariable Long tsId,
+        @RequestBody SceneTranscriptUpdateRequest request,
+        @AuthUser AuthInfo authInfo
+    ) {
+        var command = request.toCommand(projectId, sceneId, tsId);
+        sceneTranscriptService.updateSceneTranscript(authInfo, command);
     }
 
     @MemberOnly
