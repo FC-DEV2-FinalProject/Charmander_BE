@@ -27,4 +27,10 @@ public class SceneController {
         var scene = sceneService.createScene(authInfo, projectId);
         return SceneResponse.from(scene);
     }
+
+    @MemberOnly
+    @DeleteMapping("/scenes/{sceneId}")
+    public void deleteScene(@PathVariable Long projectId, @PathVariable Long sceneId, @AuthUser AuthInfo authInfo) {
+        sceneService.deleteScene(authInfo, projectId, sceneId);
+    }
 }

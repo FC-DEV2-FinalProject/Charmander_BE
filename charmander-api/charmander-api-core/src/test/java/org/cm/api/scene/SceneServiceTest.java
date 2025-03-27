@@ -84,6 +84,41 @@ class SceneServiceTest {
         }
     }
 
+    @Nested
+    @DisplayName("[삭제 테스트]")
+    class DeletionTest {
+        @Test
+        @DisplayName("001. 사용자가 소유한 Scene을 삭제할 수 있어야 함.")
+        void test00001() {
+            // given
+            var member = createMember();
+            var project = populatProjectData(member, 1);
+            var scene = project.getScenes().getFirst();
+            var authInfo = new AuthInfo(member.getId());
+
+            // when
+            sceneService.deleteScene(authInfo, project.getId(), scene.getId());
+            var scenes = sceneService.getProjectScenes(authInfo, project.getId());
+
+            // then
+            assertEquals(0, scenes.size());
+        }
+
+        @Test
+        @DisplayName("002. 다른 사용자가 소유한 Scene을 삭제할 수 없어야 함.")
+        void test00002() {
+            // given
+            var member1 = createMember();
+            var member2 = createMember();
+            var project = populatProjectData(member1, 1);
+            var scene = project.getScenes().getFirst();
+            var authInfo = new AuthInfo(member2.getId());
+
+            // when
+            assertThrows(Exception.class, () -> sceneService.deleteScene(authInfo, project.getId(), scene.getId()));
+        }
+    }
+
     private Member createMember() {
         var member = MemberFixture.create();
         return em.merge(member);

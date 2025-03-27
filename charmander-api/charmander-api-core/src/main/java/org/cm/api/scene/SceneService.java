@@ -30,4 +30,11 @@ public class SceneService {
         var scene = Scene.createEmpty(project);
         return sceneRepository.save(scene);
     }
+
+    public void deleteScene(AuthInfo authInfo, Long projectId, Long sceneId) {
+        var scene = sceneRepository.findProjectSceneForUpdate(projectId, sceneId, authInfo.getMemberId())
+            .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.SCENE_NOT_FOUND));
+
+        sceneRepository.delete(scene);
+    }
 }
