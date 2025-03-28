@@ -1,6 +1,7 @@
 package org.cm.api.file;
 
 import org.cm.config.ContentsLocatorConfig;
+import org.cm.exception.CoreApiException;
 import org.cm.infra.storage.PreSignedFileUploadService;
 import org.cm.security.AuthInfo;
 import org.cm.test.config.BaseServiceIntergrationTest;
@@ -66,6 +67,21 @@ class UploadedFileServiceTest extends BaseServiceIntergrationTest {
 
             // then
             assertEquals(file.getId(), foundFile.getId());
+        }
+
+        @Test
+        @DisplayName("003. 다른 사용자가 업로드한 파일을 조회할 수 없다.")
+        void 다른_사용자가_업로드한_파일을_조회할_수_없다() {
+            // stub
+            var member = createMember();
+            var file = createUploadedFile(member);
+            var otherMember = createMember();
+
+            // given
+            var authInfo = new AuthInfo(otherMember.getId());
+
+            // when
+            assertThrows(CoreApiException.class, () -> uploadedFileService.getUserUploadedFile(authInfo, file.getId()));
         }
     }
 }
