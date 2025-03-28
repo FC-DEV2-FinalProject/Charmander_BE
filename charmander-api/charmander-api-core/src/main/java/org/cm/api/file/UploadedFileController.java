@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.cm.api.common.dto.PageResponse;
 import org.cm.api.file.dto.UploadedFileResponse;
+import org.cm.infra.storage.PreSignedURLAbortCommand;
 import org.cm.infra.storage.PreSignedURLCompleteCommand;
 import org.cm.security.AuthInfo;
 import org.cm.security.annotations.support.AuthUser;
@@ -56,5 +57,14 @@ public class UploadedFileController {
         @AuthUser AuthInfo authInfo
     ) {
         uploadedFileService.completeUserFileUpload(authInfo, command);
+    }
+
+    @MemberOnly
+    @PostMapping("/abort")
+    public void abortFileUpload(
+        @NotEmpty @RequestBody PreSignedURLAbortCommand command,
+        @AuthUser AuthInfo authInfo
+    ) {
+        uploadedFileService.abortUserFileUpload(authInfo, command);
     }
 }

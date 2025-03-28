@@ -72,6 +72,20 @@ public class UploadedFile {
         status = UploadedFileStatus.COMPLETED;
     }
 
+    public void startAbort() {
+        if (status != UploadedFileStatus.UPLOADING) {
+            throw new CoreDomainException(CoreDomainExceptionCode.INVALID_FILE_STATUS);
+        }
+        status = UploadedFileStatus.ABORT_IN_PROGRESS;
+    }
+
+    public void finishAbort() {
+        if (status != UploadedFileStatus.ABORT_IN_PROGRESS) {
+            throw new CoreDomainException(CoreDomainExceptionCode.INVALID_FILE_STATUS);
+        }
+        status = UploadedFileStatus.ABORTED;
+    }
+
     public static UploadedFile createUserUploadFile(String fileId, Long ownerId) {
         return new UploadedFile(fileId, UploadedFileType.USER_UPLOAD, ownerId);
     }
