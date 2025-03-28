@@ -11,6 +11,7 @@ import java.time.LocalDateTime;
 public record TemplateResponse(
     Long id,
     int priority,
+    String thumbnailUrl,
     TemplateData data,
     LocalDateTime createdAt,
     LocalDateTime updatedAt
