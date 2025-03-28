@@ -31,6 +31,16 @@ public class UploadedFileController {
     }
 
     @MemberOnly
+    @GetMapping("/my/{fileId}")
+    public UploadedFileResponse getMyUploadedFile(
+        @PathVariable String fileId,
+        @AuthUser AuthInfo authInfo
+    ) {
+        var file = uploadedFileService.getUserUploadedFile(authInfo, fileId);
+        return UploadedFileResponse.from(file);
+    }
+
+    @MemberOnly
     @GetMapping("/upload-url")
     public String getFileUploadUrl(
         @NotEmpty @RequestParam String fileName,
