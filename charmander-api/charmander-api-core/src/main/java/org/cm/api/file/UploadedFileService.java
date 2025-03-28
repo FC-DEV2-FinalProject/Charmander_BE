@@ -2,6 +2,7 @@ package org.cm.api.file;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
+import org.cm.api.file.dto.GetUploadFileIdCommand;
 import org.cm.common.utils.RandomKeyGenerator;
 import org.cm.domain.file.UploadedFile;
 import org.cm.domain.file.UploadedFileRepository;
@@ -43,6 +44,10 @@ public class UploadedFileService {
     public UploadedFile getUserUploadedFile(AuthInfo authInfo, String fileId) {
         return uploadedFileRepository.findByIdAndOwner_Id(fileId, authInfo.getMemberId())
             .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.FILE_NOT_FOUND));
+    }
+
+    public PreSignedURLIdentifier getUploadId(AuthInfo authInfo, GetUploadFileIdCommand command) {
+        return preSignedFileUploadService.sign(locator, command.fileType());
     }
 
     public String getUserFileUploadUrl(AuthInfo authInfo, @NotEmpty String fileName) {
