@@ -21,6 +21,16 @@ public interface TaskScriptRepository extends JpaRepository<TaskScript, Long> {
 
     List<TaskScript> findAllByTaskId(Long taskId);
 
-    @Query("select t from TaskScript t where t.sceneId = :sceneId and t.status != 'Success'")
-    List<TaskScript> findAllNotSuccessTaskScriptsBySceneId(Long sceneId);
+    @Query("select t from TaskScript t where t.sceneId = :sceneId and t.status = 'Success'")
+    List<TaskScript> findAllSuccessTaskScriptsBySceneId(Long sceneId);
+
+    // 모든 작업이 완료된지 검사
+    @Query("select count(t) from TaskScript t where t.sceneId = :scenId and t.status != 'Success'")
+    long countNotSuccessTaskScriptsBySceneId(Long scenId);
+
+    // 하위 작업들이 모두 완료된 경우 0임
+    default boolean areAllSubTasksDone(long sceneId) {
+        return countNotSuccessTaskScriptsBySceneId(sceneId) == 0;
+    }
+
 }

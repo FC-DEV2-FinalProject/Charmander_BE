@@ -58,6 +58,13 @@ public class Task extends BaseEntity {
     public Task(Project project, TaskType type) {
         this.project = project;
         this.type = type;
+        this.inputSchema = new TaskInputSchema("", null, null);
+    }
+
+    public Task(Project project, TaskType type, TaskInputSchema schema) {
+        this.project = project;
+        this.type = type;
+        this.inputSchema = schema;
     }
 
     @PrePersist

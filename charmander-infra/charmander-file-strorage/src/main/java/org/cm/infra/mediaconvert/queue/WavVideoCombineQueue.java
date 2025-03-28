@@ -59,11 +59,11 @@ public class WavVideoCombineQueue {
             AudioSource audioSource,
             VideoSource videoSource,
             String fileId,
-            T input
+            T metadata
     ) {
         CreateJobRequest jobRequest = CreateJobRequest.builder()
                 .queue(property.queue().sceneCombine())
-                .userMetadata(MetadataConverter.convert(input))
+                .userMetadata(MetadataConverter.convert(metadata))
                 .role(property.userArn())
                 .settings(JobSettings.builder()
                         .timecodeConfig(TimecodeConfig.builder()

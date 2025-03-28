@@ -56,13 +56,13 @@ public class AllVideoCombineQueue {
     public <T> String offer(
             List<VideoSource> videoSources,
             String fileId,
-            T metadata
+            T input
     ) {
 
         CreateJobRequest jobRequest = CreateJobRequest.builder()
                 .queue(mediaConvertProperty.queue().sceneCombine())
                 .role(mediaConvertProperty.userArn())
-                .userMetadata(MetadataConverter.convert(metadata))
+                .userMetadata(MetadataConverter.convert(input))
                 .settings(JobSettings.builder()
                         .timecodeConfig(TimecodeConfig.builder()
                                 .source(TimecodeSource.ZEROBASED)

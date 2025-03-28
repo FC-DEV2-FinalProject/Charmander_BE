@@ -63,6 +63,7 @@ public class WavImageCombineQueue {
 
         CreateJobRequest jobRequest = CreateJobRequest.builder()
                 .queue(property.queue().sceneCombine())
+                .userMetadata(MetadataConverter.convert(metadata))
                 .role(property.userArn())
                 .userMetadata(MetadataConverter.convert(metadata))
                 .settings(JobSettings.builder()
