@@ -1,7 +1,6 @@
 package org.cm.web.resolver;
 
 import jakarta.servlet.http.HttpServletRequest;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.cm.jwt.JwtService;
 import org.cm.security.AuthInfo;
@@ -12,6 +11,8 @@ import org.springframework.web.bind.support.WebDataBinderFactory;
 import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
+
+import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor
@@ -31,12 +32,16 @@ public class AuthUserResolver implements HandlerMethodArgumentResolver {
         WebDataBinderFactory binderFactory
     ) {
         var servletRequest = (HttpServletRequest) webRequest.getNativeRequest();
-        return Optional
-            .ofNullable(servletRequest.getHeader("Authorization"))
-            .filter(header -> header.startsWith("Bearer "))
-            .map(header -> header.substring(7))
-            .map(jwtService::verifyAccessToken)
-            .map(AuthInfo::from)
-            .orElse(null);
+        try {
+            return Optional
+                .ofNullable(servletRequest.getHeader("Authorization"))
+                .filter(header -> header.startsWith("Bearer "))
+                .map(header -> header.substring(7))
+                .map(jwtService::verifyAccessToken)
+                .map(AuthInfo::from)
+                .orElse(null);
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
