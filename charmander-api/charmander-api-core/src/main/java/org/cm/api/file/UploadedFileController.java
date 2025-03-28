@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.cm.api.common.dto.PageResponse;
+import org.cm.api.file.dto.FileUploadUrlResponse;
 import org.cm.api.file.dto.UploadedFileResponse;
 import org.cm.infra.storage.PreSignedURLAbortCommand;
 import org.cm.infra.storage.PreSignedURLCompleteCommand;
@@ -43,11 +44,12 @@ public class UploadedFileController {
 
     @MemberOnly
     @GetMapping("/upload-url")
-    public String getFileUploadUrl(
+    public FileUploadUrlResponse getFileUploadUrl(
         @NotEmpty @RequestParam String fileName,
         @AuthUser AuthInfo authInfo
     ) {
-        return uploadedFileService.getUserFileUploadUrl(authInfo, fileName);
+        var url = uploadedFileService.getUserFileUploadUrl(authInfo, fileName);
+        return new FileUploadUrlResponse(url);
     }
 
     @MemberOnly
