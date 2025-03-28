@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Arrays;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -38,7 +39,9 @@ public class AuthController {
     @PostMapping("/refresh")
     public LoginResponse refresh(HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
         try {
-            var loginResponse = Arrays.stream(servletRequest.getCookies())
+            var loginResponse = Optional.ofNullable(servletRequest.getCookies())
+                .stream()
+                .flatMap(Arrays::stream)
                 .filter((cookie) -> JwtConstants.REFRESH_TOKEN_COOKIE_NAME.equals(cookie.getName()))
                 .findFirst()
                 .map(Cookie::getValue)
