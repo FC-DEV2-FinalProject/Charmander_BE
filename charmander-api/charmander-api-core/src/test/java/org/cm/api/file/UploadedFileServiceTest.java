@@ -1,5 +1,7 @@
 package org.cm.api.file;
 
+import org.cm.config.ContentsLocatorConfig;
+import org.cm.infra.storage.PreSignedFileUploadService;
 import org.cm.security.AuthInfo;
 import org.cm.test.config.BaseServiceIntergrationTest;
 import org.junit.jupiter.api.DisplayName;
@@ -8,16 +10,23 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@Import({UploadedFileService.class})
+@Import({
+    UploadedFileService.class,
+    ContentsLocatorConfig.class
+})
 @DisplayName("[통합 테스트] UploadedFileService")
 class UploadedFileServiceTest extends BaseServiceIntergrationTest {
     @Autowired
     UploadedFileService uploadedFileService;
+
+    @MockitoBean
+    PreSignedFileUploadService preSignedFileUploadService;
 
     @Nested
     @DisplayName("[조회]")
