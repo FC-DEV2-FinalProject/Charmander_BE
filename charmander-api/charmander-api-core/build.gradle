@@ -16,6 +16,7 @@ dependencies {
     implementation project(":charmander-domain:charmander-domain-core")
     implementation project(":charmander-infra:charmander-docs")
     implementation project(":charmander-infra:charmander-kafka")
+    implementation project(":charmander-infra:charmander-file-strorage")
 
     implementation "org.springframework.boot:spring-boot-starter-web"
     implementation "org.springframework.boot:spring-boot-starter-data-redis"
