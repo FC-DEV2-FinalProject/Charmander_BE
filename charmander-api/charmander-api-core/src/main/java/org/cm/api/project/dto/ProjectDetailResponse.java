@@ -8,7 +8,6 @@ public record ProjectDetailResponse(
     Long id,
     String name,
     boolean active,
-    String data,
     int version,
     LocalDateTime lastAccessedAt,
     LocalDateTime createdAt,
