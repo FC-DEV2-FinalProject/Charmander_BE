@@ -9,7 +9,6 @@ import org.cm.infra.storage.PreSignedFileUploadService;
 import org.cm.infra.storage.PreSignedURLIdentifier;
 import org.cm.kafka.TaskScriptRecord;
 import org.cm.service.TtsService;
-import org.cm.vo.TaskCompletedCheckEvent;
 import org.cm.vo.TaskScriptGenerationCompletedEvent;
 import org.cm.vo.TaskScriptGenerationStartedEvent;
 import org.cm.vo.TtsCombineEvent;
@@ -43,7 +42,6 @@ public class TaskConsumer {
 
             completeTaskScriptGeneration(taskScriptRecord, preSignedURLIdentifier, ttsInfo);
         } catch (Exception e) {
-
             log.error("{}", e.getMessage(), e);
         }
 
@@ -64,7 +62,6 @@ public class TaskConsumer {
 
         applicationEventPublisher.publishEvent(taskScriptGenerationCompletedEvent);
         applicationEventPublisher.publishEvent(ttsCombineEvent);
-        applicationEventPublisher.publishEvent(new TaskCompletedCheckEvent(taskScriptRecord.taskId()));
     }
 
     private TtsInfo createTts(

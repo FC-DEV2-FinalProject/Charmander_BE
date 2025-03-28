@@ -3,6 +3,7 @@ package org.cm.service;
 import java.util.List;
 import java.util.stream.IntStream;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.cm.common.utils.RandomKeyGenerator;
 import org.cm.domain.task.SceneOutput;
 import org.cm.domain.task.SceneOutputRepository;
@@ -13,6 +14,8 @@ import org.cm.domain.taskscript.TaskScript;
 import org.cm.domain.taskscript.TaskScriptRepository;
 import org.cm.infra.mediaconvert.queue.WavCombineQueue;
 import org.cm.infra.mediaconvert.queue.WavCombineQueue.AudioSource;
+import org.cm.infra.utils.MetadataConverter;
+import org.cm.kafka.UserMetadata;
 import org.cm.vo.TaskScriptGenerationCompletedEvent;
 import org.cm.vo.TaskScriptGenerationStartedEvent;
 import org.cm.vo.TtsCombineEvent;
@@ -20,6 +23,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class TaskScriptEventListener {
@@ -44,17 +48,23 @@ public class TaskScriptEventListener {
     @Transactional
     public void listen(TtsCombineEvent event) {
         // TODO 음성이 하나 인 경우 바로 장면 합성으로 가도록 구현
-
         var taskScript = taskScriptRepository.getById(event.taskScriptId());
-        var taskScripts = taskScriptRepository.findAllNotSuccessTaskScriptsBySceneId(taskScript.getSceneId());
+        var count = taskScriptRepository.countNotSuccessTaskScriptsByTaskId(taskScript.getSceneId());
+        if (count != 0) {
+            return;
+        }
+
+        var taskScripts = taskScriptRepository.findAllSuccessTaskScriptsBySceneId(taskScript.getSceneId());
         var task = taskScript.getTask();
         var scene = task.getInputSchema().findSceneById(taskScript.getSceneId());
         var sceneOutput = findSceneOutput(task, taskScript, scene);
         var transcripts = scene.transcript();
         var audioSources = getAudioSources(taskScripts, transcripts);
         var combineAudioId = RandomKeyGenerator.generateRandomKey();
+        var metadata = UserMetadata.ttsCombine(task.getId(), taskScript.getId(), scene.id());
 
-        wavCombineQueue.offer(combineAudioId, audioSources);
+        log.info("{}", audioSources);
+        wavCombineQueue.offer(combineAudioId, audioSources, MetadataConverter.convert(metadata));
         sceneOutput.update(combineAudioId);
 
     }
