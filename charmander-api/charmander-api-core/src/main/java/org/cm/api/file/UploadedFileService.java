@@ -8,10 +8,7 @@ import org.cm.domain.file.UploadedFileRepository;
 import org.cm.domain.file.UploadedFileStatus;
 import org.cm.exception.CoreApiException;
 import org.cm.exception.CoreApiExceptionCode;
-import org.cm.infra.storage.ContentsLocator;
-import org.cm.infra.storage.PreSignedFileUploadService;
-import org.cm.infra.storage.PreSignedURLCompleteCommand;
-import org.cm.infra.storage.PreSignedURLGenerateCommand;
+import org.cm.infra.storage.*;
 import org.cm.security.AuthInfo;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
@@ -72,6 +69,21 @@ public class UploadedFileService {
         uploadedFileRepository.save(file);
         preSignedFileUploadService.complete(locator, command);
         file.finishCompletion();
+        uploadedFileRepository.save(file);
+    }
+
+    public void abortUserFileUpload(AuthInfo authInfo, @NotEmpty PreSignedURLAbortCommand command) {
+        var file = uploadedFileRepository.findByIdForUpdate(command.uploadId())
+            .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.FILE_NOT_FOUND));
+
+        if (file.getStatus() != UploadedFileStatus.UPLOADING) {
+            throw new CoreApiException(CoreApiExceptionCode.FILE_INVALID_STATUS);
+        }
+
+        file.startAbort();
+        uploadedFileRepository.save(file);
+        preSignedFileUploadService.abort(locator, command);
+        file.finishAbort();
         uploadedFileRepository.save(file);
     }
 }

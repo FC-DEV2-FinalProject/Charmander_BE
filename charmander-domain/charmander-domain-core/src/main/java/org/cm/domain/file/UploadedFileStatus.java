@@ -13,6 +13,8 @@ public enum UploadedFileStatus implements PersistenceEnum<String> {
     UPLOADING             ("uploading"),
     COMPLETE_IN_PROGRESS  ("complete_in_progress"),
     COMPLETED             ("completed"),
+    ABORT_IN_PROGRESS     ("abort_in_progress"),
+    ABORTED               ("aborted")
     ;
     // @formatter:on
 
