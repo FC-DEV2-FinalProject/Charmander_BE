@@ -115,7 +115,7 @@ class SceneServiceIntergrationTest extends BaseServiceIntergrationTest {
         void 사용자가_소유한_Scene을_삭제할_수_있어야_함() {
             // given
             var member = createMember();
-            var project = populatProjectData(member, 1);
+            var project = populatProjectData(member, 2);
             var scene = project.getScenes().getFirst();
             var authInfo = new AuthInfo(member.getId());
 
@@ -136,6 +136,19 @@ class SceneServiceIntergrationTest extends BaseServiceIntergrationTest {
             var project = populatProjectData(member1, 1);
             var scene = project.getScenes().getFirst();
             var authInfo = new AuthInfo(member2.getId());
+
+            // when
+            assertThrows(Exception.class, () -> sceneService.deleteScene(authInfo, project.getId(), scene.getId()));
+        }
+
+        @Test
+        @DisplayName("003. Scene이 하나뿐인 Project의 Scene을 삭제할 수 없어야 함.")
+        void Scene이_하나뿐인_Project의_Scene을_삭제할_수_없어야_함() {
+            // given
+            var member = createMember();
+            var project = populatProjectData(member, 1);
+            var scene = project.getScenes().getFirst();
+            var authInfo = new AuthInfo(member.getId());
 
             // when
             assertThrows(Exception.class, () -> sceneService.deleteScene(authInfo, project.getId(), scene.getId()));

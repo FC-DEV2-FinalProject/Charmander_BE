@@ -38,6 +38,9 @@ public class SceneService {
         var scene = sceneRepository.findProjectSceneForUpdate(projectId, sceneId, authInfo.getMemberId())
             .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.SCENE_NOT_FOUND));
 
+        if (scene.getProject().getScenes().size() == 1) {
+            throw new CoreApiException(CoreApiExceptionCode.SCENE_DELETE_LAST_SCENE);
+        }
         sceneRepository.delete(scene);
     }
 
