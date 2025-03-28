@@ -5,10 +5,15 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Stream;
+
 import lombok.RequiredArgsConstructor;
 import org.cm.api.auth.dto.LoginRequest;
 import org.cm.api.auth.dto.LoginResponse;
 import org.cm.jwt.JwtConstants;
+import org.jspecify.annotations.Nullable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseCookie;
@@ -40,7 +45,9 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public LoginResponse refresh(HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
-        var loginResponse = Arrays.stream(servletRequest.getCookies())
+        var loginResponse = Optional.ofNullable(servletRequest.getCookies())
+            .stream()
+            .flatMap(Arrays::stream)
             .filter((cookie) -> JwtConstants.REFRESH_TOKEN_COOKIE_NAME.equals(cookie.getName()))
             .findFirst()
             .map(Cookie::getValue)
