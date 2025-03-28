@@ -19,6 +19,9 @@ public record TemplateData(
     @Embedded
     ScreenSize size,
 
+    @Column(nullable = false)
+    String thumbnailUrl,
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(nullable = false, updatable = false)
     TemplateBackground background,

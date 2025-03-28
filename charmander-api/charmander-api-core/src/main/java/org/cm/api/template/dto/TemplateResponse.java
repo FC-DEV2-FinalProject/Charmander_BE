@@ -13,6 +13,7 @@ import static org.mapstruct.factory.Mappers.getMapper;
 public record TemplateResponse(
     Long id,
     int priority,
+    String thumbnailUrl,
     TemplateData data,
     LocalDateTime createdAt,
     LocalDateTime updatedAt
