@@ -45,10 +45,24 @@ public class TaskScript extends BaseEntity {
     private TaskScriptStatus status;
 
 
-    public TaskScript(Task task, String sentence, Object option) {
+    public TaskScript(Task task, Long sceneId, String sentence, Object option) {
+        this.task = task;
+        this.sceneId = sceneId;
+        this.sentence = sentence;
+        this.status = TaskScriptStatus.PENDING;
+        this.option = option.toString();
+    }
+
+    public TaskScript(Task task, Long sceneId, String sentence) {
+        this.task = task;
+        this.sceneId = sceneId;
+        this.sentence = sentence;
+        this.status = TaskScriptStatus.PENDING;
+    }
+
+    public TaskScript(Task task, String sentence) {
         this.task = task;
         this.sentence = sentence;
-        this.option = option.toString();
         this.status = TaskScriptStatus.PENDING;
     }
 
