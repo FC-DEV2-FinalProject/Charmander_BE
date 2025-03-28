@@ -2,6 +2,8 @@ package org.cm.test.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
+import org.cm.common.utils.RandomKeyGenerator;
+import org.cm.domain.file.UploadedFile;
 import org.cm.domain.member.Member;
 import org.cm.domain.project.Project;
 import org.cm.domain.scene.Scene;
@@ -53,5 +55,11 @@ public abstract class BaseServiceIntergrationTest {
             .toList();
         scenes.forEach(project::addScene);
         return em.merge(project);
+    }
+
+    protected UploadedFile createUploadedFile(Member member) {
+        var fileId = RandomKeyGenerator.generateRandomKey();
+        var uploadedFile = UploadedFile.createUserUploadFile(fileId, member.getId());
+        return em.merge(uploadedFile);
     }
 }
