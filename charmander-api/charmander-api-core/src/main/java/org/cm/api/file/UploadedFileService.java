@@ -2,15 +2,18 @@ package org.cm.api.file;
 
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
-import lombok.RequiredArgsConstructor;
 import org.cm.common.utils.RandomKeyGenerator;
 import org.cm.domain.file.UploadedFile;
 import org.cm.domain.file.UploadedFileRepository;
 import org.cm.domain.file.UploadedFileStatus;
 import org.cm.exception.CoreApiException;
 import org.cm.exception.CoreApiExceptionCode;
-import org.cm.infra.storage.*;
+import org.cm.infra.storage.ContentsLocator;
+import org.cm.infra.storage.PreSignedFileUploadService;
+import org.cm.infra.storage.PreSignedURLCompleteCommand;
+import org.cm.infra.storage.PreSignedURLGenerateCommand;
 import org.cm.security.AuthInfo;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -18,13 +21,20 @@ import java.time.Duration;
 
 @Service
 @Validated
-@RequiredArgsConstructor
 public class UploadedFileService {
+    private final ContentsLocator locator;
     private final PreSignedFileUploadService preSignedFileUploadService;
-
     private final UploadedFileRepository uploadedFileRepository;
 
-    private ContentsLocator locator = new AwsContentsLocator("charmander-resource", "user-uploaded");
+    public UploadedFileService(
+        @Qualifier("userUploadedContentsLocator") ContentsLocator locator,
+        PreSignedFileUploadService preSignedFileUploadService,
+        UploadedFileRepository uploadedFileRepository
+    ) {
+        this.locator = locator;
+        this.preSignedFileUploadService = preSignedFileUploadService;
+        this.uploadedFileRepository = uploadedFileRepository;
+    }
 
     public String getUserFileUploadUrl(AuthInfo authInfo, @NotEmpty String fileName) {
         var uploadId = RandomKeyGenerator.generateRandomKey();
