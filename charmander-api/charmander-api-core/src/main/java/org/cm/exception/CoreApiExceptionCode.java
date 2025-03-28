@@ -14,6 +14,8 @@ public enum CoreApiExceptionCode implements WebExceptionCode {
     ACCOUNT_EMAIL_ALREADY_IN_USE("A001", "Email is already in use."),
     ACCOUNT_VERIFICATION_CODE_NOT_MATCH("A002", "Verification code does not match."),
 
+    REFRESH_TOKEN_VERIFICATION_FAILED("RT001", "Refresh token verification failed.", HttpStatus.UNAUTHORIZED),
+
     AUTH_INVALID_CREDENTIAL("AU001", "Invalid username or password."),
 
     MEMBER_NOT_FOUND("M001", "Member not found.", HttpStatus.NOT_FOUND),
