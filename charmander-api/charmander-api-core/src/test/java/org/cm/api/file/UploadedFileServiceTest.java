@@ -41,5 +41,22 @@ class UploadedFileServiceTest extends BaseServiceIntergrationTest {
             // then
             assertEquals(nFiles, files.getTotalElements());
         }
+
+        @Test
+        @DisplayName("002. 사용자가 업로드한 파일을 조회할 수 있다.")
+        void 사용자가_업로드한_파일을_조회할_수_있다() {
+            // stub
+            var member = createMember();
+            var file = createUploadedFile(member);
+
+            // given
+            var authInfo = new AuthInfo(member.getId());
+
+            // when
+            var foundFile = uploadedFileService.getUserUploadedFile(authInfo, file.getId());
+
+            // then
+            assertEquals(file.getId(), foundFile.getId());
+        }
     }
 }

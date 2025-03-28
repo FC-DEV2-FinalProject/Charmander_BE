@@ -42,6 +42,12 @@ public class UploadedFileService {
         return uploadedFileRepository.findByOwner_Id(authInfo.getMemberId(), pageable);
     }
 
+
+    public UploadedFile getUserUploadedFile(AuthInfo authInfo, String fileId) {
+        return uploadedFileRepository.findByIdAndOwner_Id(fileId, authInfo.getMemberId())
+            .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.FILE_NOT_FOUND));
+    }
+
     public String getUserFileUploadUrl(AuthInfo authInfo, @NotEmpty String fileName) {
         var uploadId = RandomKeyGenerator.generateRandomKey();
         var command = new PreSignedURLGenerateCommand(fileName, uploadId, 1);
