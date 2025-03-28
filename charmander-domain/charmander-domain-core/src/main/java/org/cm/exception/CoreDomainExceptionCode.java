@@ -30,6 +30,8 @@ public enum CoreDomainExceptionCode implements ExceptionCode {
     TASK_SCRIPT_FAIL_ALLOWED_ONLY_IN_PROGRESS("D04", "작업 실패 처리는 진행 상태에서만 가능합니다."),
     NOT_FOUND_TASK_SCRIPT("D05", "작업 스크립트를 찾을 수 없습니다"),
     TASK_SCRIPTS_ALLOWED_ONLY_CREATING("D06", "작업 스크립트는 생성 중 상태에서만 설정할 수 있습니다."),
+
+    INVALID_FILE_STATUS("E01", "파일 상태가 올바르지 않습니다."),
     ;
 
     // Core domain

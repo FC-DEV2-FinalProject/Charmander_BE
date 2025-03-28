@@ -30,6 +30,10 @@ public enum CoreApiExceptionCode implements WebExceptionCode {
     TASK_NOT_FOUND("T001", "Task not found.", HttpStatus.NOT_FOUND),
 
     TEMPLATE_NOT_FOUND("TP001", "Template not found.", HttpStatus.NOT_FOUND),
+
+    FILE_NOT_FOUND     ("F001", "File not found.",         HttpStatus.NOT_FOUND),
+    FILE_FORBIDDEN     ("F002", "File access forbidden.",  HttpStatus.FORBIDDEN),
+    FILE_INVALID_STATUS("F003", "File status is invalid.", HttpStatus.BAD_REQUEST),
     ;
     // @formatter:on
 
