@@ -23,12 +23,12 @@ public class UploadedFile {
     private String id;
 
     @Nullable
-    @Column(updatable = false)
+    @Column(name = "owner_id", updatable = false)
     private Long ownerId;
 
     @Nullable
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(updatable = false, insertable = false)
+    @JoinColumn(name = "owner_id", updatable = false, insertable = false)
     private Member owner;
 
     @Convert(converter = UploadedFileType.Converter.class)
