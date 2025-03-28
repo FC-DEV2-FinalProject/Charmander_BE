@@ -1,15 +1,15 @@
 package org.cm.domain.task;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.cm.converter.SceneConverter;
 import org.cm.domain.common.BaseEntity;
 import org.cm.domain.task.TaskInputSchema.Scene;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 @Getter
 @Entity
@@ -23,7 +23,8 @@ public class SceneOutput extends BaseEntity {
     @Column(nullable = false, updatable = false)
     private Long taskId;
 
-    @Convert(converter = SceneConverter.class)
+    //    @Convert(converter = SceneConverter.class)
+    @JdbcTypeCode(SqlTypes.JSON)
     @Column(columnDefinition = "MEDIUMTEXT")
     private Scene scene;
 
@@ -40,7 +41,7 @@ public class SceneOutput extends BaseEntity {
     }
 
     public void update(String combineAudioId) {
-        this.voiceFileId = voiceFileId;
+        this.voiceFileId = combineAudioId;
     }
 
     public void updateSceneId(String sceneFileId) {
