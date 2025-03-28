@@ -13,7 +13,7 @@ public class MemberOnlyHandler {
     @Before("@annotation(org.cm.security.annotations.support.MemberOnly)")
     public void check(JoinPoint joinPoint) {
         Arrays.stream(joinPoint.getArgs())
-            .filter(arg -> arg.getClass().isAssignableFrom(AuthInfo.class))
+            .filter(arg -> arg instanceof AuthInfo)
             .map(AuthInfo.class::cast)
             .findFirst()
             .orElseThrow(() -> new IllegalArgumentException("Unauthorized"));
