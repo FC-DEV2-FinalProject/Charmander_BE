@@ -2,11 +2,13 @@ package org.cm.api.template.dto;
 
 import org.cm.domain.common.ScreenSize;
 import org.cm.domain.template.Template;
+import org.cm.domain.template.TemplateAvatarType;
 import org.cm.domain.template.TemplateBackgroundType;
 import org.cm.domain.template.TemplateCategory;
-import org.mapstruct.factory.Mappers;
 
 import java.time.LocalDateTime;
+
+import static org.mapstruct.factory.Mappers.getMapper;
 
 public record TemplateResponse(
     Long id,
@@ -17,7 +19,7 @@ public record TemplateResponse(
 ) {
     @org.mapstruct.Mapper
     public interface Mapper {
-        Mapper INSTANCE = Mappers.getMapper(Mapper.class);
+        Mapper INSTANCE = getMapper(Mapper.class);
 
         TemplateResponse map(Template e);
     }
@@ -33,7 +35,6 @@ public record TemplateResponse(
         TemplateBackgroundDto background,
         TemplateAvatarDto avatar
     ) {
-
     }
 
     public record TemplateBackgroundDto(
@@ -53,7 +54,9 @@ public record TemplateResponse(
         Long id,
         String name,
         int priority,
+        TemplateAvatarType type,
         String fileUrl,
+        ScreenSizeDto size,
         LocalDateTime createdAt,
         LocalDateTime updatedAt
     ) {
