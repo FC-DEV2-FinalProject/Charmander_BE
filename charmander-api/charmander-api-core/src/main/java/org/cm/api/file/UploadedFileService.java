@@ -1,9 +1,10 @@
 package org.cm.api.file;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import org.cm.api.file.dto.GetUploadFileIdCommand;
-import org.cm.common.utils.RandomKeyGenerator;
 import org.cm.domain.file.UploadedFile;
 import org.cm.domain.file.UploadedFileRepository;
 import org.cm.domain.file.UploadedFileStatus;
@@ -18,6 +19,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
 import java.time.Duration;
+import java.util.List;
+import java.util.stream.IntStream;
 
 @Service
 @Validated
@@ -50,13 +53,17 @@ public class UploadedFileService {
         return preSignedFileUploadService.sign(locator, command.fileType());
     }
 
-    public String getUserFileUploadUrl(AuthInfo authInfo, @NotEmpty String fileName) {
-        var uploadId = RandomKeyGenerator.generateRandomKey();
-        var command = new PreSignedURLGenerateCommand(fileName, uploadId, 1);
+    public List<String> getUserFileUploadUrl(
+        AuthInfo authInfo,
+        @NotEmpty String fileName,
+        @NotEmpty String uploadId,
+        @Min(1) @Max(100) Integer parts
+    ) {
         var duration = Duration.ofMinutes(10);
-        var file = UploadedFile.createUserUploadFile(uploadId, authInfo.getMemberId());
-        uploadedFileRepository.save(file);
-        return preSignedFileUploadService.generateURL(locator, command, duration);
+        return IntStream.rangeClosed(1, parts)
+            .mapToObj(partNumber -> new PreSignedURLGenerateCommand(fileName, uploadId, partNumber))
+            .map(command -> preSignedFileUploadService.generateURL(locator, command, duration))
+            .toList();
     }
 
     public void completeUserFileUpload(AuthInfo authInfo, @Valid PreSignedURLCompleteCommand command) {
