@@ -3,16 +3,22 @@ package org.cm.api.file;
 import org.cm.config.ContentsLocatorConfig;
 import org.cm.exception.CoreApiException;
 import org.cm.infra.storage.PreSignedFileUploadService;
+import org.cm.infra.storage.PreSignedURLGenerateCommand;
 import org.cm.security.AuthInfo;
 import org.cm.test.config.BaseServiceIntergrationTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
+import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -82,6 +88,34 @@ class UploadedFileServiceTest extends BaseServiceIntergrationTest {
 
             // when
             assertThrows(CoreApiException.class, () -> uploadedFileService.getUserUploadedFile(authInfo, file.getId()));
+        }
+    }
+
+    @Nested
+    @DisplayName("[기능]")
+    class FeatureTest {
+        @Test
+        @DisplayName("001. getUserFileUploadUrl - 1부터 단조 증가하는 parts를 사용해야 함")
+        void getUserFileUploadUrl_should_generate_incremental_parts_value() {
+            // given
+            var authInfo = new AuthInfo(1L);
+            var fileName = "test.txt";
+            var uploadId = "uploadId";
+            var parts = 10;
+
+            // when
+            var urls = uploadedFileService.getUserFileUploadUrl(authInfo, fileName, uploadId, parts);
+
+            // then
+            var captor = ArgumentCaptor.forClass(PreSignedURLGenerateCommand.class);
+            Mockito.verify(preSignedFileUploadService, Mockito.times(10))
+                .generateURL(Mockito.any(), captor.capture(), Mockito.any());
+            var capturedCommands = captor.getAllValues();
+
+            assertEquals(parts, capturedCommands.size());
+            for (int i = 1; i <= parts; i++) {
+                assertEquals(i, capturedCommands.get(i - 1).partNumber());
+            }
         }
     }
 }

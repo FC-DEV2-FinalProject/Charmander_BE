@@ -1,10 +1,14 @@
 package org.cm.api.file;
 
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
+import org.cm.api.common.dto.ListResponse;
 import org.cm.api.common.dto.PageResponse;
 import org.cm.api.file.dto.GetUploadFileIdCommand;
+import org.cm.api.file.dto.UploadUrlResponse;
 import org.cm.api.file.dto.UploadedFileResponse;
 import org.cm.infra.storage.PreSignedURLAbortCommand;
 import org.cm.infra.storage.PreSignedURLCompleteCommand;
@@ -50,6 +54,18 @@ public class UploadedFileController {
         @AuthUser AuthInfo authInfo
     ) {
         return uploadedFileService.getUploadId(authInfo, command);
+    }
+
+    @MemberOnly
+    @GetMapping("/upload-url")
+    public ListResponse<UploadUrlResponse> getUploadUrl(
+        @NotEmpty @RequestParam String fileName,
+        @NotEmpty @RequestParam String uploadId,
+        @Min(1) @Max(100) @RequestParam Integer parts,
+        @AuthUser AuthInfo authInfo
+    ) {
+        var urls = uploadedFileService.getUserFileUploadUrl(authInfo, fileName, uploadId, parts);
+        return ListResponse.ofList(urls, UploadUrlResponse::from);
     }
 
     @MemberOnly
