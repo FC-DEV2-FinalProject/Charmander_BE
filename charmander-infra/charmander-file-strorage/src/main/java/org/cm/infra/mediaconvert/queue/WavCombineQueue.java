@@ -5,6 +5,7 @@ import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.cm.infra.property.MediaConvertProperty;
 import org.cm.infra.property.S3URLProperty;
+import org.cm.infra.storage.ContentsLocator;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.mediaconvert.MediaConvertClient;
 import software.amazon.awssdk.services.mediaconvert.model.AacCodingMode;
@@ -52,11 +53,13 @@ public class WavCombineQueue {
 
     public String offer(
             String fileId,
-            List<AudioSource> audioSources
+            List<AudioSource> audioSources,
+            Map<String, String> metadata
     ) {
         CreateJobRequest jobRequest = CreateJobRequest.builder()
                 .queue(mediaConvertProperty.queue().voiceCombine())
                 .role(mediaConvertProperty.userArn())
+                .userMetadata(metadata)
                 .settings(JobSettings.builder()
                         .timecodeConfig(TimecodeConfig.builder()
                                 .source(TimecodeSource.ZEROBASED)
@@ -96,7 +99,9 @@ public class WavCombineQueue {
                                         .nameModifier("output")
                                         .build())
                                 .build())
-                        .inputs(audioSources.stream().map(AudioSource::toInput).flatMap(List::stream).toList())
+                        .inputs(audioSources.stream()
+                                .map(audioSource -> audioSource.toInput(s3UrlProperty.ttsContentsLocator()))
+                                .flatMap(List::stream).toList())
                         .build())
                 .accelerationSettings(AccelerationSettings.builder()
                         .mode(AccelerationMode.DISABLED)
@@ -121,6 +126,29 @@ public class WavCombineQueue {
                     .audioSelectors(Map.of("Audio Selector 1", AudioSelector.builder()
                             .defaultSelection(AudioDefaultSelection.DEFAULT)
                             .externalAudioFileInput(s3AudioLocation)
+                            .build()))
+                    .videoSelector(VideoSelector.builder().build())
+                    .timecodeSource(InputTimecodeSource.ZEROBASED)
+                    .build();
+            if (duration >= 50) {
+                var delayInput = Input.builder()
+                        .audioSelectors(Map.of("Audio Selector 1", AudioSelector.builder()
+                                .defaultSelection(AudioDefaultSelection.DEFAULT)
+                                .build()))
+                        .videoSelector(VideoSelector.builder().build())
+                        .videoGenerator(InputVideoGenerator.builder().duration(duration).build())
+                        .build();
+                return List.of(audioInput, delayInput);
+            }
+            return List.of(audioInput);
+        }
+
+        public List<Input> toInput(ContentsLocator contentsLocator) {
+
+            var audioInput = Input.builder()
+                    .audioSelectors(Map.of("Audio Selector 1", AudioSelector.builder()
+                            .defaultSelection(AudioDefaultSelection.DEFAULT)
+                            .externalAudioFileInput(contentsLocator.combineLocation(s3AudioLocation))
                             .build()))
                     .videoSelector(VideoSelector.builder().build())
                     .timecodeSource(InputTimecodeSource.ZEROBASED)

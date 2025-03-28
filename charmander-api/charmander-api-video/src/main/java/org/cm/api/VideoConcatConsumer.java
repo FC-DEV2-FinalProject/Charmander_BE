@@ -6,6 +6,7 @@ import org.cm.domain.task.SceneOutputRepository;
 import org.cm.infra.mediaconvert.queue.AllVideoCombineQueue;
 import org.cm.infra.mediaconvert.queue.WavVideoCombineQueue.VideoSource;
 import org.cm.kafka.OverlayCompleteRecord;
+import org.cm.kafka.UserMetadata;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
@@ -25,6 +26,15 @@ public class VideoConcatConsumer {
                 .map(sceneOutput -> new VideoSource(sceneOutput.getSceneFileId(), 1280, 720, 0, 0))
                 .toList();
 
-        allVideoCombineQueue.offer(videoSources, RandomKeyGenerator.generateRandomKey());
+        var metadata = UserMetadata.concatVideo(
+                record.taskId(),
+                record.sceneId()
+        );
+
+        allVideoCombineQueue.offer(
+                videoSources,
+                RandomKeyGenerator.generateRandomKey(),
+                metadata
+        );
     }
 }
