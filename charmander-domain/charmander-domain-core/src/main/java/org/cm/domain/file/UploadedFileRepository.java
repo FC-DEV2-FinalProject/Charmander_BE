@@ -12,6 +12,8 @@ import java.util.Optional;
 public interface UploadedFileRepository extends JpaRepository<UploadedFile, String> {
     Page<UploadedFile> findByOwner_Id(Long ownerId, Pageable pageable);
 
+    Optional<UploadedFile> findByIdAndOwner_Id(String id, Long owner_id);
+
     // TODO: [튜닝] DB에 직접 UPDATE 쿼리를 날리는 방식과 비교?
     @Lock(LockModeType.OPTIMISTIC)
     @Query("SELECT f FROM UploadedFile f WHERE f.id = :s")
