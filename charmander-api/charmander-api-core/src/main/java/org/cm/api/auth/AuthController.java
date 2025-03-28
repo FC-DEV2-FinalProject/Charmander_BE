@@ -1,22 +1,19 @@
 package org.cm.api.auth;
 
+import com.auth0.jwt.exceptions.SignatureVerificationException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import java.time.Duration;
-import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import org.cm.api.auth.dto.LoginRequest;
 import org.cm.api.auth.dto.LoginResponse;
+import org.cm.exception.CoreApiException;
+import org.cm.exception.CoreApiExceptionCode;
 import org.cm.jwt.JwtConstants;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseCookie;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Arrays;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -40,13 +37,18 @@ public class AuthController {
 
     @PostMapping("/refresh")
     public LoginResponse refresh(HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
-        var loginResponse = Arrays.stream(servletRequest.getCookies())
-            .filter((cookie) -> JwtConstants.REFRESH_TOKEN_COOKIE_NAME.equals(cookie.getName()))
-            .findFirst()
-            .map(Cookie::getValue)
-            .map(authService::refresh)
-            .orElseThrow(() -> new RuntimeException("Refresh token not found"));
-        AuthHttpUtils.addRefreshTokenCookie(servletResponse, loginResponse.refreshToken());
-        return loginResponse;
+        try {
+            var loginResponse = Arrays.stream(servletRequest.getCookies())
+                .filter((cookie) -> JwtConstants.REFRESH_TOKEN_COOKIE_NAME.equals(cookie.getName()))
+                .findFirst()
+                .map(Cookie::getValue)
+                .map(authService::refresh)
+                .orElseThrow(() -> new RuntimeException("Refresh token not found"));
+            AuthHttpUtils.addRefreshTokenCookie(servletResponse, loginResponse.refreshToken());
+            return loginResponse;
+        } catch (SignatureVerificationException e) {
+            AuthHttpUtils.revokeRefreshTokenCookie(servletResponse);
+            throw new CoreApiException(CoreApiExceptionCode.REFRESH_TOKEN_VERIFICATION_FAILED);
+        }
     }
 }
