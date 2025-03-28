@@ -21,7 +21,7 @@ public class Project extends BaseEntity {
     @JoinColumn(nullable = false, updatable = false)
     private Member owner;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Scene> scenes = new ArrayList<>();
 
     @Setter
