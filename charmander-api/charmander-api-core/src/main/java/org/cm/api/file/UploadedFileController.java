@@ -3,10 +3,13 @@ package org.cm.api.file;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
+import org.cm.api.common.dto.PageResponse;
+import org.cm.api.file.dto.UploadedFileResponse;
 import org.cm.infra.storage.PreSignedURLCompleteCommand;
 import org.cm.security.AuthInfo;
 import org.cm.security.annotations.support.AuthUser;
 import org.cm.security.annotations.support.MemberOnly;
+import org.springframework.data.domain.Pageable;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +19,16 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class UploadedFileController {
     private final UploadedFileService uploadedFileService;
+
+    @MemberOnly
+    @GetMapping("/my")
+    public PageResponse<UploadedFileResponse> getMyUploadedFiles(
+        Pageable pageable,
+        @AuthUser AuthInfo authInfo
+    ) {
+        var page = uploadedFileService.getUserUploadedFiles(authInfo, pageable);
+        return PageResponse.of(page, UploadedFileResponse::from);
+    }
 
     @MemberOnly
     @GetMapping("/upload-url")

@@ -14,6 +14,8 @@ import org.cm.infra.storage.PreSignedURLCompleteCommand;
 import org.cm.infra.storage.PreSignedURLGenerateCommand;
 import org.cm.security.AuthInfo;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
 
@@ -34,6 +36,10 @@ public class UploadedFileService {
         this.locator = locator;
         this.preSignedFileUploadService = preSignedFileUploadService;
         this.uploadedFileRepository = uploadedFileRepository;
+    }
+
+    public Page<UploadedFile> getUserUploadedFiles(AuthInfo authInfo, Pageable pageable) {
+        return uploadedFileRepository.findByOwner_Id(authInfo.getMemberId(), pageable);
     }
 
     public String getUserFileUploadUrl(AuthInfo authInfo, @NotEmpty String fileName) {
