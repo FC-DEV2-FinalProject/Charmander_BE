@@ -28,6 +28,7 @@ public class Project extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
+    @Setter
     @Embedded
     private ProjectProperty property;
 
