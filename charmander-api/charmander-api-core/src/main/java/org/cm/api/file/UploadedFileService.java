@@ -1,10 +1,12 @@
 package org.cm.api.file;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotEmpty;
 import org.cm.api.file.dto.GetUploadFileIdCommand;
+import org.cm.common.domain.FileType;
 import org.cm.domain.file.UploadedFile;
 import org.cm.domain.file.UploadedFileRepository;
 import org.cm.domain.file.UploadedFileStatus;
@@ -40,17 +42,20 @@ public class UploadedFileService {
     }
 
     public Page<UploadedFile> getUserUploadedFiles(AuthInfo authInfo, Pageable pageable) {
-        return uploadedFileRepository.findByOwner_Id(authInfo.getMemberId(), pageable);
+        return uploadedFileRepository.findByOwnerId(authInfo.getMemberId(), pageable);
     }
 
 
     public UploadedFile getUserUploadedFile(AuthInfo authInfo, String fileId) {
-        return uploadedFileRepository.findByIdAndOwner_Id(fileId, authInfo.getMemberId())
+        return uploadedFileRepository.findByFullPathAndOwnerId(fileId, authInfo.getMemberId())
             .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.FILE_NOT_FOUND));
     }
 
-    public PreSignedURLIdentifier getUploadId(AuthInfo authInfo, GetUploadFileIdCommand command) {
-        return preSignedFileUploadService.sign(locator, command.fileType());
+    public UploadedFile getUploadId(AuthInfo authInfo, @NotEmpty String fileName, @NotEmpty FileType fileType) {
+        var command = new GetUploadFileIdCommand(fileName, fileType);
+        var identifier = preSignedFileUploadService.sign(locator, command.fileType());
+        var file = UploadedFile.createUserUploadFile(identifier.uploadId(), identifier.fullPath(), authInfo.getMemberId());
+        return uploadedFileRepository.save(file);
     }
 
     public List<String> getUserFileUploadUrl(
@@ -67,10 +72,10 @@ public class UploadedFileService {
     }
 
     public void completeUserFileUpload(AuthInfo authInfo, @Valid PreSignedURLCompleteCommand command) {
-        var file = uploadedFileRepository.findByIdForUpdate(command.uploadId())
+        var file = uploadedFileRepository.findByUploadIdForUpdate(command.uploadId())
             .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.FILE_NOT_FOUND));
 
-        if (file.hasOwnership(authInfo.getMemberId())) {
+        if (!file.hasOwnership(authInfo.getMemberId())) {
             throw new CoreApiException(CoreApiExceptionCode.FILE_FORBIDDEN);
         }
         if (file.getStatus() != UploadedFileStatus.UPLOADING) {
@@ -85,7 +90,7 @@ public class UploadedFileService {
     }
 
     public void abortUserFileUpload(AuthInfo authInfo, @NotEmpty PreSignedURLAbortCommand command) {
-        var file = uploadedFileRepository.findByIdForUpdate(command.uploadId())
+        var file = uploadedFileRepository.findByUploadIdForUpdate(command.uploadId())
             .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.FILE_NOT_FOUND));
 
         if (file.getStatus() != UploadedFileStatus.UPLOADING) {

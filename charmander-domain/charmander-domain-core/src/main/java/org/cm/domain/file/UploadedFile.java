@@ -19,8 +19,11 @@ import java.util.Objects;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UploadedFile {
     @Id
-    @Column(nullable = false, updatable = false, length = 512)
-    private String id;
+    @Column(nullable = false, updatable = false, length = 256)
+    private String fullPath;
+
+    @Column(nullable = false, updatable = false, unique = true, length = 256)
+    private String uploadId;
 
     @Nullable
     @Column(name = "owner_id", updatable = false)
@@ -48,10 +51,21 @@ public class UploadedFile {
     @Column(nullable = false)
     private LocalDateTime updatedAt;
 
-    UploadedFile(String fileId, UploadedFileType uploadType, Long ownerId) {
-        this.id = fileId;
+    UploadedFile(
+        String uploadId,
+        String fullPath,
+        UploadedFileType uploadType,
+        Long ownerId
+    ) {
+        this.uploadId = uploadId;
+        this.fullPath = fullPath;
         this.uploadType = uploadType;
         this.ownerId = ownerId;
+    }
+
+    public String getFileName() {
+        var tokens = fullPath.split("/");
+        return tokens[tokens.length - 1];
     }
 
     public boolean hasOwnership(Long memberId) {
@@ -86,7 +100,7 @@ public class UploadedFile {
         status = UploadedFileStatus.ABORTED;
     }
 
-    public static UploadedFile createUserUploadFile(String fileId, Long ownerId) {
-        return new UploadedFile(fileId, UploadedFileType.USER_UPLOAD, ownerId);
+    public static UploadedFile createUserUploadFile(String uploadId, String fileId, Long ownerId) {
+        return new UploadedFile(uploadId, fileId, UploadedFileType.USER_UPLOAD, ownerId);
     }
 }
