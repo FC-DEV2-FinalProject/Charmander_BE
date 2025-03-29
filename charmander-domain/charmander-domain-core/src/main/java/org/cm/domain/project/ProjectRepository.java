@@ -1,23 +1,24 @@
 package org.cm.domain.project;
 
 import jakarta.persistence.LockModeType;
-import org.cm.exception.CoreDomainException;
-import org.cm.exception.CoreDomainExceptionCode;
-import org.jspecify.annotations.NonNull;
-import org.springframework.data.jpa.repository.*;
-import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
+import org.cm.exception.CoreDomainException;
+import org.cm.exception.CoreDomainExceptionCode;
+import org.jspecify.annotations.NonNull;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findAllByOwnerId(Long memberId);
 
     Optional<Project> findByIdAndOwnerId(Long id, Long memberId);
 
-    @EntityGraph(attributePaths = {"scenes", "scenes.transcripts"})
+    //    @EntityGraph(attributePaths = {"scenes", "scenes.transcripts"})
     @Query("SELECT p FROM project p JOIN FETCH p.owner WHERE p.id = :id AND p.owner.id = :memberId")
     Optional<Project> findByIdAndOwnerIdWithFetch(Long id, Long memberId);
 
@@ -28,7 +29,7 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @NonNull
     default Project getById(@NonNull Long projectId) {
         return findById(projectId)
-            .orElseThrow(() -> new CoreDomainException(CoreDomainExceptionCode.NOT_FOUND_PROJECT));
+                .orElseThrow(() -> new CoreDomainException(CoreDomainExceptionCode.NOT_FOUND_PROJECT));
     }
 
     // Project newsArticle 수정
@@ -36,5 +37,5 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
     @Query("UPDATE project p SET p.newsArticle = :newsArticle WHERE p.id = :id AND p.updatedAt < :updatedAt")
     int updateProjectNewsArticleFindById(@Param("id") Long id,
                                          @Param("newsArticle") String newsArticle,
-                                         @Param("updatedAt")LocalDateTime localDateTime);
+                                         @Param("updatedAt") LocalDateTime localDateTime);
 }
