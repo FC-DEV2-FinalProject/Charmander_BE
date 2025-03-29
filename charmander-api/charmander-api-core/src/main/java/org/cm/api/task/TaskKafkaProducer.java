@@ -3,8 +3,8 @@ package org.cm.api.task;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import org.cm.api.task.event.TaskCreationEvent;
-import org.cm.domain.task.TaskRepository;
-import org.cm.api.task.dto.TaskScriptRecord;
+import org.cm.kafka.KafkaTopicNames;
+import org.cm.kafka.TaskScriptRecord;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -15,19 +15,21 @@ import org.springframework.transaction.event.TransactionalEventListener;
 @Component
 @RequiredArgsConstructor
 public class TaskKafkaProducer implements ApplicationEventPublisherAware {
+    private final KafkaTemplate<String, TaskScriptRecord> kafkaTemplate;
     @Setter
     private ApplicationEventPublisher applicationEventPublisher;
-
-    private final KafkaTemplate<String, Object> kafkaTemplate;
-
-    private final TaskRepository taskRepository;
 
     @TransactionalEventListener(phase = TransactionPhase.AFTER_COMPLETION, classes = TaskCreationEvent.class)
     public void handleProjectGeneratedEvent(TaskCreationEvent event) {
         event.getTask()
-            .getTaskScripts()
-            .stream()
-            .map(TaskScriptRecord::from)
-            .forEach((message) -> kafkaTemplate.send("tts-task", message));
+                .getTaskScripts()
+                .stream()
+                .map(taskScript -> new TaskScriptRecord(
+                        taskScript.getTask().getId(),
+                        taskScript.getId(),
+                        taskScript.getSentence(),
+                        taskScript.getOption()
+                ))
+                .forEach((message) -> kafkaTemplate.send(KafkaTopicNames.TTS_PROCESSING, message));
     }
 }

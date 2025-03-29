@@ -79,6 +79,7 @@ public class TaskScript extends BaseEntity {
             throw new CoreDomainException(CoreDomainExceptionCode.TASK_SCRIPT_SUCCESS_ALLOWED_ONLY_IN_PROGRESS);
         }
         this.fileId = fileId;
+        this.status = TaskScriptStatus.SUCCESS;
     }
 
     public void cancel() {

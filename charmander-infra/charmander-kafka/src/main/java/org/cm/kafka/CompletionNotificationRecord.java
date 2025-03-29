@@ -1,6 +1,6 @@
 package org.cm.kafka;
 
-public record VideoConcatRecord(
+public record CompletionNotificationRecord(
         Long taskId,
         String fileId
 ) {

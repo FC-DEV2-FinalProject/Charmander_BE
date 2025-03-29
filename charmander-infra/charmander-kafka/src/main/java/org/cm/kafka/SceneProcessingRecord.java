@@ -1,6 +1,6 @@
 package org.cm.kafka;
 
-public record TtsCombineRecord(
+public record SceneProcessingRecord(
         Long taskId,
         Long taskScriptId,
         Long sceneId,

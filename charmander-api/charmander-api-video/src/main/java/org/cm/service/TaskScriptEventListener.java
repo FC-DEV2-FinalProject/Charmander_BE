@@ -56,21 +56,19 @@ public class TaskScriptEventListener {
         var task = taskScript.getTask();
         var scene = task.getInputSchema().findSceneById(taskScript.getSceneId());
 
-        createNewSceneOutput(task, taskScript, scene);
+        var sceneOutput = createNewSceneOutput(task, taskScript, scene);
 
         wavCombineQueue.offer(
                 RandomKeyGenerator.generateRandomKey(),
                 getAudioSources(taskScripts, scene.transcript()),
-                UserMetadata.ttsCombine(task.getId(), taskScript.getId(), scene.id())
+                UserMetadata.ttsCombine(task.getId(), taskScript.getId(), sceneOutput.getId())
         );
     }
 
-    private void createNewSceneOutput(Task task, TaskScript taskScript, Scene scene) {
-        var sceneOutput = new SceneOutput(task.getId(), taskScript.getSceneId(), scene);
-        sceneOutputRepository.findByTaskIdAndSceneId(task.getId(), taskScript.getSceneId())
-                .ifPresentOrElse(_ -> {
-                    // no action
-                }, () -> sceneOutputRepository.save(sceneOutput));
+    private SceneOutput createNewSceneOutput(Task task, TaskScript taskScript, Scene scene) {
+        var sceneOutput = new SceneOutput(task.getId(), scene.id(), scene);
+        return sceneOutputRepository.findByTaskIdAndSceneId(task.getId(), taskScript.getSceneId())
+                .orElseGet(() -> sceneOutputRepository.save(sceneOutput));
     }
 
     private List<AudioSource> getAudioSources(
