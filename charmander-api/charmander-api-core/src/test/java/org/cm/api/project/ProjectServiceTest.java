@@ -5,22 +5,20 @@ import org.cm.api.task.TaskService;
 import org.cm.domain.member.MemberRepository;
 import org.cm.domain.project.ProjectRepository;
 import org.cm.security.AuthInfo;
+import org.cm.test.config.BaseServiceUnitTest;
 import org.cm.test.fixture.ProjectFixture;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
-@ExtendWith({MockitoExtension.class})
-class ProjectServiceTest {
+class ProjectServiceTest extends BaseServiceUnitTest {
     @InjectMocks
     ProjectService projectService;
 
