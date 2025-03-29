@@ -34,9 +34,9 @@ public class SceneOutput extends BaseEntity {
     private String avatarFileId;
 
 
-    public SceneOutput(Long sceneId, Long taskId, Scene scene) {
-        this.sceneId = sceneId;
+    public SceneOutput(Long taskId, Long sceneId, Scene scene) {
         this.taskId = taskId;
+        this.sceneId = sceneId;
         this.scene = scene;
     }
 
