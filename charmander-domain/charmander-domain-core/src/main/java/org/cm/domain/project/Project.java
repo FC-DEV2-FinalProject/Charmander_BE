@@ -28,6 +28,9 @@ public class Project extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
+    @Embedded
+    private ProjectProperty property;
+
     @Version
     @Column(nullable = false)
     private int version;
@@ -42,6 +45,7 @@ public class Project extends BaseEntity {
     ) {
         this.owner = owner;
         this.name = name;
+        this.property = ProjectProperty.createDefault();
         this.version = version;
     }
 
