@@ -37,8 +37,8 @@ class ProjectServiceTest {
     @DisplayName("[변경 테스트]")
     class UpdateTest {
         @Test
-        @DisplayName("name: 값이 Null일 경우 변경되지 않아야 함")
-        public void test00001() {
+        @DisplayName("001. name: 값이 Null일 경우 변경되지 않아야 함")
+        public void 값이_NULL일_경우_변경되지_않아야_함() {
             // given
             var authInfo = Mockito.mock(AuthInfo.class);
             var projectId = 1L;
@@ -60,5 +60,7 @@ class ProjectServiceTest {
             assertThat(prevName).isNotEqualTo(request.name());
             assertThat(prevName).isEqualTo(afterName);
         }
+
+
     }
 }
