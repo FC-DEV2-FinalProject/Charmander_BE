@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.cm.infra.mediaconvert.queue.WavVideoCombineQueue.VideoSource;
 import org.cm.infra.property.MediaConvertProperty;
 import org.cm.infra.property.S3URLProperty;
+import org.cm.infra.utils.MetadataConverter;
 import org.springframework.stereotype.Component;
 import software.amazon.awssdk.services.mediaconvert.MediaConvertClient;
 import software.amazon.awssdk.services.mediaconvert.model.AacCodingMode;
@@ -52,14 +53,16 @@ public class AllVideoCombineQueue {
     private final S3URLProperty s3UrlProperty;
     private final MediaConvertProperty mediaConvertProperty;
 
-    public String offer(
+    public <T> String offer(
             List<VideoSource> videoSources,
-            String fileId
+            String fileId,
+            T input
     ) {
 
         CreateJobRequest jobRequest = CreateJobRequest.builder()
                 .queue(mediaConvertProperty.queue().sceneCombine())
                 .role(mediaConvertProperty.userArn())
+                .userMetadata(MetadataConverter.convert(input))
                 .settings(JobSettings.builder()
                         .timecodeConfig(TimecodeConfig.builder()
                                 .source(TimecodeSource.ZEROBASED)

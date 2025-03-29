@@ -1,7 +1,7 @@
-package org.cm.domain.scene;
+package org.cm.common.domain;
 
 public enum SceneMediaType {
     Image,
     Video
-    ;
 }
+

@@ -39,6 +39,20 @@ public class ProjectController {
     }
 
     @MemberOnly
+    @PatchMapping("/{id}/newsArticle")
+    public void updateProjectNewsArticle(
+        @PathVariable Long id,
+        @AuthUser AuthInfo authInfo,
+        String newsArticle
+    ) {
+        projectService.modifyProjectNewsArticle(
+            id,
+            authInfo.getMemberId(),
+            newsArticle
+        );
+    }
+
+    @MemberOnly
     @PatchMapping("/{id}")
     public void updateProject(@PathVariable Long id, @RequestBody ProjectUpdateRequest request, @AuthUser AuthInfo authInfo) {
         projectService.updateProject(authInfo, id, request);

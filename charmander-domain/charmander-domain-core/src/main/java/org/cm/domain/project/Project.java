@@ -21,7 +21,7 @@ public class Project extends BaseEntity {
     @JoinColumn(nullable = false, updatable = false)
     private Member owner;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Scene> scenes = new ArrayList<>();
 
     @Setter
@@ -31,6 +31,8 @@ public class Project extends BaseEntity {
     @Setter
     @Embedded
     private ProjectProperty property;
+
+    private String newsArticle;
 
     @Version
     @Column(nullable = false)
@@ -60,5 +62,9 @@ public class Project extends BaseEntity {
 
     public static Project newCreateProject(Member owner) {
         return new Project(owner, "New Project", 0);
+    }
+
+    public void updateProjectNewsArticle(String newsArticle) {
+        this.newsArticle = newsArticle;
     }
 }

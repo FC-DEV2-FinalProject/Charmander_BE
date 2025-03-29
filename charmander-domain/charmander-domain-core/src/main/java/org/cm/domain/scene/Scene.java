@@ -17,13 +17,14 @@ import java.util.List;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Scene extends BaseEntity {
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.REMOVE, CascadeType.DETACH})
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(nullable = false, updatable = false)
     private Project project;
 
     @OneToMany(mappedBy = "scene", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SceneTranscript> transcripts = new ArrayList<>();
 
+    @Setter
     @Embedded
     private SceneSubtitle subtitle;
 

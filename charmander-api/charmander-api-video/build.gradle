@@ -1,13 +1,13 @@
-
 dependencies {
     implementation project(":charmander-infra:charmander-docs")
     implementation project(":charmander-domain:charmander-domain-core")
     implementation project(":charmander-domain:charmander-domain-common")
     implementation project(":charmander-common")
     implementation project(":charmander-infra:charmander-file-strorage")
+    implementation project(":charmander-infra:charmander-kafka")
 
     implementation "org.springframework.boot:spring-boot-starter-web"
-    implementation 'org.springframework.kafka:spring-kafka'
 
     testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation(project(":charmander-domain:charmander-domain-core"))
 }
