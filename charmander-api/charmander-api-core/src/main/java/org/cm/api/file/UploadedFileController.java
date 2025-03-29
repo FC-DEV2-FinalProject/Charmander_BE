@@ -7,12 +7,12 @@ import jakarta.validation.constraints.NotEmpty;
 import lombok.RequiredArgsConstructor;
 import org.cm.api.common.dto.ListResponse;
 import org.cm.api.common.dto.PageResponse;
-import org.cm.api.file.dto.GetUploadFileIdCommand;
+import org.cm.api.file.dto.GetUploadFileIdResponse;
 import org.cm.api.file.dto.UploadUrlResponse;
 import org.cm.api.file.dto.UploadedFileResponse;
+import org.cm.common.domain.FileType;
 import org.cm.infra.storage.PreSignedURLAbortCommand;
 import org.cm.infra.storage.PreSignedURLCompleteCommand;
-import org.cm.infra.storage.PreSignedURLIdentifier;
 import org.cm.security.AuthInfo;
 import org.cm.security.annotations.support.AuthUser;
 import org.cm.security.annotations.support.MemberOnly;
@@ -38,22 +38,23 @@ public class UploadedFileController {
     }
 
     @MemberOnly
-    @GetMapping("/my/{fileId}")
+    @GetMapping("/my/{fullPath}")
     public UploadedFileResponse getMyUploadedFile(
-        @PathVariable String fileId,
+        @PathVariable String fullPath,
         @AuthUser AuthInfo authInfo
     ) {
-        var file = uploadedFileService.getUserUploadedFile(authInfo, fileId);
+        var file = uploadedFileService.getUserUploadedFile(authInfo, fullPath);
         return UploadedFileResponse.from(file);
     }
 
     @MemberOnly
-    @PostMapping("/upload-id")
-    public PreSignedURLIdentifier getUploadFileId(
-        @RequestBody GetUploadFileIdCommand command,
+    @GetMapping("/upload-id")
+    public GetUploadFileIdResponse getUploadFileId(
+        @NotEmpty @RequestParam String fileName, @NotEmpty @RequestParam FileType fileType,
         @AuthUser AuthInfo authInfo
     ) {
-        return uploadedFileService.getUploadId(authInfo, command);
+        var file = uploadedFileService.getUploadId(authInfo, fileName, fileType);
+        return GetUploadFileIdResponse.from(file);
     }
 
     @MemberOnly
