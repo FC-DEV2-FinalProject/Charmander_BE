@@ -1,0 +1,47 @@
+[tool.poetry]
+name = "vits"
+version = "0.1.0"
+description = ""
+authors = ["charmanderbe02 <charmanderbe02@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.7"
+python-dotenv = "0.21.1"
+numpy = "1.18.5"
+scipy = "1.5.2"
+phonemizer = "2.2.1"
+jamo = "0.4.1"
+jamotools = "0.1.10"
+g2pk = "0.9.4"
+
+[tool.poetry.group.train.dependencies]
+torch = {version = "1.13.1", source = "torch-cuda"}
+Cython = "0.29.21"
+librosa = "0.8.0"
+matplotlib = "3.3.1"
+tensorboard = "2.3.0"
+Unidecode = "1.1.1"
+
+[tool.poetry.group.infer.dependencies]
+torch = {version = "1.13.1", source = "torch-cpu"}
+
+[tool.poetry.group.api.dependencies]
+fastapi = "0.103.2"
+uvicorn = "0.22.0"
+
+smart-open = "^7.1.0"
+requests = "2.31.0"
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[[tool.poetry.source]]
+name = "torch-cuda"
+url = "https://download.pytorch.org/whl/cu124"
+priority = "explicit"
+
+[[tool.poetry.source]]
+name = "torch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+priority = "explicit"

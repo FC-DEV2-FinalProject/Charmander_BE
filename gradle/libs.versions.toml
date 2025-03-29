@@ -1,0 +1,8 @@
+[versions]
+mapstruct = "1.6.3"
+
+[libraries]
+jwt = { group = "com.auth0", name = "java-jwt", version = "4.5.0" }
+mapstruct = { group = "org.mapstruct", name = "mapstruct", version.ref = "mapstruct" }
+mapstruct-processor = { group = "org.mapstruct", name = "mapstruct-processor", version.ref = "mapstruct" }
+mapstruct-lombok = { group = "org.projectlombok", name = "lombok-mapstruct-binding", version = "0.2.0" }

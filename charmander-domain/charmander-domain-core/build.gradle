@@ -1,3 +1,13 @@
 dependencies {
-    implementation project(":charmander-domain::charmander-domain-common")
+    implementation project(":charmander-common")
+    implementation project(":charmander-domain:charmander-domain-common")
+
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+
+    testImplementation 'com.fasterxml.jackson.core:jackson-databind:2.13.1'
+
+    testFixturesImplementation('com.fasterxml.jackson.core:jackson-databind:2.13.1')
+
+    testFixturesImplementation(project(":charmander-domain:charmander-domain-common"))
 }

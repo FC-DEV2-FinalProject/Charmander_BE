@@ -1,0 +1,16 @@
+springdoc:
+  swagger-ui:
+    enabled: true
+    operationsSorter: method  # API 정렬 기준 (alpha, method 등)
+    tagsSorter: alpha     # 태그 정렬 기준 (기본값: alpha)
+    display-request-duration: true  # 요청 소요 시간 표시 여부
+    disable-swagger-default-url: true  # 기본 URL 숨기기
+
+---
+spring.config.activate.on-profile: stage
+
+springdoc.swagger-ui.enabled: false
+---
+spring.config.activate.on-profile: prod
+
+springdoc.swagger-ui.enabled: false

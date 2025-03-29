@@ -1,0 +1,30 @@
+venv
+.venv
+**/__pycache__
+
+*.pyc
+*.pyo
+*.pyd
+
+.DS_Store
+
+# git
+.git
+.gitignore
+
+# dotenv
+.env
+
+# vscode
+.vscode
+
+# docker
+docker-compose*.yaml
+Dockerfile
+
+
+# markdown
+README.MD
+
+# etc
+assets

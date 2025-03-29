@@ -1,0 +1,26 @@
+server:
+  port: 8081
+
+spring:
+  config:
+    import:
+      - api-docs.yml
+      - db-common.yml
+      - file-storage.yml
+  profiles:
+    active: local
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: tts-task-processor
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+          spring.json.trusted.packages: "*"   # 또는 변환할 패키지 지정
+
+tts:
+  url: http://localhost:8081
+
+

@@ -1,0 +1,6 @@
+dependencies {
+    implementation project(":charmander-infra:charmander-kafka")
+
+    implementation platform("io.awspring.cloud:spring-cloud-aws-dependencies:3.0.1")
+    implementation 'io.awspring.cloud:spring-cloud-aws-starter-sqs'
+}

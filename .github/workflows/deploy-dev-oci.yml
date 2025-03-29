@@ -1,0 +1,36 @@
+name: deploy dev to oci
+
+on:
+  push:
+    branches:
+      - dev
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout sources
+      uses: actions/checkout@v4
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'graalvm'
+        java-version: 21
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@v3
+    - name: Build with Gradle
+      run: ./gradlew :charmander-api:charmander-api-core:clean :charmander-api:charmander-api-core:bootJar
+    - name: Deploy to Server
+      env:
+        HOST: ${{ secrets.DEV_OCI_SERVER_HOST }}
+        USERNAME: ${{ secrets.DEV_OCI_SERVER_USER }}
+        PRIVATE_KEY: ${{ secrets.DEV_OCI_SERVER_PRIVATE_KEY }}
+      run: |
+        rm -rf ~/.ssh/known_hosts
+        mkdir -p ~/.ssh/ && touch ~/.ssh/known_hosts
+        ssh-keyscan ${{ env.HOST }} >> ~/.ssh/known_hosts
+        echo "${{ env.PRIVATE_KEY }}" > private_key.pem
+        chmod 600 private_key.pem
+        scp -i private_key.pem charmander-api/charmander-api-core/build/libs/*.jar ${{ env.USERNAME }}@${{ env.HOST }}:~/app/charmander/api/app/app.jar
+        ssh -i private_key.pem ${{ env.USERNAME }}@${{ env.HOST }} 'bash -s' < /home/ubuntu/app/charmander/api/deploy.sh
+        rm private_key.pem
