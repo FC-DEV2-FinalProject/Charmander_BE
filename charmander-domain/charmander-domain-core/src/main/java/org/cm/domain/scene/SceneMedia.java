@@ -12,6 +12,16 @@ public record SceneMedia(
         Duration duration,
         Property property
 ) {
+    public static SceneMedia createDefault() {
+        return new SceneMedia(
+                SceneMediaType.Image,
+                "",
+                "0",
+                Duration.ZERO,
+                Property.createDefault()
+        );
+    }
+
     public record Property(
             int layer,
             ScreenSize size,
@@ -23,17 +33,7 @@ public record SceneMedia(
         }
 
         public static Property createDefault() {
-            return new Property(0, new ScreenSize(0, 0), new Position2D(0, 0), 1.0);
+            return new Property(0, new ScreenSize(1280, 720), new Position2D(0, 0), 1.0);
         }
-    }
-
-    public static SceneMedia createDefault() {
-        return new SceneMedia(
-            SceneMediaType.Image,
-            "",
-            "0",
-            Duration.ZERO,
-            Property.createDefault()
-        );
     }
 }
