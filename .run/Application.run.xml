@@ -4,7 +4,7 @@
     <module name="Charmander.charmander-api.charmander-api-core.main" />
     <option name="SHORTEN_COMMAND_LINE" value="ARGS_FILE" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="org.cm.Application" />
-    <option name="VM_PARAMETERS" value="-Dspring.config.location=./.gradle/application.yaml" />
+    <option name="VM_PARAMETERS" value="-Dspring.config.location=./.local/application.yaml" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
