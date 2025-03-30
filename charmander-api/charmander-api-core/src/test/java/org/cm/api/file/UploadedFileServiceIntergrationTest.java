@@ -37,13 +37,17 @@ class UploadedFileServiceIntergrationTest extends BaseServiceIntergrationTest {
     @DisplayName("[조회]")
     class ReadTest {
         @Test
-        @DisplayName("001. 사용자가 업로드한 파일 목록을 조회할 수 있다.")
+        @DisplayName("001. 업로드가 완료된 파일 목록을 조회할 수 있다.")
         void 사용자가_업로드한_파일_목록을_조회할_수_있다() {
             // stub
             var member = createMember();
             var nFiles = 5;
             IntStream.range(0, nFiles)
-                .forEach(i -> createUploadedFile(member));
+                .mapToObj(i -> createUploadedFile(member))
+                .forEach(file -> {
+                    file.startCompletion();
+                    file.finishCompletion();
+                });
 
             // given
             var authInfo = new AuthInfo(member.getId());
@@ -57,11 +61,13 @@ class UploadedFileServiceIntergrationTest extends BaseServiceIntergrationTest {
         }
 
         @Test
-        @DisplayName("002. 사용자가 업로드한 파일을 조회할 수 있다.")
+        @DisplayName("002. 업로드가 완료된 파일을 조회할 수 있다.")
         void 사용자가_업로드한_파일을_조회할_수_있다() {
             // stub
             var member = createMember();
             var file = createUploadedFile(member);
+            file.startCompletion();
+            file.finishCompletion();
 
             // given
             var authInfo = new AuthInfo(member.getId());
@@ -83,6 +89,38 @@ class UploadedFileServiceIntergrationTest extends BaseServiceIntergrationTest {
 
             // given
             var authInfo = new AuthInfo(otherMember.getId());
+
+            // when
+            assertThrows(CoreApiException.class, () -> uploadedFileService.getUserUploadedFile(authInfo, file.getFullPath()));
+        }
+
+        @Test
+        @DisplayName("004. 업로드가 완료되지 않으면 목록 조회에 포함되지 않는다.")
+        void 업로드가_완료되지_않으면_목록_조회에_포함되지_않는다() {
+            // stub
+            var member = createMember();
+            var file = createUploadedFile(member);
+
+            // given
+            var authInfo = new AuthInfo(member.getId());
+            var pageable = PageRequest.of(0, 10);
+
+            // when
+            var files = uploadedFileService.getUserUploadedFiles(authInfo, pageable);
+
+            // then
+            assertEquals(0, files.getTotalElements());
+        }
+
+        @Test
+        @DisplayName("005. 업로드가 완료되지 않으면 단건 조회에 실패한다.")
+        void 업로드가_완료되지_않으면_단건_조회에_실패한다() {
+            // stub
+            var member = createMember();
+            var file = createUploadedFile(member);
+
+            // given
+            var authInfo = new AuthInfo(member.getId());
 
             // when
             assertThrows(CoreApiException.class, () -> uploadedFileService.getUserUploadedFile(authInfo, file.getFullPath()));

@@ -4,7 +4,7 @@ import org.cm.domain.file.UploadedFile;
 import org.cm.domain.member.Member;
 
 public class UploadedFileFixture {
-    public static UploadedFile create(String fileId, Member member) {
-        return UploadedFile.createUserUploadFile(fileId, member.getId());
+    public static UploadedFile create(String uploadId, String fileId, Member member) {
+        return UploadedFile.createUserUploadFile(uploadId, fileId, member.getId());
     }
 }
