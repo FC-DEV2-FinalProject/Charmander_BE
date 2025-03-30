@@ -3,10 +3,13 @@ package org.cm.test.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
 import org.cm.common.utils.RandomKeyGenerator;
+import org.cm.domain.common.ScreenSize;
 import org.cm.domain.file.UploadedFile;
 import org.cm.domain.member.Member;
 import org.cm.domain.project.Project;
 import org.cm.domain.scene.Scene;
+import org.cm.domain.template.TemplateBackground;
+import org.cm.domain.template.TemplateBackgroundType;
 import org.cm.test.fixture.MemberFixture;
 import org.cm.test.fixture.ProjectFixture;
 import org.cm.test.fixture.SceneFixture;
@@ -46,6 +49,17 @@ public abstract class BaseServiceIntergrationTest {
     protected Scene createScene(Project project) {
         var scene = SceneFixture.create(project);
         return em.merge(scene);
+    }
+
+    protected TemplateBackground createTemplateBackground(Member member) {
+        TemplateBackground bg;
+        if (member == null) {
+            bg = TemplateBackground.createShared("1", TemplateBackgroundType.Image, "1", ScreenSize.createDefault());
+        }
+        else {
+            bg = TemplateBackground.createUserOwned(member, "1", TemplateBackgroundType.Image, "1", ScreenSize.createDefault());
+        }
+        return em.merge(bg);
     }
 
     @SuppressWarnings("SameParameterValue")

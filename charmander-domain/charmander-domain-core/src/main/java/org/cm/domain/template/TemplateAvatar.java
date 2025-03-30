@@ -1,9 +1,6 @@
 package org.cm.domain.template;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Convert;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,6 +8,7 @@ import lombok.Setter;
 import org.cm.common.domain.SceneMediaType;
 import org.cm.domain.common.BaseEntity;
 import org.cm.domain.common.ScreenSize;
+import org.cm.domain.member.Member;
 import org.cm.domain.scene.SceneMedia;
 
 import java.time.Duration;
@@ -19,6 +17,10 @@ import java.time.Duration;
 @Entity(name = "templateAvatar")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TemplateAvatar extends BaseEntity {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id", updatable = false)
+    private Member owner;
+
     @Column(nullable = false, updatable = false)
     private String name;
 

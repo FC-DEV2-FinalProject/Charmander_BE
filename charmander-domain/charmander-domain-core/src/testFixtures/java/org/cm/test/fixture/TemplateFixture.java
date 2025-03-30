@@ -18,7 +18,7 @@ public class TemplateFixture {
     }
 
     public static TemplateBackground createBackground(){
-        return new TemplateBackground(
+        return TemplateBackground.createShared(
             "BackgroundName",
             TemplateBackgroundType.Image,
             "fileUrl",
