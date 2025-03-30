@@ -4,13 +4,16 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.cm.common.domain.SceneMediaType;
 import org.cm.domain.member.Member;
+import org.cm.domain.scene.SceneMedia;
 import org.cm.exception.CoreDomainException;
 import org.cm.exception.CoreDomainExceptionCode;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.jspecify.annotations.Nullable;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
@@ -98,6 +101,16 @@ public class UploadedFile {
             throw new CoreDomainException(CoreDomainExceptionCode.INVALID_FILE_STATUS);
         }
         status = UploadedFileStatus.ABORTED;
+    }
+
+    public SceneMedia toSceneMedia() {
+        return new SceneMedia(
+            SceneMediaType.Image,
+            this.fullPath,
+            "0",
+            Duration.ZERO,
+            SceneMedia.Property.createDefault()
+        );
     }
 
     public static UploadedFile createUserUploadFile(String uploadId, String fileId, Long ownerId) {

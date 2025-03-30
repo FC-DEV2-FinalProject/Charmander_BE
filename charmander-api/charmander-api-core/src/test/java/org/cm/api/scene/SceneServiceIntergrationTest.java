@@ -92,7 +92,7 @@ class SceneServiceIntergrationTest extends BaseServiceIntergrationTest {
 
             var request = new SceneUpdateRequest(
               new SceneUpdateRequest.SceneSubtitleDto("new subtitle", null),
-              null
+              null, null, null
             );
 
             // when

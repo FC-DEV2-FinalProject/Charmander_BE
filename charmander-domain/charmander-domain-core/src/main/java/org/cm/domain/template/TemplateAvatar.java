@@ -8,8 +8,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.cm.common.domain.SceneMediaType;
 import org.cm.domain.common.BaseEntity;
 import org.cm.domain.common.ScreenSize;
+import org.cm.domain.scene.SceneMedia;
+
+import java.time.Duration;
 
 @Getter
 @Entity(name = "templateAvatar")
@@ -42,5 +46,15 @@ public class TemplateAvatar extends BaseEntity {
         this.fileUrl = fileUrl;
         this.type = type;
         this.size = size;
+    }
+
+    public SceneMedia toSceneMedia() {
+        return new SceneMedia(
+            SceneMediaType.Image,
+            this.fileUrl,
+            "0",
+            Duration.ZERO,
+            SceneMedia.Property.of(size)
+        );
     }
 }

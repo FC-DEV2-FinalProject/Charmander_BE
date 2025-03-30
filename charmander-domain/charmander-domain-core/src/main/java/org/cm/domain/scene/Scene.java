@@ -28,10 +28,12 @@ public class Scene extends BaseEntity {
     @Embedded
     private SceneSubtitle subtitle;
 
+    @Setter
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(nullable = false, columnDefinition = "json")
     private SceneMedia background;
 
+    @Setter
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(nullable = false, columnDefinition = "json")
     private SceneMedia avatar;

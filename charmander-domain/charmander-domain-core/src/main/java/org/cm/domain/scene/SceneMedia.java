@@ -35,5 +35,9 @@ public record SceneMedia(
         public static Property createDefault() {
             return new Property(0, new ScreenSize(1280, 720), new Position2D(0, 0), 1.0);
         }
+
+        public static Property of(ScreenSize size) {
+            return new Property(0, size, new Position2D(0, 0), 1.0);
+        }
     }
 }

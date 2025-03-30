@@ -31,8 +31,9 @@ public class SceneController {
 
     @MemberOnly
     @PatchMapping("/scenes/{sceneId}")
-    public void updateScene(@PathVariable Long projectId, @PathVariable Long sceneId, @RequestBody SceneUpdateRequest request, @AuthUser AuthInfo authInfo) {
-        sceneService.updateScene(authInfo, projectId, sceneId, request);
+    public SceneResponse updateScene(@PathVariable Long projectId, @PathVariable Long sceneId, @RequestBody SceneUpdateRequest request, @AuthUser AuthInfo authInfo) {
+        var scene = sceneService.updateScene(authInfo, projectId, sceneId, request);
+        return SceneResponse.from(scene);
     }
 
     @MemberOnly

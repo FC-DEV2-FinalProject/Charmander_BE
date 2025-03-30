@@ -41,10 +41,11 @@ public class SceneService {
         sceneRepository.delete(scene);
     }
 
-    public void updateScene(AuthInfo authInfo, Long projectId, Long sceneId, SceneUpdateRequest request) {
+    public Scene updateScene(AuthInfo authInfo, Long projectId, Long sceneId, SceneUpdateRequest request) {
         var scene = sceneRepository.findProjectSceneForUpdate(projectId, sceneId, authInfo.getMemberId())
             .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.SCENE_NOT_FOUND));
 
-        updateMapper.update(scene, request);
+        updateMapper.update(authInfo, scene, request);
+        return sceneRepository.save(scene);
     }
 }
