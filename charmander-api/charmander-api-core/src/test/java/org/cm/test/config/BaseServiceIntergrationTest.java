@@ -5,9 +5,11 @@ import jakarta.persistence.EntityManager;
 import org.cm.domain.member.Member;
 import org.cm.domain.project.Project;
 import org.cm.domain.scene.Scene;
+import org.cm.domain.scene.SceneTranscript;
 import org.cm.test.fixture.MemberFixture;
 import org.cm.test.fixture.ProjectFixture;
 import org.cm.test.fixture.SceneFixture;
+import org.cm.test.fixture.SceneTranscriptFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -43,6 +45,11 @@ public abstract class BaseServiceIntergrationTest {
     protected Scene createScene(Project project) {
         var scene = SceneFixture.create(project);
         return em.merge(scene);
+    }
+
+    protected SceneTranscript createSceneTranscript(Scene scene) {
+        var transcript = SceneTranscriptFixture.create(scene);
+        return em.merge(transcript);
     }
 
     @SuppressWarnings("SameParameterValue")
