@@ -1,5 +1,6 @@
 package org.cm.api.file;
 
+import org.assertj.core.api.Assertions;
 import org.cm.config.ContentsLocatorConfig;
 import org.cm.exception.CoreApiException;
 import org.cm.infra.storage.PreSignedFileUploadService;
@@ -11,14 +12,11 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
-import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
-import org.springframework.test.context.bean.override.mockito.MockitoSpyBean;
 
-import java.util.List;
 import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -28,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
     ContentsLocatorConfig.class
 })
 @DisplayName("[통합 테스트] UploadedFileService")
-class UploadedFileServiceTest extends BaseServiceIntergrationTest {
+class UploadedFileServiceIntergrationTest extends BaseServiceIntergrationTest {
     @Autowired
     UploadedFileService uploadedFileService;
 
@@ -69,10 +67,10 @@ class UploadedFileServiceTest extends BaseServiceIntergrationTest {
             var authInfo = new AuthInfo(member.getId());
 
             // when
-            var foundFile = uploadedFileService.getUserUploadedFile(authInfo, file.getId());
+            var foundFile = uploadedFileService.getUserUploadedFile(authInfo, file.getFullPath());
 
             // then
-            assertEquals(file.getId(), foundFile.getId());
+            assertEquals(file.getFullPath(), foundFile.getFullPath());
         }
 
         @Test
@@ -87,7 +85,7 @@ class UploadedFileServiceTest extends BaseServiceIntergrationTest {
             var authInfo = new AuthInfo(otherMember.getId());
 
             // when
-            assertThrows(CoreApiException.class, () -> uploadedFileService.getUserUploadedFile(authInfo, file.getId()));
+            assertThrows(CoreApiException.class, () -> uploadedFileService.getUserUploadedFile(authInfo, file.getFullPath()));
         }
     }
 
