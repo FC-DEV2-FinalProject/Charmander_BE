@@ -27,7 +27,7 @@ public class TemplateFixture {
     }
 
     public static TemplateAvatar createAvatar(){
-        return new TemplateAvatar(
+        return TemplateAvatar.createShared(
             "AvatarName",
             TemplateAvatarType.Image,
             "fileUrl",

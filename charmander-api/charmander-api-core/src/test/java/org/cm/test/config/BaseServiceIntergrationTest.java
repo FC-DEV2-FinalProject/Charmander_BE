@@ -8,6 +8,8 @@ import org.cm.domain.file.UploadedFile;
 import org.cm.domain.member.Member;
 import org.cm.domain.project.Project;
 import org.cm.domain.scene.Scene;
+import org.cm.domain.template.TemplateAvatar;
+import org.cm.domain.template.TemplateAvatarType;
 import org.cm.domain.template.TemplateBackground;
 import org.cm.domain.template.TemplateBackgroundType;
 import org.cm.test.fixture.MemberFixture;
@@ -60,6 +62,17 @@ public abstract class BaseServiceIntergrationTest {
             bg = TemplateBackground.createUserOwned(member, "1", TemplateBackgroundType.Image, "1", ScreenSize.createDefault());
         }
         return em.merge(bg);
+    }
+
+    protected TemplateAvatar createTemplateAvatar(Member member) {
+        TemplateAvatar avatar;
+        if (member == null) {
+            avatar = TemplateAvatar.createShared("1", TemplateAvatarType.Image, "1", ScreenSize.createDefault());
+        }
+        else {
+            avatar = TemplateAvatar.createUserOwned(member, "1", TemplateAvatarType.Image, "1", ScreenSize.createDefault());
+        }
+        return em.merge(avatar);
     }
 
     @SuppressWarnings("SameParameterValue")

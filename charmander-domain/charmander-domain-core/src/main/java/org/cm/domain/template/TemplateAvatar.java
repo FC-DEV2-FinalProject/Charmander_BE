@@ -28,7 +28,7 @@ public class TemplateAvatar extends BaseEntity {
     @Column(nullable = false)
     private int priority = 1;
 
-    @Column(nullable = false, updatable = false)
+    @Column(nullable = false)
     private String fileUrl;
 
     @Convert(converter = TemplateAvatarType.Converter.class)
@@ -38,15 +38,17 @@ public class TemplateAvatar extends BaseEntity {
     @Embedded
     private ScreenSize size;
 
-    public TemplateAvatar(
+    private TemplateAvatar(
+        Member owner,
         String name,
         TemplateAvatarType type,
         String fileUrl,
         ScreenSize size
     ) {
+        this.owner = owner;
         this.name = name;
-        this.fileUrl = fileUrl;
         this.type = type;
+        this.fileUrl = fileUrl;
         this.size = size;
     }
 
@@ -58,5 +60,24 @@ public class TemplateAvatar extends BaseEntity {
             Duration.ZERO,
             SceneMedia.Property.of(size)
         );
+    }
+
+    public static TemplateAvatar createUserOwned(
+        Member owner,
+        String name,
+        TemplateAvatarType type,
+        String fileUrl,
+        ScreenSize size
+    ) {
+        return new TemplateAvatar(owner, name, type, fileUrl, size);
+    }
+
+    public static TemplateAvatar createShared(
+        String name,
+        TemplateAvatarType type,
+        String fileUrl,
+        ScreenSize size
+    ) {
+        return new TemplateAvatar(null, name, type, fileUrl, size);
     }
 }
