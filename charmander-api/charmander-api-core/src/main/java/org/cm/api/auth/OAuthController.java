@@ -26,6 +26,7 @@ public class OAuthController {
     }
 
     @PostMapping("/signup")
+    @ResponseBody
     public LoginResponse signup(@RequestBody OAuthSignupRequest request, HttpServletResponse httpResponse) {
         var token = oAuthClient.getToken(request.provider(), request.code(), request.state());
         var oAuthUserInfo = oAuthClient.getUserInfo(request.provider(), token, request.state());
