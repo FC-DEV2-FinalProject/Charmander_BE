@@ -13,6 +13,7 @@ import org.cm.test.fixture.ProjectFixture;
 import org.cm.test.fixture.SceneFixture;
 import org.cm.test.fixture.SceneTranscriptFixture;
 import org.cm.test.fixture.UploadedFileFixture;
+import org.cm.test.fixture.UploadedFileFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
