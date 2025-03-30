@@ -27,7 +27,7 @@ public class ProjectController {
     @MemberOnly
     @GetMapping("/{id}")
     public ProjectDetailResponse getProjectById(@PathVariable Long id, @AuthUser AuthInfo authInfo) {
-        var item = projectService.getProjectById(authInfo, id);
+        var item = projectService.getProjectByIdForDetails(authInfo, id);
         return ProjectDetailResponse.from(item);
     }
 
