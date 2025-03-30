@@ -1,6 +1,5 @@
 package org.cm.api.file;
 
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -42,12 +41,12 @@ public class UploadedFileService {
     }
 
     public Page<UploadedFile> getUserUploadedFiles(AuthInfo authInfo, Pageable pageable) {
-        return uploadedFileRepository.findByOwnerId(authInfo.getMemberId(), pageable);
+        return uploadedFileRepository.findByOwnerIdAndStatus(authInfo.getMemberId(), UploadedFileStatus.COMPLETED, pageable);
     }
 
 
     public UploadedFile getUserUploadedFile(AuthInfo authInfo, String fileId) {
-        return uploadedFileRepository.findByFullPathAndOwnerId(fileId, authInfo.getMemberId())
+        return uploadedFileRepository.findByFullPathAndOwnerIdAndStatus(fileId, authInfo.getMemberId(), UploadedFileStatus.COMPLETED)
             .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.FILE_NOT_FOUND));
     }
 

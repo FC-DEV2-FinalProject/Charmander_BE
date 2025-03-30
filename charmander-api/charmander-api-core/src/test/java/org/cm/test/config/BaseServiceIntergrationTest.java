@@ -10,6 +10,7 @@ import org.cm.domain.scene.Scene;
 import org.cm.test.fixture.MemberFixture;
 import org.cm.test.fixture.ProjectFixture;
 import org.cm.test.fixture.SceneFixture;
+import org.cm.test.fixture.UploadedFileFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -60,7 +61,7 @@ public abstract class BaseServiceIntergrationTest {
     protected UploadedFile createUploadedFile(Member member) {
         var uploadId = RandomKeyGenerator.generateRandomKey();
         var fileId = RandomKeyGenerator.generateRandomKey();
-        var uploadedFile = UploadedFile.createUserUploadFile(uploadId, fileId, member.getId());
+        var uploadedFile = UploadedFileFixture.create(uploadId, fileId, member);
         return em.merge(uploadedFile);
     }
 }
