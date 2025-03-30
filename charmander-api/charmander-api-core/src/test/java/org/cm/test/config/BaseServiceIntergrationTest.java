@@ -65,8 +65,9 @@ public abstract class BaseServiceIntergrationTest {
     }
 
     protected UploadedFile createUploadedFile(Member member) {
+        var uploadId = RandomKeyGenerator.generateRandomKey();
         var fileId = RandomKeyGenerator.generateRandomKey();
-        var uploadedFile = UploadedFile.createUserUploadFile(fileId, member.getId());
+        var uploadedFile = UploadedFile.createUserUploadFile(uploadId, fileId, member.getId());
         return em.merge(uploadedFile);
     }
 }
