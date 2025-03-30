@@ -1,9 +1,6 @@
 package org.cm.domain.project;
 
 import jakarta.persistence.LockModeType;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 import org.cm.exception.CoreDomainException;
 import org.cm.exception.CoreDomainExceptionCode;
 import org.jspecify.annotations.NonNull;
@@ -13,13 +10,24 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
+
 public interface ProjectRepository extends JpaRepository<Project, Long> {
     List<Project> findAllByOwnerId(Long memberId);
 
     Optional<Project> findByIdAndOwnerId(Long id, Long memberId);
 
-    //    @EntityGraph(attributePaths = {"scenes", "scenes.transcripts"})
-    @Query("SELECT p FROM project p JOIN FETCH p.owner WHERE p.id = :id AND p.owner.id = :memberId")
+    @Query("""
+            SELECT p
+            FROM project p
+            JOIN FETCH p.owner
+            JOIN FETCH p.scenes s
+            JOIN FETCH s.transcripts t
+            WHERE p.id = :id
+              AND p.owner.id = :memberId
+        """)
     Optional<Project> findByIdAndOwnerIdWithFetch(Long id, Long memberId);
 
     @Lock(LockModeType.OPTIMISTIC)
