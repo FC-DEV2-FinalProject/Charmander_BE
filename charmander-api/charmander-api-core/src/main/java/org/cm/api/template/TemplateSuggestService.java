@@ -40,7 +40,7 @@ public class TemplateSuggestService {
 
 
     @UtilityClass
-    public class TemplateCategoryTools {
+    static class TemplateCategoryTools {
         // TODO: items_json 대신 Tool Calling으로 리팩토링.
         // @Tool(description = "Get the list of categories of templates")
         public List<TemplateCategoryDto> getTemplateCategories() {
