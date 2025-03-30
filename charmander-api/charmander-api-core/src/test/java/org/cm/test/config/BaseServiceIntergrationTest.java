@@ -2,6 +2,8 @@ package org.cm.test.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.EntityManager;
+import org.cm.common.utils.RandomKeyGenerator;
+import org.cm.domain.file.UploadedFile;
 import org.cm.domain.member.Member;
 import org.cm.domain.project.Project;
 import org.cm.domain.scene.Scene;
@@ -10,6 +12,8 @@ import org.cm.test.fixture.MemberFixture;
 import org.cm.test.fixture.ProjectFixture;
 import org.cm.test.fixture.SceneFixture;
 import org.cm.test.fixture.SceneTranscriptFixture;
+import org.cm.test.fixture.UploadedFileFixture;
+import org.cm.test.fixture.UploadedFileFixture;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
@@ -60,5 +64,12 @@ public abstract class BaseServiceIntergrationTest {
             .toList();
         scenes.forEach(project::addScene);
         return em.merge(project);
+    }
+
+    protected UploadedFile createUploadedFile(Member member) {
+        var uploadId = RandomKeyGenerator.generateRandomKey();
+        var fileId = RandomKeyGenerator.generateRandomKey();
+        var uploadedFile = UploadedFileFixture.create(uploadId, fileId, member);
+        return em.merge(uploadedFile);
     }
 }
