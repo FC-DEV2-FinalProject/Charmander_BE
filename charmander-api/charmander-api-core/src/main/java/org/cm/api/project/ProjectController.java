@@ -2,10 +2,7 @@ package org.cm.api.project;
 
 import lombok.RequiredArgsConstructor;
 import org.cm.api.common.dto.ListResponse;
-import org.cm.api.project.dto.ProjectDetailResponse;
-import org.cm.api.project.dto.ProjectGenerationResponse;
-import org.cm.api.project.dto.ProjectResponse;
-import org.cm.api.project.dto.ProjectUpdateRequest;
+import org.cm.api.project.dto.*;
 import org.cm.security.AuthInfo;
 import org.cm.security.annotations.support.AuthUser;
 import org.cm.security.annotations.support.MemberOnly;
@@ -16,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class ProjectController {
     private final ProjectService projectService;
+    private final ProjectSummaryService projectSummaryService;
 
     @MemberOnly
     @GetMapping
@@ -62,6 +60,12 @@ public class ProjectController {
     @DeleteMapping("/{id}")
     public void deleteProject(@PathVariable Long id, @AuthUser AuthInfo authInfo) {
         projectService.deleteProject(authInfo, id);
+    }
+
+    @MemberOnly
+    @PostMapping("/generate-transcript")
+    public ProjectGenerateTranscriptAIResult generateTranscript(@RequestBody ProjectGenerateTranscriptRequest request, @AuthUser AuthInfo authInfo) {
+        return projectSummaryService.generateTranscript(authInfo, request);
     }
 
     // TODO: 중복 요청 방지
