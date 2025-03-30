@@ -23,8 +23,8 @@ public interface ProjectRepository extends JpaRepository<Project, Long> {
             SELECT p
             FROM project p
             JOIN FETCH p.owner
-            JOIN FETCH p.scenes s
-            JOIN FETCH s.transcripts t
+            LEFT OUTER JOIN FETCH p.scenes s
+            LEFT OUTER JOIN FETCH s.transcripts t
             WHERE p.id = :id
               AND p.owner.id = :memberId
         """)
