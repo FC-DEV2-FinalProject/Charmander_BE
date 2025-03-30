@@ -11,6 +11,8 @@ import org.springframework.http.HttpStatusCode;
 @RequiredArgsConstructor
 public enum CoreApiExceptionCode implements WebExceptionCode {
     // @formatter:off
+    UNAUTHORIZED("AU001", "Unauthorized.", LogLevel.WARN, HttpStatus.UNAUTHORIZED),
+
     ACCOUNT_EMAIL_ALREADY_IN_USE("A001", "Email is already in use."),
     ACCOUNT_VERIFICATION_CODE_NOT_MATCH("A002", "Verification code does not match."),
 
