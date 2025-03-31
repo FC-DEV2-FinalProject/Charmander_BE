@@ -116,7 +116,7 @@ class SceneServiceIntergrationTest extends BaseServiceIntergrationTest {
             // given
             var member = createMember();
             var project = populatProjectData(member, 1);
-            var scene = project.getScenes().getFirst();
+            var scene = project.getScenes().stream().findFirst().get();
             var authInfo = new AuthInfo(member.getId());
 
             // when
@@ -134,7 +134,7 @@ class SceneServiceIntergrationTest extends BaseServiceIntergrationTest {
             var member1 = createMember();
             var member2 = createMember();
             var project = populatProjectData(member1, 1);
-            var scene = project.getScenes().getFirst();
+            var scene = project.getScenes().stream().findFirst().get();
             var authInfo = new AuthInfo(member2.getId());
 
             // when

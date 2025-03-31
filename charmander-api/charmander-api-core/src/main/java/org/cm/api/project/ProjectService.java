@@ -7,6 +7,7 @@ import org.cm.api.task.TaskService;
 import org.cm.domain.member.MemberRepository;
 import org.cm.domain.project.Project;
 import org.cm.domain.project.ProjectRepository;
+import org.cm.domain.scene.Scene;
 import org.cm.domain.task.Task;
 import org.cm.domain.task.TaskType;
 import org.cm.exception.CoreApiException;
@@ -54,6 +55,7 @@ public class ProjectService implements ApplicationEventPublisherAware {
             .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.MEMBER_NOT_FOUND));
 
         var project = Project.newCreateProject(member);
+        project.addScene(Scene.createEmpty(project));
         return projectRepository.save(project);
     }
 
