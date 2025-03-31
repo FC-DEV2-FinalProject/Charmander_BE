@@ -32,13 +32,13 @@ public interface SceneRepository extends JpaRepository<Scene, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("""
-          SELECT s
-          FROM Scene s
-          JOIN s.project p
-          JOIN p.owner m
-          WHERE p.id = :projectId
-          AND s.id = :sceneId
-          AND m.id = :memberId
-      """)
+            SELECT s
+            FROM Scene s
+            JOIN s.project p
+            JOIN p.owner m
+            WHERE p.id = :projectId
+            AND s.id = :sceneId
+            AND m.id = :memberId
+        """)
     Optional<Scene> findProjectSceneForUpdate(Long projectId, Long sceneId, Long memberId);
 }
