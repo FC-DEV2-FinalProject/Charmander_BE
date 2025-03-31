@@ -31,6 +31,7 @@ public enum CoreApiExceptionCode implements WebExceptionCode {
 
     SCENE_NOT_FOUND("SC001", "Scene not found.", HttpStatus.NOT_FOUND),
     SCENE_TRANSCRIPT_NOT_FOUND("SCT001", "Scene transcript not found.", HttpStatus.NOT_FOUND),
+    SCENE_DELETE_LAST_SCENE("SC002", "Last scene cannot be deleted.", HttpStatus.BAD_REQUEST),
 
     TASK_NOT_FOUND("T001", "Task not found.", HttpStatus.NOT_FOUND),
 

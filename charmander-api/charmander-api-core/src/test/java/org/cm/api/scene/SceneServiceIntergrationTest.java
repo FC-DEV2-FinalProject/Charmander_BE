@@ -115,16 +115,19 @@ class SceneServiceIntergrationTest extends BaseServiceIntergrationTest {
         void 사용자가_소유한_Scene을_삭제할_수_있어야_함() {
             // given
             var member = createMember();
-            var project = populatProjectData(member, 1);
+            var project = populatProjectData(member, 2);
             var scene = project.getScenes().stream().findFirst().get();
             var authInfo = new AuthInfo(member.getId());
+
+            project.getScenes().forEach(s -> System.out.println(s.getId()));
 
             // when
             sceneService.deleteScene(authInfo, project.getId(), scene.getId());
             var scenes = sceneService.getProjectScenes(authInfo, project.getId());
 
             // then
-            assertEquals(0, scenes.size());
+            scenes.forEach(s -> System.out.println(s.getId()));
+            assertEquals(1, scenes.size());
         }
 
         @Test
@@ -136,6 +139,19 @@ class SceneServiceIntergrationTest extends BaseServiceIntergrationTest {
             var project = populatProjectData(member1, 1);
             var scene = project.getScenes().stream().findFirst().get();
             var authInfo = new AuthInfo(member2.getId());
+
+            // when
+            assertThrows(Exception.class, () -> sceneService.deleteScene(authInfo, project.getId(), scene.getId()));
+        }
+
+        @Test
+        @DisplayName("003. 마지막 Scene을 삭제할 수 없어야 함")
+        void 마지막_Scene을_삭제할_수_없어야_함() {
+            // given
+            var member = createMember();
+            var project = populatProjectData(member, 1);
+            var scene = project.getScenes().stream().findFirst().get();
+            var authInfo = new AuthInfo(member.getId());
 
             // when
             assertThrows(Exception.class, () -> sceneService.deleteScene(authInfo, project.getId(), scene.getId()));
