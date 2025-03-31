@@ -11,7 +11,7 @@ jobs:
     steps:
       - name: Print Java version
         run: |
-          echo java --version
+          echo ${java --version}
       - name: Print JAVA_HOME
         run: |
           echo $JAVA_HOME
