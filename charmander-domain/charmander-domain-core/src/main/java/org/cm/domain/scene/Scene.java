@@ -21,7 +21,7 @@ public class Scene extends BaseEntity {
     @JoinColumn(nullable = false, updatable = false)
     private Project project;
 
-    @OneToMany(mappedBy = "scene", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "scene", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<SceneTranscript> transcripts = new HashSet<>();
 
     @Setter
