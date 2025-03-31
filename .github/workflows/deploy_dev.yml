@@ -22,8 +22,8 @@ jobs:
       - name: Print JAVA_HOME
         run: |
           echo $JAVA_HOME
-      # - name: application.yml 파일 만들기
-      #   run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./charmander-api/charmander-api-core/src/main/resources/application.yml
+      - name: application.yml 파일 만들기
+        run: echo "${{ secrets.APPLICATION_PROPERTIES }}" > ./charmander-api/charmander-api-core/src/main/resources/application.yml
       # - name: AWS Resource에 접근할 수 있게 AWS credentials 설정
       #   uses: aws-actions/configure-aws-credentials@v4
       #   with:
@@ -31,6 +31,8 @@ jobs:
       #     aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
       #     aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       - name: 테스트 및 빌드하기
+        env:
+          SPRING_CLOUD_AWS_SECRETSMANAGER_FAILFAST: false
         run: ./gradlew :charmander-api:charmander-api-core:clean :charmander-api:charmander-api-core:build
         
       # - name: Github Repository 파일 불러오기
