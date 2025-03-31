@@ -10,10 +10,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print Java version
-      - run: |
+        run: |
           echo java --version
       - name: Print JAVA_HOME
-      - run: |
+        run: |
           echo $JAVA_HOME
       # - name: Github Repository 파일 불러오기
       #   uses: actions/checkout@v4
