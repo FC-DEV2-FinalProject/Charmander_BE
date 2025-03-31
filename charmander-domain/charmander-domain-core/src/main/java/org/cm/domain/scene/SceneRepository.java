@@ -41,4 +41,6 @@ public interface SceneRepository extends JpaRepository<Scene, Long> {
           AND m.id = :memberId
       """)
     Optional<Scene> findProjectSceneForUpdate(Long projectId, Long sceneId, Long memberId);
+
+    int countByProjectId(Long id);
 }
