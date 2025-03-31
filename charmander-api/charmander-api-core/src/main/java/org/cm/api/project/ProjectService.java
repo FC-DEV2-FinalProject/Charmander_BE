@@ -44,9 +44,8 @@ public class ProjectService implements ApplicationEventPublisherAware {
         return projectRepository.findAllByOwnerId(authInfo.getMemberId());
     }
 
-    @Transactional(readOnly = true)
-    public Project getProjectById(AuthInfo authInfo, Long id) {
-        return projectRepository.findByIdAndOwnerId(id, authInfo.getMemberId())
+    public Project getProjectByIdForDetails(AuthInfo authInfo, Long id) {
+        return projectRepository.findByIdAndOwnerIdWithFetch(id, authInfo.getMemberId())
             .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.PROJECT_NOT_FOUND));
     }
 

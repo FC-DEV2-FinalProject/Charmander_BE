@@ -46,7 +46,7 @@ public class AuthController {
                 .findFirst()
                 .map(Cookie::getValue)
                 .map(authService::refresh)
-                .orElseThrow(() -> new RuntimeException("Refresh token not found"));
+                .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.REFRESH_TOKEN_NOT_FOUND));
             AuthHttpUtils.addRefreshTokenCookie(servletResponse, loginResponse.refreshToken());
             return loginResponse;
         } catch (SignatureVerificationException e) {

@@ -8,7 +8,7 @@ import org.cm.domain.common.BaseEntity;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class SceneTranscript extends BaseEntity {
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(nullable = false, updatable = false)
     private Scene scene;
 

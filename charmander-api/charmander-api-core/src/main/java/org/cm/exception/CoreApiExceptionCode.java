@@ -13,8 +13,13 @@ public enum CoreApiExceptionCode implements WebExceptionCode {
     // @formatter:off
     UNAUTHORIZED("AU001", "Unauthorized.", LogLevel.WARN, HttpStatus.UNAUTHORIZED),
 
+    REFRESH_TOKEN_NOT_FOUND("RT001", "Refresh token not found.", HttpStatus.UNAUTHORIZED),
+
     ACCOUNT_EMAIL_ALREADY_IN_USE("A001", "Email is already in use."),
     ACCOUNT_VERIFICATION_CODE_NOT_MATCH("A002", "Verification code does not match."),
+
+    OAUTH_PROVIDER_NOT_FOUND("OP001", "OAuth provider not found.", HttpStatus.BAD_REQUEST),
+    OAUTH_REGISTRATION_NOT_FOUND("OR001", "OAuth registration not found.", HttpStatus.INTERNAL_SERVER_ERROR),
 
     REFRESH_TOKEN_VERIFICATION_FAILED("RT001", "Refresh token verification failed.", HttpStatus.UNAUTHORIZED),
 
