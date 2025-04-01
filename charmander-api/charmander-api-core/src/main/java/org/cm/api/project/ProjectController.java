@@ -41,12 +41,12 @@ public class ProjectController {
     public void updateProjectNewsArticle(
         @PathVariable Long id,
         @AuthUser AuthInfo authInfo,
-        String newsArticle
+        @RequestBody ProjectUpdateNewsArticleRequest request
     ) {
         projectService.modifyProjectNewsArticle(
             id,
             authInfo.getMemberId(),
-            newsArticle
+            request.newsArticle()
         );
     }
 
