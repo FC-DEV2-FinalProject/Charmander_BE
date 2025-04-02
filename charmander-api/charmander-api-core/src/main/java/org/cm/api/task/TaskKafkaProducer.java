@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionPhase;
 import org.springframework.transaction.event.TransactionalEventListener;
 
+import java.util.Comparator;
+
 @Component
 @RequiredArgsConstructor
 public class TaskKafkaProducer implements ApplicationEventPublisherAware {
@@ -24,6 +26,7 @@ public class TaskKafkaProducer implements ApplicationEventPublisherAware {
         event.getTask()
                 .getTaskScripts()
                 .stream()
+                .sorted(Comparator.comparing(lhs -> lhs.getTask().getId())) // TODO: 우선순위 컬럼 추가
                 .map(taskScript -> new TaskScriptRecord(
                         taskScript.getTask().getId(),
                         taskScript.getId(),
