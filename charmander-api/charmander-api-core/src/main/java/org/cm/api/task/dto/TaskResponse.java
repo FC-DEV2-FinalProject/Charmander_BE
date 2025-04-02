@@ -1,15 +1,11 @@
 package org.cm.api.task.dto;
 
-import org.cm.domain.task.Task;
 import org.cm.domain.task.TaskOutput;
 import org.cm.domain.task.TaskStatus;
 import org.cm.domain.task.TaskType;
-import org.mapstruct.Mapping;
 
+import java.time.Duration;
 import java.time.LocalDateTime;
-
-import static org.cm.api.task.dto.TaskResponse.Mapper.INSTANCE;
-import static org.mapstruct.factory.Mappers.getMapper;
 
 public record TaskResponse(
     Long id,
@@ -17,20 +13,24 @@ public record TaskResponse(
     String jobId,
     TaskType type,
     TaskStatus status,
-    TaskOutput output,
+    TaskOutputDTO output,
     int retryCount,
     LocalDateTime createdAt,
     LocalDateTime updatedAt
 ) {
-    @org.mapstruct.Mapper
-    public interface Mapper {
-        Mapper INSTANCE = getMapper(Mapper.class);
-
-        @Mapping(source = "project.id", target = "projectId")
-        TaskResponse map(Task e);
-    }
-
-    public static TaskResponse from(Task e) {
-        return INSTANCE.map(e);
+    public record TaskOutputDTO(
+        String fileUrl,
+        String fileName,
+        Duration playtime,
+        Integer downloadCount
+    ) {
+        public TaskOutputDTO(TaskOutput taskOutput) {
+            this(
+                taskOutput.fileUrl(),
+                taskOutput.fileName(),
+                taskOutput.playtime(),
+                taskOutput.getDownloadCount()
+            );
+        }
     }
 }

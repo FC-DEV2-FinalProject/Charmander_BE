@@ -1,0 +1,50 @@
+package org.cm.api.task.mapper;
+
+import lombok.RequiredArgsConstructor;
+import org.cm.api.task.dto.TaskResponse;
+import org.cm.domain.task.Task;
+import org.cm.infra.utils.S3Utils;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class TaskResponseMapper {
+    private final S3Utils s3Utils;
+
+    public TaskResponse map(final Task task) {
+        return new TaskResponse(
+            task.getId(),
+            task.getProject().getId(),
+            task.getJobId(),
+            task.getType(),
+            task.getStatus(),
+            mapTaskOutput(task),
+            task.getRetryCount(),
+            task.getCreatedAt(),
+            task.getUpdatedAt()
+        );
+    }
+
+    private TaskResponse.TaskOutputDTO mapTaskOutput(final Task task) {
+        var e = task.getOutput();
+        return new TaskResponse.TaskOutputDTO(
+            resolveFileUrl(e.fileName()),
+            e.fileName(),
+            e.playtime(),
+            e.getDownloadCount()
+        );
+    }
+
+    private String resolveFileUrl(final String fileUrl) {
+        // TODO: 추상화 하기
+        var regex = "^s3://([^/]+)/(.+)$";
+        var matcher = fileUrl.replace("s3://", "").split("/");
+        if (matcher.length > 1) {
+            var bucketName = matcher[0];
+            var filePath = matcher[1];
+            var region = s3Utils.getBucketRegion(bucketName);
+            return String.format("https://%s.s3.%s.amazonaws.com/%s", bucketName, region, filePath);
+        }
+        return null;
+    }
+}
