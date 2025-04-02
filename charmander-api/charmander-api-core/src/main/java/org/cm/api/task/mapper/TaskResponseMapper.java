@@ -6,6 +6,8 @@ import org.cm.domain.task.Task;
 import org.cm.infra.utils.S3Utils;
 import org.springframework.stereotype.Component;
 
+import java.util.regex.Pattern;
+
 @Component
 @RequiredArgsConstructor
 public class TaskResponseMapper {
@@ -38,10 +40,11 @@ public class TaskResponseMapper {
     private String resolveFileUrl(final String fileUrl) {
         // TODO: 추상화 하기
         var regex = "^s3://([^/]+)/(.+)$";
-        var matcher = fileUrl.replace("s3://", "").split("/");
-        if (matcher.length > 1) {
-            var bucketName = matcher[0];
-            var filePath = matcher[1];
+        var pattern = Pattern.compile(regex);
+        var matcher = pattern.matcher(fileUrl);
+        if (matcher.find()) {
+            String bucketName = matcher.group(1);
+            String filePath = matcher.group(2);
             var region = s3Utils.getBucketRegion(bucketName);
             return String.format("https://%s.s3.%s.amazonaws.com/%s", bucketName, region, filePath);
         }
