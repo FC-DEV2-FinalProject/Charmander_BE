@@ -22,6 +22,7 @@ public class Scene extends BaseEntity {
     private Project project;
 
     @OneToMany(mappedBy = "scene", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("id ASC")
     private Set<SceneTranscript> transcripts = new LinkedHashSet<>();
 
     @Setter
