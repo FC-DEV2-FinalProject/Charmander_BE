@@ -10,7 +10,7 @@ import org.cm.domain.project.Project;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 @Entity
@@ -22,7 +22,7 @@ public class Scene extends BaseEntity {
     private Project project;
 
     @OneToMany(mappedBy = "scene", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<SceneTranscript> transcripts = new HashSet<>();
+    private Set<SceneTranscript> transcripts = new LinkedHashSet<>();
 
     @Setter
     @Embedded
