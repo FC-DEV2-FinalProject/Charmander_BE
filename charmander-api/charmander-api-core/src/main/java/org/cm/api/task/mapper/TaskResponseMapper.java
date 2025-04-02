@@ -29,6 +29,9 @@ public class TaskResponseMapper {
 
     private TaskResponse.TaskOutputDTO mapTaskOutput(final Task task) {
         var e = task.getOutput();
+        if (e == null) {
+            return null;
+        }
         return new TaskResponse.TaskOutputDTO(
             resolveFileUrl(e.fileName()),
             e.fileName(),
