@@ -80,9 +80,8 @@ graph
 
 ```
 
-- **charmander-common :**
-    
-    다른 모듈들이 가장 많이 의존하는 기반 모듈, 공통 코드, 예외 코드가 존재합니다.
+- **charmander-common :** 
+    - 다른 모듈들이 가장 많이 의존하는 기반 모듈, 공통 코드, 예외 코드가 존재합니다.
     
 - **charmander-infra:**
     - charmander-file-strorage는 파일 처리, 미디어 관련 처리를 담당하는 모듈입니다.
@@ -107,15 +106,8 @@ graph
 
 back
 
-- Java
-- Java-test-fixtures
-- Gradle
-- Jspecify
-- Python
-- FastAPI
-- Spring boot
-- Spring Data JPA
-- Junit5
+![image](https://github.com/user-attachments/assets/0aa4d221-c9eb-434c-8098-d7c27d81d791)
+
 
 DB
 
@@ -125,16 +117,7 @@ DB
 
 infra
 
-- Docker
-- GIthub Actions
-- Nginx
-- AWS
-    - Media Convert
-    - EventBridge
-    - SQS
-    - S3
-    - EC2
-    - CloudFront
+![image](https://github.com/user-attachments/assets/4b6bfe6a-7859-48bb-b45f-e9f2e3c4e2f7)
 
 # 이슈 및 해결
 
