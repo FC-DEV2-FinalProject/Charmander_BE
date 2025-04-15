@@ -296,9 +296,9 @@ aws
 
 # 팀원 소개
 
-|  | email | 블로그 | 깃헙 |
-| --- | --- | --- | --- |
-| 박서윤  | wideskyinme@gmail.com | https://5ddugi.tistory.com/ | https://github.com/SeoYoonP |
-| 박재홍 | [ghddlfkdn@gmail.com](mailto:ghddlfkdn@gmail.com) |  | https://github.com/StarlitDreamerGalaxyWanderer |
-| 변재호 | jaho321@naver.com |  | https://github.com/jaho96 |
-| 윤여일 | dudlf016@gmail.com |  | https://github.com/dudlf |
+|  | email | 깃헙 |
+| --- | --- |  --- |
+| 박서윤  | wideskyinme@gmail.com | https://github.com/SeoYoonP |
+| 박재홍 | [ghddlfkdn@gmail.com](mailto:ghddlfkdn@gmail.com) |  https://github.com/StarlitDreamerGalaxyWanderer |
+| 변재호 | jaho321@naver.com |  https://github.com/jaho96 |
+| 윤여일 | dudlf016@gmail.com |  https://github.com/dudlf |
