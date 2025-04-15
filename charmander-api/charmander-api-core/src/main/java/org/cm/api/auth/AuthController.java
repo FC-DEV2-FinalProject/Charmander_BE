@@ -37,16 +37,13 @@ public class AuthController {
     }
 
     @PostMapping("/refresh")
-    public LoginResponse refresh(HttpServletRequest servletRequest, HttpServletResponse servletResponse) {
+    public LoginResponse refresh(
+        @CookieValue(name = JwtConstants.REFRESH_TOKEN_COOKIE_NAME) String refreshToken,
+        HttpServletRequest servletRequest,
+        HttpServletResponse servletResponse
+    ) {
         try {
-            var loginResponse = Optional.ofNullable(servletRequest.getCookies())
-                .stream()
-                .flatMap(Arrays::stream)
-                .filter((cookie) -> JwtConstants.REFRESH_TOKEN_COOKIE_NAME.equals(cookie.getName()))
-                .findFirst()
-                .map(Cookie::getValue)
-                .map(authService::refresh)
-                .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.REFRESH_TOKEN_NOT_FOUND));
+            var loginResponse = authService.refresh(refreshToken);
             AuthHttpUtils.addRefreshTokenCookie(servletResponse, loginResponse.refreshToken());
             return loginResponse;
         } catch (SignatureVerificationException e) {
