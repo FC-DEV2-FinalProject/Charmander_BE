@@ -36,7 +36,7 @@
 
 ```mermaid
 
-graph 
+graph LR
 
   subgraph "API Layer"
     AC[charmander-api-core]
@@ -77,6 +77,7 @@ graph
   AC --> KA
 
   SQS --> KA
+  SQS --> FS
 
 ```
 
