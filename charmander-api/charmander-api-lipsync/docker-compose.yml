@@ -1,0 +1,11 @@
+services:
+  wav2lip:
+    build:
+      context: .
+    ports:
+      - 5000:5000
+    volumes:
+      - ./checkpoints:/app/checkpoints:ro
+      - ./assets:/app:ro
+      - ./result:/app
+    entrypoint: ["bash"]
