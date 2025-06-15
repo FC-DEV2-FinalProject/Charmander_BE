@@ -2,6 +2,7 @@ package org.cm.api.scene;
 
 import lombok.RequiredArgsConstructor;
 import org.cm.api.scene.dto.SceneTranscriptCreateCommand;
+import org.cm.api.scene.dto.SceneTranscriptDeleteCommand;
 import org.cm.api.scene.dto.SceneTranscriptResponse;
 import org.cm.api.scene.dto.SceneTranscriptUpdateRequest;
 import org.cm.security.AuthInfo;
@@ -38,5 +39,17 @@ public class SceneTranscriptController {
     ) {
         var command = request.toCommand(projectId, sceneId, tsId);
         sceneTranscriptService.updateSceneTranscript(authInfo, command);
+    }
+
+    @MemberOnly
+    @DeleteMapping("/scenes/{sceneId}/ts/{tsId}")
+    public void deleteSceneTs(
+        @PathVariable Long projectId,
+        @PathVariable Long sceneId,
+        @PathVariable Long tsId,
+        @AuthUser AuthInfo authInfo
+    ) {
+        var command = new SceneTranscriptDeleteCommand(projectId, sceneId, tsId);
+        sceneTranscriptService.deleteSceneTranscript(authInfo, command);
     }
 }

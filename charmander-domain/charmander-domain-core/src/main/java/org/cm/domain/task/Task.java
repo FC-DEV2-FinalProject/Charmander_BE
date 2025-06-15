@@ -79,6 +79,7 @@ public class Task extends BaseEntity {
             throw new CoreDomainException(CoreDomainExceptionCode.TASK_SCRIPTS_ALLOWED_ONLY_CREATING);
         }
         this.taskScripts = taskScripts;
+        this.inputSchema = TaskInputSchema.from(project);
     }
 
     public void start() {

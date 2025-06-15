@@ -10,8 +10,8 @@ import org.cm.domain.member.Member;
 import org.cm.domain.scene.Scene;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Entity(name = "project")
@@ -22,11 +22,15 @@ public class Project extends BaseEntity {
     private Member owner;
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Scene> scenes = new ArrayList<>();
+    private Set<Scene> scenes = new HashSet<>();
 
     @Setter
     @Column(nullable = false)
     private String name;
+
+    @Setter
+    @Embedded
+    private ProjectProperty property;
 
     private String newsArticle;
 
@@ -44,6 +48,7 @@ public class Project extends BaseEntity {
     ) {
         this.owner = owner;
         this.name = name;
+        this.property = ProjectProperty.createDefault();
         this.version = version;
     }
 

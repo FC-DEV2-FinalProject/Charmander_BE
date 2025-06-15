@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.cm.api.scene.dto.SceneTranscriptCreateCommand;
+import org.cm.api.scene.dto.SceneTranscriptDeleteCommand;
 import org.cm.api.scene.dto.SceneTranscriptUpdateCommand;
 import org.cm.domain.scene.SceneRepository;
 import org.cm.domain.scene.SceneTranscript;
@@ -36,11 +37,19 @@ public class SceneTranscriptService {
         AuthInfo authInfo,
         @Valid SceneTranscriptUpdateCommand command
     ) {
-        var transcript = sceneTranscriptRepository.findForUpdate(command.projectId(), command.transcriptId(), command.sceneId(), authInfo.getMemberId())
+        var transcript = sceneTranscriptRepository.findForUpdate(command.projectId(), command.sceneId(), command.transcriptId(), authInfo.getMemberId())
             .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.SCENE_TRANSCRIPT_NOT_FOUND));
 
         command.update(transcript);
 
         return sceneTranscriptRepository.save(transcript);
+    }
+
+    @Transactional
+    public void deleteSceneTranscript(AuthInfo authInfo, SceneTranscriptDeleteCommand command) {
+        var transcript = sceneTranscriptRepository.findForUpdate(command.projectId(), command.sceneId(), command.transcriptId(), authInfo.getMemberId())
+            .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.SCENE_TRANSCRIPT_NOT_FOUND));
+
+        sceneTranscriptRepository.delete(transcript);
     }
 }

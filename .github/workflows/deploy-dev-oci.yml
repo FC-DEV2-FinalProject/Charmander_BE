@@ -31,6 +31,6 @@ jobs:
         ssh-keyscan ${{ env.HOST }} >> ~/.ssh/known_hosts
         echo "${{ env.PRIVATE_KEY }}" > private_key.pem
         chmod 600 private_key.pem
-        scp -i private_key.pem charmander-api/charmander-api-core/build/libs/*.jar ${{ env.USERNAME }}@${{ env.HOST }}:~/app/charmander/api/app/app.jar
-        ssh -i private_key.pem ${{ env.USERNAME }}@${{ env.HOST }} 'bash -s' < /home/ubuntu/app/charmander/api/deploy.sh
+        scp -i private_key.pem charmander-api/charmander-api-core/build/libs/*.jar ${{ env.USERNAME }}@${{ env.HOST }}:/home/${{ env.USERNAME }}/app/charmander/api/app/next.jar
+        ssh -i private_key.pem ${{ env.USERNAME }}@${{ env.HOST }} /home/${{ env.USERNAME }}/app/charmander/api/deploy.sh
         rm private_key.pem

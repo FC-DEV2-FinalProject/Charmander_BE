@@ -3,11 +3,14 @@ package org.cm.domain.task;
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
 import jakarta.persistence.Embeddable;
-import java.time.Duration;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.cm.converter.DurationToSecondConverter;
 
+import java.time.Duration;
+
+@Getter
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TaskOutput {

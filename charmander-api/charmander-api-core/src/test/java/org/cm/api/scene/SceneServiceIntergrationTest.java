@@ -92,7 +92,7 @@ class SceneServiceIntergrationTest extends BaseServiceIntergrationTest {
 
             var request = new SceneUpdateRequest(
               new SceneUpdateRequest.SceneSubtitleDto("new subtitle", null),
-              null
+              null, null, null
             );
 
             // when
@@ -105,6 +105,111 @@ class SceneServiceIntergrationTest extends BaseServiceIntergrationTest {
             assertEquals(request.subtitle().text(), after.getSubtitle().getText());
             assertNotEquals(before.getSubtitle().getText(), after.getSubtitle().getText());
         }
+
+        @Test
+        @DisplayName("002. 템플릿 배경 ID를 이용해 배경을 설정할 수 있어야 함")
+        void 템플릿_배경_ID를_이용해_배경을_설정할_수_있어야_함() throws Exception {
+            // given
+            var member = createMember();
+            var project = createProject(member);
+            var scene = createScene(project);
+            var templateBackground = createTemplateBackground(null);
+            var authInfo = new AuthInfo(member.getId());
+
+            var request = new SceneUpdateRequest(
+                null,
+                new SceneUpdateRequest.SceneBackgroundUpdateDto(1L, null),
+                null, null
+            );
+
+            // when
+            var before = objectMapper.readValue(objectMapper.writeValueAsString(scene), Scene.class);
+            sceneService.updateScene(authInfo, project.getId(), scene.getId(), request);
+            var after = sceneService.getProjectScenes(authInfo, project.getId()).getFirst();
+
+            // then
+            assertNotEquals(before, after);
+            assertEquals(templateBackground.toSceneMedia(), after.getBackground());
+            assertNotEquals(before.getBackground(), after.getBackground());
+        }
+
+        @Test
+        @DisplayName("003. 사용자가 업로드한 배경 ID를 이용해 배경을 설정할 수 있어야 함")
+        void 사용자가_업로드한_배경_ID를_이용해_배경을_설정할_수_있어야_함() throws Exception {
+            // given
+            var member = createMember();
+            var project = createProject(member);
+            var scene = createScene(project);
+            var uploadedFile = createUploadedFile(member);
+            uploadedFile.startCompletion();
+            uploadedFile.finishCompletion();
+            var authInfo = new AuthInfo(member.getId());
+
+            var request = new SceneUpdateRequest(
+                null,
+                new SceneUpdateRequest.SceneBackgroundUpdateDto(null, uploadedFile.getFullPath()),
+                null, null
+            );
+
+            // when
+            var before = objectMapper.readValue(objectMapper.writeValueAsString(scene), Scene.class);
+            sceneService.updateScene(authInfo, project.getId(), scene.getId(), request);
+            var after = sceneService.getProjectScenes(authInfo, project.getId()).getFirst();
+
+            // then
+            assertNotEquals(before, after);
+            assertEquals(uploadedFile.toSceneMedia(), after.getBackground());
+            assertNotEquals(before.getBackground(), after.getBackground());
+        }
+
+        @Test
+        @DisplayName("004. 다른 사용자가 업로드한 배경 ID를 이용해 배경을 설정할 수 없어야 함")
+        void 다른_사용자가_업로드한_배경_ID를_이용해_배경을_설정할_수_없어야_함() {
+            // given
+            var member1 = createMember();
+            var member2 = createMember();
+            var project = createProject(member1);
+            var scene = createScene(project);
+            var uploadedFile = createUploadedFile(member2);
+            var authInfo = new AuthInfo(member1.getId());
+
+            var request = new SceneUpdateRequest(
+                null,
+                new SceneUpdateRequest.SceneBackgroundUpdateDto(null, uploadedFile.getFullPath()),
+                null, null
+            );
+
+            // when
+            assertThrows(Exception.class, () -> sceneService.updateScene(authInfo, project.getId(), scene.getId(), request));
+        }
+
+        @Test
+        @DisplayName("005. 템플릿 아바타 ID를 이용해 아바타를 설정할 수 있어야 함")
+        void 템플릿_아바타_ID를_이용해_아바타를_설정할_수_있어야_함() throws Exception {
+            // given
+            var member = createMember();
+            var project = createProject(member);
+            var scene = createScene(project);
+            var templateAvatar = createTemplateAvatar(null);
+            var authInfo = new AuthInfo(member.getId());
+
+            var request = new SceneUpdateRequest(
+                null,
+                null,
+                new SceneUpdateRequest.SceneAvatarUpdateDto(1L),
+                null
+            );
+
+            // when
+            var before = objectMapper.readValue(objectMapper.writeValueAsString(scene), Scene.class);
+            sceneService.updateScene(authInfo, project.getId(), scene.getId(), request);
+            var after = sceneService.getProjectScenes(authInfo, project.getId()).getFirst();
+
+            // then
+            assertNotEquals(before, after);
+            assertEquals(templateAvatar.toSceneMedia(), after.getAvatar());
+            assertNotEquals(before.getAvatar(), after.getAvatar());
+        }
     }
 
     @Nested
@@ -115,16 +220,19 @@ class SceneServiceIntergrationTest extends BaseServiceIntergrationTest {
         void 사용자가_소유한_Scene을_삭제할_수_있어야_함() {
             // given
             var member = createMember();
-            var project = populatProjectData(member, 1);
-            var scene = project.getScenes().getFirst();
+            var project = populatProjectData(member, 2);
+            var scene = project.getScenes().stream().findFirst().get();
             var authInfo = new AuthInfo(member.getId());
+
+            project.getScenes().forEach(s -> System.out.println(s.getId()));
 
             // when
             sceneService.deleteScene(authInfo, project.getId(), scene.getId());
             var scenes = sceneService.getProjectScenes(authInfo, project.getId());
 
             // then
-            assertEquals(0, scenes.size());
+            scenes.forEach(s -> System.out.println(s.getId()));
+            assertEquals(1, scenes.size());
         }
 
         @Test
@@ -134,8 +242,21 @@ class SceneServiceIntergrationTest extends BaseServiceIntergrationTest {
             var member1 = createMember();
             var member2 = createMember();
             var project = populatProjectData(member1, 1);
-            var scene = project.getScenes().getFirst();
+            var scene = project.getScenes().stream().findFirst().get();
             var authInfo = new AuthInfo(member2.getId());
+
+            // when
+            assertThrows(Exception.class, () -> sceneService.deleteScene(authInfo, project.getId(), scene.getId()));
+        }
+
+        @Test
+        @DisplayName("003. 마지막 Scene을 삭제할 수 없어야 함")
+        void 마지막_Scene을_삭제할_수_없어야_함() {
+            // given
+            var member = createMember();
+            var project = populatProjectData(member, 1);
+            var scene = project.getScenes().stream().findFirst().get();
+            var authInfo = new AuthInfo(member.getId());
 
             // when
             assertThrows(Exception.class, () -> sceneService.deleteScene(authInfo, project.getId(), scene.getId()));

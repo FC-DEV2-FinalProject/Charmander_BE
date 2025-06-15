@@ -3,6 +3,8 @@ package org.cm.security.aop;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Before;
+import org.cm.exception.CoreApiException;
+import org.cm.exception.CoreApiExceptionCode;
 import org.cm.security.AuthInfo;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +19,6 @@ public class MemberOnlyHandler {
             .filter((arg) -> arg instanceof AuthInfo)
             .map(AuthInfo.class::cast)
             .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Unauthorized"));
+            .orElseThrow(() -> new CoreApiException(CoreApiExceptionCode.UNAUTHORIZED));
     }
 }

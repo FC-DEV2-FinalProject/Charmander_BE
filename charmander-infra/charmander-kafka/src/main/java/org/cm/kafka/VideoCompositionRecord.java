@@ -1,6 +1,6 @@
 package org.cm.kafka;
 
-public record OverlayCompleteRecord(
+public record VideoCompositionRecord(
         Long taskId,
         Long sceneId,
         String sceneVideoId

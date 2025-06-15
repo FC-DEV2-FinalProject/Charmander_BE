@@ -10,8 +10,8 @@ import org.cm.domain.project.Project;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -21,17 +21,20 @@ public class Scene extends BaseEntity {
     @JoinColumn(nullable = false, updatable = false)
     private Project project;
 
-    @OneToMany(mappedBy = "scene", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<SceneTranscript> transcripts = new ArrayList<>();
+    @OneToMany(mappedBy = "scene", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
+    @OrderBy("id ASC")
+    private Set<SceneTranscript> transcripts = new LinkedHashSet<>();
 
     @Setter
     @Embedded
     private SceneSubtitle subtitle;
 
+    @Setter
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(nullable = false, columnDefinition = "json")
     private SceneMedia background;
 
+    @Setter
     @JdbcTypeCode(SqlTypes.JSON)
     @Column(nullable = false, columnDefinition = "json")
     private SceneMedia avatar;

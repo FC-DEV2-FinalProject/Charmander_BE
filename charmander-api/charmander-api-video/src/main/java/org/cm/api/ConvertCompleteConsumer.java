@@ -2,7 +2,8 @@ package org.cm.api;
 
 import lombok.RequiredArgsConstructor;
 import org.cm.domain.task.TaskRepository;
-import org.cm.kafka.VideoConcatRecord;
+import org.cm.kafka.CompletionNotificationRecord;
+import org.cm.kafka.KafkaTopicNames;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -14,8 +15,8 @@ public class ConvertCompleteConsumer {
     private final TaskRepository taskRepository;
 
     @Transactional
-    @KafkaListener(topics = "scene-task", groupId = "tts-task-group")
-    public void listen(VideoConcatRecord videoConcatRecord) {
+    @KafkaListener(topics = KafkaTopicNames.COMPLETION_NOTIFICATION, groupId = "tts-task-group")
+    public void listen(CompletionNotificationRecord videoConcatRecord) {
         var task = taskRepository.getById(videoConcatRecord.taskId());
 
         task.succeed(videoConcatRecord.fileId());

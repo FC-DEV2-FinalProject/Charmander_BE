@@ -11,4 +11,7 @@ public record ScreenSize(
     @Column(nullable = false)
     int height
 ) {
+    public static ScreenSize createDefault() {
+        return new ScreenSize(1920, 1080);
+    }
 }

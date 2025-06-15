@@ -7,6 +7,7 @@ import org.cm.common.domain.FileType;
 import org.cm.infra.storage.ContentsLocator;
 import org.cm.infra.storage.PreSignedFileUploadService;
 import org.cm.infra.storage.PreSignedURLIdentifier;
+import org.cm.kafka.KafkaTopicNames;
 import org.cm.kafka.TaskScriptRecord;
 import org.cm.service.TaskScriptService;
 import org.cm.service.TtsService;
@@ -31,7 +32,7 @@ public class TaskConsumer {
     @Value("${consumer.host}")
     private String serverURL;
 
-    @KafkaListener(topics = "tts-task", groupId = "tts-task-group")
+    @KafkaListener(topics = KafkaTopicNames.TTS_PROCESSING, groupId = "tts-task-group")
     public void consume(TaskScriptRecord taskScriptRecord) {
         try {
             subExecute(taskScriptRecord);

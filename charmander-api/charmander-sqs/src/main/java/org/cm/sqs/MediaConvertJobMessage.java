@@ -2,6 +2,7 @@ package org.cm.sqs;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+import org.cm.kafka.UserMetadata;
 
 public record MediaConvertJobMessage(
         String version,
@@ -24,20 +25,6 @@ public record MediaConvertJobMessage(
             UserMetadata userMetadata,
             List<OutputGroupDetail> outputGroupDetails
     ) {
-    }
-
-    public record UserMetadata(
-            Type type,
-            Long taskId,
-            Long taskScriptId,
-            Long sceneId
-    ) {
-        public enum Type {
-            TTS_COMBINE,
-            VIDEO_OVERLAY,
-            SCENE_COMBINE,
-            CONCAT_VIDEO
-        }
     }
 
 

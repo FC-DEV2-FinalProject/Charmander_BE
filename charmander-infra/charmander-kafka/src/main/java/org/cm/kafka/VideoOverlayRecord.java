@@ -1,6 +1,6 @@
 package org.cm.kafka;
 
-public record SceneCombineRecord(
+public record VideoOverlayRecord(
         Long taskId,
         Long taskScriptId,
         Long sceneId,
